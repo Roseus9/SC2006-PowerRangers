@@ -31,7 +31,7 @@ function Header() {
                             <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                         </NavDropdown>
                         <LinkContainer to ='/createListing'>
-                            <Nav.Link>Create Listing<i className="fa-square-virus"></i></Nav.Link>
+                            <Nav.Link>Create Listing</Nav.Link>
                         </LinkContainer>
                     </Nav>
                 </Navbar.Collapse>
