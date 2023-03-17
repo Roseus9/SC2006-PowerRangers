@@ -14,6 +14,7 @@ function Header() {
                             NTU Marketplace
                     </Navbar.Brand>
                 </LinkContainer>
+                <SearchBar/>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">

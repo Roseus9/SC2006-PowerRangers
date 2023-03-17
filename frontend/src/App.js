@@ -6,6 +6,7 @@ import Home from './screens/Home';
 import ProductScreen from './screens/ProductScreen';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';  
 import CreateListing from './screens/CreateListing';
+import ReviewScreen from './screens/ReviewScreen';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path='/' element={<Home />} end />
                 <Route path='/product/:itemId' element={<ProductScreen />} />
                 <Route path='/createListing' element={<CreateListing/>} />
+                <Route path='/review' element={<ReviewScreen />} />
               </Routes>
             </Container>
           </main>
