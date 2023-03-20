@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import SearchBar from './SearchBar';
 import shop from '../resources/shop.svg';
 
 function Header() {
