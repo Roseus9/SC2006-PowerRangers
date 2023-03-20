@@ -2,7 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Cloning the Project and Starting the Project
+
+First enter the backend folder:
+### `cd backend`
+
+Then download the necessary packages:
+### `npm install`
 
 In the project directory, you can run:
 
