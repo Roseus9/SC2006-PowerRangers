@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {useParams, useLocation, useNavigate} from 'react-router-dom'
-import {Link} from 'react-router-dom'
+import {useParams, useLocation, useNavigate, Link} from 'react-router-dom'
 import {Form, Button, Row, Col} from 'react-bootstrap'
 import {login} from '../actions/userLoginActions'
 import Notification from '../components/Notification'
@@ -24,10 +23,11 @@ function LoginScreen() {
     //  useSelector is a hook that allows us to access the state
     const userLogin = useSelector(state => state.userLogin);
     //  refer to the userLoginReducer for the structure of userLogin state object
-    const { loading, userInfo, error } = userLogin;
+    let { loading, userInfo, error } = userLogin;
     //  useEffect second parameter is array of dependencies, the effect will only run when dependencies change
     //      performance optimization that can help avoid unnecessary re-renders
     useEffect(() => {
+        error = null;
         if (userInfo) {
             navigate(redirect)
         }
@@ -47,14 +47,14 @@ function LoginScreen() {
     return (
 
         <FormContainer>
-            <h1>Login</h1>
+            <h3>Login</h3>
             {/* if there is an error, display the error message */}
             {error && <Notification variant='danger' message={error}/>}
             {/* if loading, display the loading message */}
             {loading && <Loader/>}
             <Form onSubmit={submitHandler}>
 
-                <Form.Group style={{marginTop:'10px'}} controlId = 'emailId' placeholder>     
+                <Form.Group className="mb-3" controlId = 'emailId' placeholder>     
                     <Form.Label>
                         Username
                     </Form.Label>
@@ -67,7 +67,7 @@ function LoginScreen() {
                     >
                     </Form.Control>
                 </Form.Group>
-                <Form.Group style={{marginTop:'10px'}} controlId = 'passwordId' placeholder>
+                <Form.Group className="mb-3" controlId = 'passwordId' placeholder>
                     <Form.Label>
                         Password
                     </Form.Label>
@@ -81,7 +81,7 @@ function LoginScreen() {
                     </Form.Control>
                 </Form.Group>
 
-                <Button type='submit' variant="secondary" style={{backgroundColor:"#F24E1E", marginRight: "8px", marginTop: "10px"}}>Submit</Button>
+                <Button className="mb-3" type='submit' variant="secondary" style={{backgroundColor:"#F24E1E", marginRight: "8px", marginTop: "10px"}}>Submit</Button>
             </Form>
             {/* 
                 this is the text below to ask the customer to register
