@@ -48,3 +48,12 @@ import {
     }
   }
 
+  //  Action creator for logging out a user
+  //  action object contains type of the action
+  export const logout = () => (dispatch) => {
+    localStorage.removeItem('userInfo')
+    dispatch({ type: USER_LOGOUT })
+  }
+
+  
+
