@@ -1,3 +1,6 @@
+// Reducer takes in the state and an action and returns a new state
+
+//  IMPORTING CONSTANTS ----------------
 import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
@@ -6,9 +9,19 @@ import {
   PRODUCT_ITEM_REQUEST,
   PRODUCT_ITEM_SUCCESS,
   PRODUCT_ITEM_FAIL,
-} from '../constants/productConstants'
+} from '../constants/constants'
+//---------------------------------------
 
-export const productListReducer = (state = { products: [] }, action) => {
+//  INITIAL STATE OF PRODUCT LIST ----------------
+const productListInitialState = {
+  loading: false,
+  products: [],
+  error: '',  
+}
+
+// REDUCERS ----------------
+// Reducer for getting a list of products
+export const productListReducer = (state = productListInitialState, action) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
       return { loading: true, products: [] }
@@ -24,7 +37,15 @@ export const productListReducer = (state = { products: [] }, action) => {
   }
 }
 
-export const productItemReducer = (state = { product: {} }, action) => {
+//  INITIAL STATE OF PRODUCT ----------------
+const productInitialState = {
+  loading: false,
+  product: {},
+  error: '',  
+}
+
+// Reducer for getting a single product
+export const productItemReducer = (state = productInitialState, action) => {
   switch (action.type) {
     case PRODUCT_ITEM_REQUEST:
       return { loading: true, product: {} }

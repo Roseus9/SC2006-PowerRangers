@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getProduct } from '../actions/productActions'
 
 // here we deconstruct the props object, to access match
-function ProductScreen({match}) {
+function ProductScreen() {
     // useParam is a hook that allows us to access the url parameters 
     let { itemId } = useParams();
     const dispatch = useDispatch();
@@ -19,7 +19,7 @@ function ProductScreen({match}) {
     // useEffect is a hook that allows us to run a function when the component loads
     useEffect(() => {
         dispatch(getProduct(itemId))
-    }, [])
+    }, [itemId, dispatch])
 
     // function ProductScreen({match}) {
     // const item = products.find((product)=> product._id === match.params.itemId)

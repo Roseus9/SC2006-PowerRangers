@@ -1,8 +1,8 @@
 import React from 'react'
 import { Image, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import SearchBar from './SearchBar';
 import shop from '../resources/shop.svg';
+import SearchBar from './SearchBar';
 
 function Header() {
   return (
@@ -19,12 +19,6 @@ function Header() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <LinkContainer to='/catalogue'>
-                            <Nav.Link>Catalogue</Nav.Link>
-                        </LinkContainer>
-                        <LinkContainer to='/login'>
-                            <Nav.Link>Login <i className="fa-solid fa-right-to-bracket"></i></Nav.Link>
-                        </LinkContainer>
                         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
@@ -32,9 +26,10 @@ function Header() {
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                         </NavDropdown>
-                        <LinkContainer to ='/createListing'>
-                            <Nav.Link>Create Listing</Nav.Link>
+                        <LinkContainer to='/login'>
+                            <Nav.Link>Login <i className="fa-solid fa-right-to-bracket"></i></Nav.Link>
                         </LinkContainer>
+
                     </Nav>
                 </Navbar.Collapse>
             </Container>

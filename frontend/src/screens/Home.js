@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import { Row, Col } from 'react-bootstrap'
-import Alert from 'react-bootstrap/Alert';
 import Loader from '../components/Loader'
 import Notification from '../components/Notification'
 
@@ -23,7 +22,7 @@ function Home() {
     // useEffect is a hook that allows us to run a function when the component loads
     useEffect(() => {
         dispatch(getProducts())
-    }, [])
+    }, [dispatch])
 
 // now we can check the attributes, loading, error otherwise render
   return (
