@@ -4,7 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import shop from '../resources/shop.svg';
 import SearchBar from './SearchBar';
 import {useSelector, useDispatch} from 'react-redux';
-import {logout} from '../actions/userLoginActions';
+import {logout} from '../actions/userLoginActions'
 
 function Header() {
     const userLogin = useSelector(state => state.userLogin);

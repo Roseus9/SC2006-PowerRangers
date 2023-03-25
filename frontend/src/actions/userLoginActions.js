@@ -13,47 +13,49 @@ import {
 //---------------------------------------
 
 // ACTION CREATORS ----------------
-//  Action creator for loggin in a user
+//  Action creator for logging out a user
+//  action object contains type of the action
+export const logout = () => (dispatch) => {
+  localStorage.removeItem('userInfo')
+  dispatch({ type: USER_LOGOUT })
+}
+
+//  Action creator for logging in a user
 //  takes in username and passsword
 //  action object contains type of the action and payload
-  export const login = (username, password) => async (dispatch) => {
-    try {
+export const login = (username, password) => async (dispatch) => {
+  try {
 
-      dispatch({ type: USER_LOGIN_REQUEST })
+    dispatch({ type: USER_LOGIN_REQUEST })
 
-      // add config to indicate that the data being sent via HTTP request body is in JSON format
-      const config = {
-        headers: {
-            'Content-type': 'application/json'
-        }
+    // add config to indicate that the data being sent via HTTP request body is in JSON format
+    const config = {
+      headers: {
+          'Content-type': 'application/json'
       }
-      
-      const { data } = await axios.post(
-        '/api/users/login', 
-        { 'username': username, 'password': password },
-        config
-      )
-
-      dispatch({ type: USER_LOGIN_SUCCESS, payload: data })
-
-      localStorage.setItem('userInfo', JSON.stringify(data))
-
-    } catch (error) {
-      dispatch({ 
-        type: USER_LOGIN_FAIL, 
-        payload: error.response && error.response.data.message
-          ? error.response.data.message + ": Incorrect username or password"
-          : error.message + ": Incorrect username or password"
-      })
     }
-  }
+    
+    const { data } = await axios.post(
+      '/api/users/login', 
+      { 'username': username, 'password': password },
+      config
+    )
 
-  //  Action creator for logging out a user
-  //  action object contains type of the action
-  export const logout = () => (dispatch) => {
-    localStorage.removeItem('userInfo')
-    dispatch({ type: USER_LOGOUT })
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data })
+
+    localStorage.setItem('userInfo', JSON.stringify(data))
+
+  } catch (error) {
+    dispatch({ 
+      type: USER_LOGIN_FAIL, 
+      payload: error.response && error.response.data.message
+        ? error.response.data.message + ": Incorrect username or password"
+        : error.message + ": Incorrect username or password"
+    })
   }
+}
+
+
 
   
 
