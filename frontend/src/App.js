@@ -23,7 +23,7 @@ function App() {
             <Route path="/product/:itemId" element={<ProductScreen />} />
             <Route path="/review" element={<ReviewScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
-            <Route path="/createlisting" element={<CreateListing />} />
+            <Route path="/create" element={<CreateListing />} />
           </Routes>
         </Container>
       </main>
