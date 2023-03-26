@@ -21,10 +21,12 @@ function CreateListing() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(previewURL);
-    console.log(pickupFlag);
     if (title == "") {
       toast.error("Missing title!");
+      return;
+    }
+    if (previewURL == null) {
+      toast.error("Missing image!");
       return;
     }
     if (blurb == "") {
@@ -39,6 +41,15 @@ function CreateListing() {
     if (condition == "") {
       toast.error("Missing item condition!");
       return;
+    }
+
+    if (!pickupFlag && !deliveryFlag) {
+      toast.error("i have no idea how to phrase this shit");
+      return;
+    }
+
+    if (pickupFlag && places.length == 0) {
+      toast.error("Missing pick up locations!");
     }
   };
   return (
@@ -105,7 +116,6 @@ function CreateListing() {
                 style={{ height: "200px", marginTop: "0px" }}
                 value={blurb}
                 onChange={(e) => {
-                  console.log(blurb);
                   setBlurb(e.target.value);
                 }}
               />
