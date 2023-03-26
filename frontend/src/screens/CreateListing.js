@@ -18,7 +18,7 @@ function CreateListing() {
   const [previewURL, setPreviewURL] = useState(null);
   const [condition, setCondition] = useState("");
   const [places, setPlaces] = useState([]);
-
+  const [price, setPrice] = useState("");
   const submitHandler = (e) => {
     e.preventDefault();
     if (title == "") {
@@ -36,6 +36,14 @@ function CreateListing() {
 
     if (tags.length == 0) {
       toast.error("Missing item tags!");
+      return;
+    }
+    if (price == "") {
+      toast.error("Missing price!");
+      return;
+    }
+    if (!price.match("^[0-9]+[.[0-9]{1,3}]{0,1}$")) {
+      toast.error("Invalid price!");
       return;
     }
     if (condition == "") {
@@ -130,6 +138,17 @@ function CreateListing() {
                 isMulti
                 isSearchable
                 autoFocus
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Choose price..."
+                value={price}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
               />
             </Form.Group>
             <Form.Group className="mb-3">
