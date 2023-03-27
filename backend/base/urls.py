@@ -13,6 +13,8 @@ urlpatterns = [
     path("", views.getRoutes, name="routes"),
     path("products", views.getProducts, name="products"),
     path("products/<str:pk>", views.getProduct, name="product"),
+    path("users/upload", views.uploadImageUser, name="upload-image-user"),
+    path("products/upload", views.uploadImageProduct, name="upload-image-product"),
   
     path('users', views.getUsers, name='users'),
     path('users/profile', views.getUserProfile, name='user-profile'),

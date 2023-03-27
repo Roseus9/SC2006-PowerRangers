@@ -139,13 +139,29 @@ def updateUserProfile(request, pk):
     user.username=data['username']
     user.email=data['email']
     profile.phone=data['phone']
-    profile.address=data['address']
-    profile.city=data['city']
-    profile.postal_code=data['postal_code']
-    profile.country=data['country']
-    profile.picture
+    profile.telegram=data['telegram']
+    profile.picture=
     # ensure password is not blank, then hash it
     if data['password'] != '':
         user.password=make_password(data['password'])
     user.save()
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def uploadImageProduct(request):
+    data = request.data
+    product_id = data['product_id']
+    product = Product.objects.get(_id=product_id)
+    product.image = request.FILES.get('image')
+    product.save()
+    return Response('Image was uploaded')
+
+@api_view(['POST'])
+def uploadImageUser(request):
+    data = request.data
+    user_id = data['user_id']
+    profile = Profile.objects.get(_id=user_id)
+    profile.image = request.FILES.get('image')
+    profile.save()
+    return Response('Image was uploaded')
