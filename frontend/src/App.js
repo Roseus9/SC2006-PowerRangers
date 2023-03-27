@@ -10,6 +10,7 @@ import ReviewScreen from "./screens/ReviewScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import CreateListing from "./screens/CreateListing";
+import Settings from './screens/Settings';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/review" element={<ReviewScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/create" element={<CreateListing />} />
+            <Route path='/settings' element={<Settings/>} />
           </Routes>
         </Container>
       </main>
