@@ -26,18 +26,20 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         # returns by default
         refresh = self.get_token(self.user)
-        data['refresh'] = str(refresh)
-        data['access'] = str(refresh.access_token)
-
-        # additional customised information we want to return to frontend
+        
         serializer = UserSerializerWithToken(self.user).data
-        data["id"] = serializer.get('id')
-        data['_id'] = serializer.get('_id')
-        data["username"] = serializer.get('username')
-        data["email"] = serializer.get('email')
-        data["name"] = serializer.get('name')
-        data["isAdmin"] = serializer.get('isAdmin')
-        data["token"] = serializer.get('token')
+        data = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            # additional customised information we want to return to frontend
+            '_id': serializer.get('_id'),
+            'username': serializer.get('username'),
+            'email': serializer.get('email'),
+            'name': serializer.get('name'),
+            'isAdmin': serializer.get('isAdmin'),
+            'token': serializer.get('token')
+        }
+
         return data
 
 # original token view
@@ -121,3 +123,22 @@ def getProduct(request, pk):
     #         product = i
     return Response(serializer.data)
     # return Response(product)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateUserProfile(request):
+    # get back the user from the token
+    user = request.user
+    # use the serializer with token so we can get the additional token
+    serializer = UserSerializerWithToken(users, many=False)
+    # get the data from the request
+    data = request.data
+    # and then update the user
+    user.first_name=data['name']
+    user.username=data['username']
+    user.email=data['email']
+    # ensure password is not blank, then hash it
+    if data['password'] != '':
+        user.password=make_password(data['password'])
+    user.save()
+    return Response(serializer.data)
