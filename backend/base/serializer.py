@@ -45,8 +45,8 @@ class UserSerializerWithToken(UserSerializer):
         fields = '__all__'
         # fields = ['_id', 'id', 'username', 'email', 'name', 'isAdmin', 'token']
 
-    # adding an additional refresh token
-    # this will be used for registration
+    # adding an additional access token (NOT refresh token)
+    # this will be used when a user requires authentication to make a PUT request e.g to update his profile
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
