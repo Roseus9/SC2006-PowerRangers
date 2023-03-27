@@ -46,8 +46,8 @@ class Review(models.Model):
 class Offer(models.Model):
     # (null=True) allows the database to store a NULL value for the field.
     # (blank=True) allows the field to be empty in a form or in the admin interface.
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='buyer')
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='seller')
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='buyerOffer')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='sellerOffer')
     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     isAccepted = models.BooleanField(default=False, blank=False)
