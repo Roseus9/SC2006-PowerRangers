@@ -126,17 +126,24 @@ def getProduct(request, pk):
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def updateUserProfile(request):
+def updateUserProfile(request, pk):
+    profile = Profile.objects.get(_id=pk)
     # get back the user from the token
     user = request.user
     # use the serializer with token so we can get the additional token
-    serializer = UserSerializerWithToken(users, many=False)
+    serializer = UserSerializerWithToken(user, many=False)
     # get the data from the request
     data = request.data
     # and then update the user
     user.first_name=data['name']
     user.username=data['username']
     user.email=data['email']
+    profile.phone=data['phone']
+    profile.address=data['address']
+    profile.city=data['city']
+    profile.postal_code=data['postal_code']
+    profile.country=data['country']
+    profile.picture
     # ensure password is not blank, then hash it
     if data['password'] != '':
         user.password=make_password(data['password'])
