@@ -8,27 +8,31 @@ import locations from "../constants/locations";
 import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Papa from "papaparse";
+import restrictedItems from "../constants/restrictedItems";
 function CreateListing() {
   const [title, setTitle] = useState("");
   const [blurb, setBlurb] = useState("");
   const [tags, setTags] = useState([]);
-  const [pickupFlag, setPickupFlag] = useState(false);
   const [deliveryFlag, setDeliveryFlag] = useState(false);
   const [file, setFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
   const [condition, setCondition] = useState("");
   const [places, setPlaces] = useState([]);
   const [price, setPrice] = useState("");
+  const [deliveryNotes, setDeliveryNotes] = useState("");
+
   const submitHandler = (e) => {
     e.preventDefault();
     if (title == "") {
       toast.error("Missing title!");
       return;
     }
-    if (previewURL == null) {
-      toast.error("Missing image!");
+    if (restrictedItems.includes(title.toLowerCase())) {
+      toast.error("Restricted item!");
       return;
     }
+    console.log(deliveryFlag);
     if (blurb == "") {
       toast.error("Missing description!");
       return;
@@ -51,14 +55,26 @@ function CreateListing() {
       return;
     }
 
-    if (!pickupFlag && !deliveryFlag) {
-      toast.error("i have no idea how to phrase this shit");
+    if (places.length == 0) {
+      toast.error("Missing pick up locations!");
       return;
     }
 
-    if (pickupFlag && places.length == 0) {
-      toast.error("Missing pick up locations!");
+    if (deliveryFlag && deliveryNotes == "") {
+      toast.error("Missing delivery notes!");
+      return;
     }
+
+    const listing = {
+      name: title,
+      price: price,
+      condition: condition == "new" ? true : false,
+      tags: tags.join(","),
+      description: blurb,
+      delivery: deliveryFlag,
+      notes: deliveryFlag == true ? deliveryNotes : null,
+      //image:
+    };
   };
   return (
     <div>
@@ -165,23 +181,6 @@ function CreateListing() {
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Pick-Up</Form.Label>
-              <Form.Check
-                value={pickupFlag}
-                onChange={(e) => {
-                  setPickupFlag(e.target.checked);
-                  var locationBox = document.getElementById("locationBox");
-                  locationBox.style.display = e.target.checked
-                    ? "inline"
-                    : "none";
-                }}
-              />
-            </Form.Group>
-            <Form.Group
-              style={{ display: pickupFlag ? "inline" : "none" }}
-              className="mb-3"
-              id="locationBox"
-            >
               <Form.Label>Pick-up Locations</Form.Label>
               <Select
                 options={locations}
@@ -200,6 +199,26 @@ function CreateListing() {
                 value={deliveryFlag}
                 onChange={(e) => {
                   setDeliveryFlag(e.target.checked);
+                  var locationBox = document.getElementById("deliveryBox");
+                  locationBox.style.display = e.target.checked
+                    ? "inline"
+                    : "none";
+                }}
+              />
+            </Form.Group>
+            <Form.Group
+              style={{ display: deliveryFlag ? "inline" : "none" }}
+              className="mb-3"
+              id="deliveryBox"
+            >
+              <Form.Label>Delivery Notes</Form.Label>
+              <Form.Control
+                as="textarea"
+                placeholder="Write your deliveryNotes..."
+                style={{ height: "200px", marginTop: "0px" }}
+                value={deliveryNotes}
+                onChange={(e) => {
+                  setDeliveryNotes(e.target.value);
                 }}
               />
             </Form.Group>
