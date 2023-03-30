@@ -43,6 +43,9 @@ function Header() {
                                 <LinkContainer to='/settings'>
                                     <NavDropdown.Item>Settings</NavDropdown.Item>
                                 </LinkContainer>
+                                <LinkContainer to='/transactionhistory'>
+                                    <NavDropdown.Item>Transaction History</NavDropdown.Item>
+                                </LinkContainer>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
                             </NavDropdown>
