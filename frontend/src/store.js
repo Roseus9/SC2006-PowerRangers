@@ -1,11 +1,14 @@
 // import { createStore, applyMiddleware } from 'redux'
 // import { composeWithDevTools } from 'redux-devtools-extension'
-import { productListReducer, productItemReducer } from './reducers/productReducer'
-import { userLoginReducer, userRegisterReducer } from './reducers/userReducer'
+import {
+  productListReducer,
+  productItemReducer,
+} from "./reducers/productReducer";
+import { userLoginReducer, userRegisterReducer } from "./reducers/userReducer";
 // import thunk from 'redux-thunk'
 // import { combineReducers } from 'redux'
-import { configureStore } from '@reduxjs/toolkit'
-
+import { configureStore } from "@reduxjs/toolkit";
+import { productCreateReducer } from "./reducers/productReducer";
 // const initialState = {}
 // const middleware = [thunk]
 // const reducer = combineReducers({
@@ -21,15 +24,15 @@ const store = configureStore({
     productItem: productItemReducer,
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
+    productCreate: productCreateReducer,
   },
   preloadedState: {
     userLogin: {
-      userInfo: localStorage.getItem('userInfo')
-        ? JSON.parse(localStorage.getItem('userInfo'))
-        : null
-    }
-  }
-})
+      userInfo: localStorage.getItem("userInfo")
+        ? JSON.parse(localStorage.getItem("userInfo"))
+        : null,
+    },
+  },
+});
 
-
-export default store
+export default store;

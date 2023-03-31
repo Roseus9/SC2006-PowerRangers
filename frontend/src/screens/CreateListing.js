@@ -10,7 +10,16 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Papa from "papaparse";
 import restrictedItems from "../constants/restrictedItems";
+import { createProduct } from "../actions/productActions";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { Navigate, redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function CreateListing() {
+  const productCreate = useSelector((state) => state.productCreate);
+  const { product, error, success } = productCreate;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [blurb, setBlurb] = useState("");
   const [tags, setTags] = useState([]);
@@ -22,6 +31,11 @@ function CreateListing() {
   const [price, setPrice] = useState("");
   const [deliveryNotes, setDeliveryNotes] = useState("");
 
+  // useEffect(() => {
+  //   if (success) {
+  //     history.push(`/product/${product._id}`);
+  //   }
+  // }, [success, history]);
   const submitHandler = (e) => {
     e.preventDefault();
     if (title == "") {
@@ -32,7 +46,10 @@ function CreateListing() {
       toast.error("Restricted item!");
       return;
     }
-    console.log(deliveryFlag);
+    if (!file) {
+      toast.error("Missing image!");
+      return;
+    }
     if (blurb == "") {
       toast.error("Missing description!");
       return;
@@ -46,7 +63,7 @@ function CreateListing() {
       toast.error("Missing price!");
       return;
     }
-    if (!price.match("^[0-9]+[.[0-9]{1,3}]{0,1}$")) {
+    if (!price.match("^[0-9]+([.[0-9]{1,3}])?$")) {
       toast.error("Invalid price!");
       return;
     }
@@ -64,17 +81,43 @@ function CreateListing() {
       toast.error("Missing delivery notes!");
       return;
     }
+    var tags_arr = [];
+    for (var i = 0; i < tags.length; i++) {
+      tags_arr.push(tags[i].value);
+    }
+    var tags_str = tags_arr.join(",");
 
-    const listing = {
-      name: title,
-      price: price,
-      condition: condition == "new" ? true : false,
-      tags: tags.join(","),
-      description: blurb,
-      delivery: deliveryFlag,
-      notes: deliveryFlag == true ? deliveryNotes : null,
-      //image:
-    };
+    var locations_arr = [];
+    for (var i = 0; i < places.length; i++) {
+      locations_arr.push(places[i].value);
+    }
+    var locations_str = locations_arr.join(",");
+    let listing = new FormData();
+    listing.append("name", title);
+    listing.append("price", price);
+    listing.append("condition", condition == "new" ? true : false);
+    listing.append("tags", tags_str);
+    listing.append("description", blurb);
+    listing.append("pickupLocations", locations_str);
+    listing.append("delivery", deliveryFlag);
+    listing.append("notes", deliveryFlag == true ? deliveryNotes : null);
+    listing.append("image", file);
+    // const listing = {
+    //   name: title,
+    //   price: price,
+    //   condition: condition == "new" ? true : false,
+    //   tags: tags_str,
+    //   description: blurb,
+    //   pickupLocations: locations_str,
+    //   delivery: deliveryFlag,
+    //   notes: deliveryFlag == true ? deliveryNotes : null,
+    //   image: file,
+    // };
+
+    dispatch(createProduct(listing));
+    if (success) {
+      navigate("/");
+    }
   };
   return (
     <div>

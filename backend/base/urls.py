@@ -14,13 +14,11 @@ urlpatterns = [
     path("products", views.getProducts, name="products"),
     path("products/<str:pk>", views.getProduct, name="product"),
     path("users/upload", views.uploadImageUser, name="upload-image-user"),
-    path("products/upload", views.uploadImageProduct, name="upload-image-product"),
-  
+    path("create", views.createProduct, name="create-product"),
     path('users', views.getUsers, name='users'),
     path('users/profile', views.getUserProfile, name='user-profile'),
     # Registering
     path('users/register', views.createUser, name='register-user'),  
     # logging in, using our customised MyTokenObtainPairView
-    path('users/login', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    
+    path('users/login', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair')
 ]   

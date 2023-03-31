@@ -56,5 +56,6 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'  # '__all__' means all fields
+        
 
 

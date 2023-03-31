@@ -123,39 +123,53 @@ def getProduct(request, pk):
     #         product = i
     return Response(serializer.data)
     # return Response(product)
-
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def updateUserProfile(request, pk):
-    profile = Profile.objects.get(_id=pk)
-    # get back the user from the token
-    user = request.user
-    # use the serializer with token so we can get the additional token
-    serializer = UserSerializerWithToken(user, many=False)
-    # get the data from the request
-    data = request.data
-    # and then update the user
-    user.first_name=data['name']
-    user.username=data['username']
-    user.email=data['email']
-    profile.phone=data['phone']
-    profile.telegram=data['telegram']
-    profile.picture=
-    # ensure password is not blank, then hash it
-    if data['password'] != '':
-        user.password=make_password(data['password'])
-    user.save()
-    return Response(serializer.data)
-
-
+    
 @api_view(['POST'])
-def uploadImageProduct(request):
+@permission_classes([IsAuthenticated])
+def createProduct(request):
     data = request.data
-    product_id = data['product_id']
-    product = Product.objects.get(_id=product_id)
-    product.image = request.FILES.get('image')
-    product.save()
-    return Response('Image was uploaded')
+    currUser = request.user
+    product = Product.objects.create(
+        seller=currUser,
+        buyer=None,
+        name=request.POST.get('name'),
+        price=request.POST.get('price'),
+        condition=True if request.POST.get('condition') == "true" else False ,
+        tags=request.POST.get('tags'),
+        description=request.POST.get('description'),
+        delivery=True if request.POST.get('delivery') == "true" else False,
+        notes=request.POST.get('notes'),
+        pickupLocations=request.POST.get('pickupLocations'),
+        soldAt=None,
+        completedAt=None,
+        image=request.FILES.get('image')
+    )
+    serializer = ProductSerializer(product, many=False)
+    return Response(serializer.data)
+    
+        
+# @api_view(['PUT'])
+# @permission_classes([IsAuthenticated])
+# def updateUserProfile(request, pk):
+#     profile = Profile.objects.get(_id=pk)
+#     # get back the user from the token
+#     user = request.user
+#     # use the serializer with token so we can get the additional token
+#     serializer = UserSerializerWithToken(user, many=False)
+#     # get the data from the request
+#     data = request.data
+#     # and then update the user
+#     user.first_name=data['name']
+#     user.username=data['username']
+#     user.email=data['email']
+#     profile.phone=data['phone']
+#     profile.telegram=data['telegram']
+#     #profile.picture=
+#     # ensure password is not blank, then hash it
+#     if data['password'] != '':
+#         user.password=make_password(data['password'])
+#     user.save()
+#     return Response(serializer.data)
 
 @api_view(['POST'])
 def uploadImageUser(request):
