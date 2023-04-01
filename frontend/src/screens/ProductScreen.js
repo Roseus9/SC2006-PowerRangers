@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Notification from '../components/Notification'
+import { Link } from 'react-router-dom'
+
 
 import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap'
 
@@ -80,7 +82,10 @@ function ProductScreen() {
         
                             </ListGroup.Item>    */}
                         </ListGroup>
-                        <Button className='my-3' variant='primary'>Bookmark</Button>  
+                        <Button className='my-3' variant='primary'>Bookmark</Button>
+                        <Link to={`/offer/product/${product._id}`}>
+                            <Button className='my-3' variant='primary' style={{marginLeft: "10px"}}>Make Offer</Button> 
+                        </Link>
                     </Col>
                 </Row>
 

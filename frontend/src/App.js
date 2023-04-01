@@ -11,6 +11,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import CreateListing from "./screens/CreateListing";
 import Settings from './screens/Settings';
+import CreateOffer from './screens/CreateOffer';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/create" element={<CreateListing />} />
             <Route path='/settings' element={<Settings/>} />
+            <Route path="/offer/product/:productID" element={<CreateOffer/>} />
           </Routes>
         </Container>
       </main>
