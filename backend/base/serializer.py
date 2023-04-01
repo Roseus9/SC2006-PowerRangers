@@ -1,6 +1,6 @@
 # import the model and serializer
 from rest_framework import serializers
-from .models import Product
+from .models import Product, Profile
 # the User model is a built-in model provided by Django that represents a user of the system. 
 from django.contrib.auth.models import User
 # import the RefreshToken class from rest_framework_simplejwt
@@ -50,12 +50,24 @@ class UserSerializerWithToken(UserSerializer):
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
+    
+    def get_name(self, obj):
+        name = obj.first_name
+        if name == "":
+            return obj.email
+        else:
+            return name
 
 # Product Serializer
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'  # '__all__' means all fields
+
+class UserProfilesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'
         
 
 

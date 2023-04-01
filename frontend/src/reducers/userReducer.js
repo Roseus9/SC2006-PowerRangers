@@ -10,6 +10,10 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
+
+  USER_PROFILE_REQUEST,
+  USER_PROFILE_SUCCESS,
+  USER_PROFILE_FAIL,
 } from '../constants/constants'
 //---------------------------------------
 
@@ -58,6 +62,24 @@ export const userRegisterReducer = (state = userInitialState, action) => {
     default:
       return state
   }
+}
+
+// Reducer for getting user details
+export const userDetailsReducer = (state = {}, action) => {
+switch (action.type) {
+  case USER_PROFILE_REQUEST:
+    // here the spread operator means we include all the attributes of the initial state object into the return object
+    return { loading: true }
+  // we are not using userInfo here because we are not returning the user info, just the user object
+  case USER_PROFILE_SUCCESS:
+    return { loading: false, userObj: action.payload }
+  // if there is an error, return a new attribute error, passing in the response from the payload
+  case USER_PROFILE_FAIL:
+    return { loading: false, error: action.payload }
+  default:
+    return state;
+}
+
 }
 
 
