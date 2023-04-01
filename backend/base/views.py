@@ -8,9 +8,9 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 # import the Models
-from .models import Product, User
+from .models import Product, User, Offer
 # import the Serializers
-from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken
+from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, OfferSerializer
 
 # JWT imports for customising tokens to return token information directly to front end
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -62,6 +62,7 @@ def getRoutes(request):
             '/api/products/<update>/<id>/',
             '/api/products/<id>/reviews/',
             '/api/products/<id>/reviews/<review_id>/',
+            '/api/offer/product/<id>'
     ]
 
     return Response(routes)
@@ -180,3 +181,24 @@ def uploadImageUser(request):
     profile.image = request.FILES.get('image')
     profile.save()
     return Response('Image was uploaded')
+
+
+@api_view(['POST'])
+#@permission_classes([IsAuthenticated])
+def createOffer(request, pk):
+    data = request.data
+    currUser = request.user
+    product = Product.objects.get(_id=pk)
+    offer = Offer.objects.create(
+        buyer=currUser,        
+        seller=product.seller,
+        product= product,
+        price=request.POST.get('price'),
+        isAccepted=None,
+        acceptedAt=None,
+        isComplete=None,
+        completedAt=None,
+    )
+    # offer.save()
+    serializer = OfferSerializer(offer, many=False)
+    return Response(serializer.data)

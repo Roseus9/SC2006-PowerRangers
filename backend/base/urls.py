@@ -15,6 +15,7 @@ urlpatterns = [
     path("products/<str:pk>", views.getProduct, name="product"),
     path("users/upload", views.uploadImageUser, name="upload-image-user"),
     path("create", views.createProduct, name="create-product"),
+    path("offer/product/<str:pk>", views.createOffer, name = "offer"),
     path('users', views.getUsers, name='users'),
     path('users/profile', views.getUserProfile, name='user-profile'),
     # Registering
