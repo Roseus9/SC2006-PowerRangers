@@ -28,7 +28,7 @@ function ProductScreen() {
     // const item = products.find((product)=> product._id === itemId)
 
     // format date
-    const dateString = item.createdAt;
+    const dateString = product.createdAt;
     const date = new Date(dateString);
     const formattedDate = date.toLocaleString();
 
@@ -70,6 +70,7 @@ function ProductScreen() {
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 Listed Time: {formattedDate}
+                                {/* Listed Time: {product.createdAt} */}
                             </ListGroup.Item>
                             {/* <ListGroup.Item>
         
