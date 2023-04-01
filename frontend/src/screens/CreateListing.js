@@ -31,11 +31,18 @@ function CreateListing() {
   const [price, setPrice] = useState("");
   const [deliveryNotes, setDeliveryNotes] = useState("");
 
-  // useEffect(() => {
-  //   if (success) {
-  //     history.push(`/product/${product._id}`);
-  //   }
-  // }, [success, history]);
+  //user cant access create listing page if not logged in
+  const userRegister = useSelector(state => state.userLogin);
+  let { loading, userInfo} = userRegister;
+  useEffect(() => {
+    if (success) {
+      navigate("/");
+    }
+    if (!userInfo) {
+        navigate("/login")
+    }
+  }, [userInfo, navigate, success])
+
   const submitHandler = (e) => {
     e.preventDefault();
     if (title == "") {

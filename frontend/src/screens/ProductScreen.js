@@ -72,6 +72,10 @@ function ProductScreen() {
                                 Listed Time: {formattedDate}
                                 {/* Listed Time: {product.createdAt} */}
                             </ListGroup.Item>
+                            <ListGroup.Item>
+                                Sold By: {product.seller}
+                                {/* Listed Time: {product.createdAt} */}
+                            </ListGroup.Item>
                             {/* <ListGroup.Item>
         
                             </ListGroup.Item>    */}
