@@ -13,8 +13,9 @@ import restrictedItems from "../constants/restrictedItems";
 import { createProduct } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { Navigate, redirect } from "react-router-dom";
+import Notification from '../components/Notification';
 import { useNavigate } from "react-router-dom";
+
 function CreateListing() {
   const productCreate = useSelector((state) => state.productCreate);
   const { product, error, success } = productCreate;
@@ -30,6 +31,11 @@ function CreateListing() {
   const [places, setPlaces] = useState([]);
   const [price, setPrice] = useState("");
   const [deliveryNotes, setDeliveryNotes] = useState("");
+
+  // for popup
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   //user cant access create listing page if not logged in
   const userRegister = useSelector(state => state.userLogin);
@@ -140,6 +146,7 @@ function CreateListing() {
         pauseOnHover
         theme="light"
       />
+
       <Form onSubmit={submitHandler}>
         <h4>Create New Listing</h4>
         <hr />
@@ -291,6 +298,7 @@ function CreateListing() {
           </div>
         </div>
       </Form>
+      {error && <Notification variant='danger' message={error}/>}          
     </div>
   );
 }

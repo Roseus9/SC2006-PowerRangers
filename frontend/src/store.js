@@ -4,7 +4,7 @@ import {
   productListReducer,
   productItemReducer,
 } from "./reducers/productReducer";
-import { userLoginReducer, userRegisterReducer } from "./reducers/userReducer";
+import { userDetailsReducer, userLoginReducer, userRegisterReducer } from "./reducers/userReducer";
 // import thunk from 'redux-thunk'
 // import { combineReducers } from 'redux'
 import { configureStore } from "@reduxjs/toolkit";
@@ -25,6 +25,7 @@ const store = configureStore({
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     productCreate: productCreateReducer,
+    userDetails: userDetailsReducer,
   },
   preloadedState: {
     userLogin: {
