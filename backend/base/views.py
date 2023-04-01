@@ -144,6 +144,7 @@ def createProduct(request):
         completedAt=None,
         image=request.FILES.get('image')
     )
+    product.save()
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
     
