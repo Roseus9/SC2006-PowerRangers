@@ -10,9 +10,12 @@ import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { getProduct } from '../actions/productActions'
+import { useNavigate } from 'react-router-dom';
+
 
 // here we deconstruct the props object, to access match
 function ProductScreen() {
+    let navigate = useNavigate();
     // useParam is a hook that allows us to access the url parameters 
     let { itemId } = useParams();
     const dispatch = useDispatch();
@@ -22,6 +25,10 @@ function ProductScreen() {
     useEffect(() => {
         dispatch(getProduct(itemId))
     }, [itemId, dispatch])
+
+    const alertClicked = () => {
+        navigate("/profile/" + product.username);
+      };
 
     // function ProductScreen({match}) {
     // const item = products.find((product)=> product._id === match.params.itemId)
@@ -74,8 +81,8 @@ function ProductScreen() {
                                 Listed Time: {formattedDate}
                                 {/* Listed Time: {product.createdAt} */}
                             </ListGroup.Item>
-                            <ListGroup.Item>
-                                Sold By: {product.seller}
+                            <ListGroup.Item action variant="warning" onClick={alertClicked}>
+                                Sold By: {product.username}
                                 {/* Listed Time: {product.createdAt} */}
                             </ListGroup.Item>
                             {/* <ListGroup.Item>

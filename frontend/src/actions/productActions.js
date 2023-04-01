@@ -40,6 +40,7 @@ export const getProducts = () => async (dispatch) => {
 //  Action creator for getting a single product
 //  action object contains type and payload
 export const getProduct = (itemId) => async (dispatch) => {
+  console.log("HI")
   try {
     dispatch({ type: PRODUCT_ITEM_REQUEST });
     const { data } = await axios.get(`/api/products/${itemId}`);

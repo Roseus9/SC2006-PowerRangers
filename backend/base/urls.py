@@ -17,7 +17,14 @@ urlpatterns = [
     path("create", views.createProduct, name="create-product"),
     path("offer/product/<str:pk>", views.createOffer, name = "offer"),
     path('users', views.getUsers, name='users'),
-    path('users/profile', views.getUserProfile, name='user-profile'),
+    
+    
+    # this allows us to access by:
+    # profile/123
+    path('users/profile/<str:id>', views.getUserProfile, name='user-profile'),
+    # profile/username
+    path('profile/<str:slug>', views.UserProfileView),
+
     # Registering
     path('users/register', views.createUser, name='register-user'),  
     # logging in, using our customised MyTokenObtainPairView

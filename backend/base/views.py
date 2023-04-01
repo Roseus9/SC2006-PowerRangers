@@ -7,10 +7,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-# import the Models
-from .models import Product, User, Offer
+from .models import Product, User, Profile, Offer
 # import the Serializers
-from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, OfferSerializer
+from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer
 
 # JWT imports for customising tokens to return token information directly to front end
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -63,13 +62,14 @@ def getRoutes(request):
             '/api/products/<id>/reviews/',
             '/api/products/<id>/reviews/<review_id>/',
             '/api/offer/product/<id>'
+            '/api/profile/<username>'
     ]
 
     return Response(routes)
     # return JsonResponse(routes, safe=False)
 
 # The request.data attribute contains the data that was sent with the request. 
-# In this case, we expect the request to include the user's name, email, username, and password
+# In this case, we expect the request to include the user's name, email, username, password and tel
 @api_view(['POST'])
 def createUser(request):
     data = request.data
@@ -80,23 +80,25 @@ def createUser(request):
             email=data['email'],
             password=make_password(data['password']),
         )
-        # serialise the user model instance into a JSON-compatible representation
-        serializer = UserSerializer(user, many=False)
-        return Response(serializer.data)
+        print("user created")
     except:
         message = {'detail': 'User with this email already exists'}
         return Response(message, status = status.HTTP_400_BAD_REQUEST)
 
-# The request.user attribute contains the user object of the authenticated user, which is set by Django's authentication middleware. 
-# If the user is not authenticated, request.user will be set to an instance of AnonymousUser.
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getUserProfile(request):
-    user = request.user
-    # serialize the User object using the UserSerializer class
-    # the many=False argument indicates that we are serializing a single User
-    serializer = UserSerializer(user, many=False)
-    return Response(serializer.data)
+    try:
+        profile = Profile.objects.create(
+            user=user,
+            telegram=data['telegram'],
+        )
+        print("profile created")
+        # serialise the user model instance into a JSON-compatible representation
+        serializer = UserSerializerWithToken(user, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Failed to create the user profile'}
+        return Response(message, status = status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -117,38 +119,40 @@ def getProducts(request):
 @api_view(['GET'])
 def getProduct(request, pk):
     product = Product.objects.get(_id=pk) # get products model, currently not in json format
+    username = UserSerializerWithToken(product.seller).data.get('username')
+    print(username)
     serializer = ProductSerializer(product, many=False) # many=False means that we have one product and we want to serialize it
-    # product = None
-    # for i in products:
-    #     if i['_id'] == pk:
-    #         product = i
-    return Response(serializer.data)
+    data = {**(serializer.data), **{'username': username} }
+    return Response(data)
     # return Response(product)
     
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def createProduct(request):
     data = request.data
     currUser = request.user
-    product = Product.objects.create(
-        seller=currUser,
-        buyer=None,
-        name=request.POST.get('name'),
-        price=request.POST.get('price'),
-        condition=True if request.POST.get('condition') == "true" else False ,
-        tags=request.POST.get('tags'),
-        description=request.POST.get('description'),
-        delivery=True if request.POST.get('delivery') == "true" else False,
-        notes=request.POST.get('notes'),
-        pickupLocations=request.POST.get('pickupLocations'),
-        soldAt=None,
-        completedAt=None,
-        image=request.FILES.get('image')
-    )
-    product.save()
-    serializer = ProductSerializer(product, many=False)
-    return Response(serializer.data)
-    
+    try:
+        product = Product.objects.create(
+            seller=currUser,
+            buyer=None,
+            name=request.POST.get('name'),
+            price=request.POST.get('price'),
+            condition=True if request.POST.get('condition') == "true" else False,
+            tags=request.POST.get('tags'),
+            description=request.POST.get('description'),
+            delivery=True if request.POST.get('delivery') == "true" else False,
+            notes=request.POST.get('notes'),
+            pickupLocations=request.POST.get('pickupLocations'),
+            soldAt=None,
+            completedAt=None,
+            image=request.FILES.get('image')
+        )
+        serializer = ProductSerializer(product, many=False)
+        return Response(serializer.data)
+    except:
+        return Response({'detail': 'Failed to create product'}, status = status.HTTP_400_BAD_REQUEST)
+
+
         
 # @api_view(['PUT'])
 # @permission_classes([IsAuthenticated])
@@ -202,3 +206,50 @@ def createOffer(request, pk):
     # offer.save()
     serializer = OfferSerializer(offer, many=False)
     return Response(serializer.data)
+# The request.user attribute contains the user object of the authenticated user, which is set by Django's authentication middleware. 
+# If the user is not authenticated, request.user will be set to an instance of AnonymousUser.
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserProfile(request, id):
+    requesteruser = request.user
+    user = User.objects.get(_id=id) 
+    # serialize the User object using the UserSerializer class
+    # the many=False argument indicates that we are serializing a single User
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+# Obtains a User Profile based on the username i.e. the slug from the url
+@api_view(['GET'])
+def UserProfileView(request, slug):
+    # first find the user for the profile visited
+    user = User.objects.get(username=slug) 
+    # then find the profile model for the user
+    try:
+        profile = Profile.objects.get(user=user)
+        serializedProfile = UserProfilesSerializer(profile, many=False).data
+
+    except:
+        message = {'detail': 'No such profile exists'}
+        return Response(message, status = status.HTTP_400_BAD_REQUEST)
+    
+    # as well as the products that the user has created
+    try:
+        products = Product.objects.filter(seller=user)
+        serializedProducts = ProductSerializer(products, many=True).data
+
+    except:
+        return(
+            {
+                'profile': serializedProfile,
+                'products': "No products found",
+                'user': UserSerializerWithToken(user, many=False).data
+            }
+        )
+    
+    data = {
+        'profile': serializedProfile,
+        'products': serializedProducts,
+        'user': UserSerializerWithToken(user, many=False).data
+    }
+
+    return Response(data)
