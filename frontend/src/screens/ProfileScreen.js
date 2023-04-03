@@ -3,6 +3,7 @@ import {useParams, useLocation, useNavigate, Link, useSearchParams } from 'react
 import Loader from '../components/Loader'
 import Notification from '../components/Notification'
 import Product2 from '../components/Product2'
+import Alert from 'react-bootstrap/Alert';
 
 import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap'
 
@@ -59,11 +60,17 @@ function ProfileScreen() {
                             ? (<Notification variant="danger" message="User not found" />)
                                 : (
                                     <Row>
-                                        {userObj.products.map((product) => (
+                                        {userObj.products.length === 0 ? (
+                                        <Alert variant="danger" className="d-none d-lg-block">
+                                            No Listings Available
+                                        </Alert>
+                                        ) : (
+                                        userObj.products.map((product) => (
                                             <Col key={product._id} sm={12} md={8} lg={4} xl={3}>
-                                                <Product2 product={product} />
+                                            <Product2 product={product} />
                                             </Col>
-                                        ))}
+                                        ))
+                                        )}
                                     </Row>
                                 )}
         </Col>

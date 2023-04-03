@@ -40,6 +40,7 @@ function CreateListing() {
   //user cant access create listing page if not logged in
   const userRegister = useSelector(state => state.userLogin);
   let { loading, userInfo} = userRegister;
+
   useEffect(() => {
     if (success) {
       navigate("/");
@@ -48,6 +49,10 @@ function CreateListing() {
         navigate("/login")
     }
   }, [userInfo, navigate, success])
+
+  const cancelClicked = () => {
+    navigate("/");
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -291,7 +296,7 @@ function CreateListing() {
               >
                 Submit
               </Button>
-              <Button variant="outline-secondary" style={{ marginTop: "5px" }}>
+              <Button onClick={cancelClicked} variant="outline-secondary" style={{ marginTop: "5px" }}>
                 Cancel
               </Button>
             </Form.Group>

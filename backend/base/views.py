@@ -7,10 +7,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-# import the Models
-from .models import Product, User, Profile
+from .models import Product, User, Profile, Offer
 # import the Serializers
-from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer
+from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer
 
 # JWT imports for customising tokens to return token information directly to front end
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -62,6 +61,7 @@ def getRoutes(request):
             '/api/products/<update>/<id>/',
             '/api/products/<id>/reviews/',
             '/api/products/<id>/reviews/<review_id>/',
+            '/api/offer/product/<id>'
             '/api/profile/<username>'
     ]
 
@@ -186,6 +186,26 @@ def uploadImageUser(request):
     profile.save()
     return Response('Image was uploaded')
 
+
+@api_view(['POST'])
+#@permission_classes([IsAuthenticated])
+def createOffer(request, pk):
+    data = request.data
+    currUser = request.user
+    product = Product.objects.get(_id=pk)
+    offer = Offer.objects.create(
+        buyer=currUser,        
+        seller=product.seller,
+        product= product,
+        price=data['price'],
+        isAccepted=False,
+        acceptedAt=None,
+        isComplete=False,
+        completedAt=None,
+    )
+    # offer.save()
+    serializer = OfferSerializer(offer, many=False)
+    return Response(serializer.data)
 # The request.user attribute contains the user object of the authenticated user, which is set by Django's authentication middleware. 
 # If the user is not authenticated, request.user will be set to an instance of AnonymousUser.
 @api_view(['GET'])
