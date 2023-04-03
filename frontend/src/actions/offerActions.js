@@ -31,7 +31,7 @@ export const createOffer = (price, product) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    const { data } = await axios.post(`/api/offer/product/${product}`, price, product, config);
+    const { data } = await axios.post(`/api/offer/product/${product}`, {"price":price, "product":product}, config);
 
     dispatch({
       type: OFFER_CREATE_SUCCESS,

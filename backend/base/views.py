@@ -197,10 +197,10 @@ def createOffer(request, pk):
         buyer=currUser,        
         seller=product.seller,
         product= product,
-        price=request.POST.get('price'),
-        isAccepted=None,
+        price=data['price'],
+        isAccepted=False,
         acceptedAt=None,
-        isComplete=None,
+        isComplete=False,
         completedAt=None,
     )
     # offer.save()
