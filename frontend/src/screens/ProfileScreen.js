@@ -29,7 +29,7 @@ function ProfileScreen() {
         <hr />
         <Col md={3}>
             <h4>User Profile</h4>
-            <Image src={userObj ? userObj.profile.image : ""} alt="No Profile Picture Uploaded" fluid / >
+            <Image src={userObj ? (userObj.profile.image ? userObj.profile.image : "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg") : "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"} alt="No Profile Picture Uploaded" fluid / >
             <ListGroup variant='flush'>
                 <ListGroup.Item variant="info">
                     <div className="fw-bold">Name: {userObj ? userObj.user.name : "No Name"}</div>
