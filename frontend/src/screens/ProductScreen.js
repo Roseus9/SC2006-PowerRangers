@@ -91,7 +91,7 @@ function ProductScreen() {
                         </ListGroup>
                         <Button className='my-3' variant='primary'>Bookmark</Button>
                         <Link to={`/offer/product/${product._id}`}>
-                            <Button className='my-3' variant='primary' style={{marginLeft: "10px"}}>Make Offer</Button> 
+                            <Button className='my-3' variant='danger' style={{marginLeft: "10px"}}>Make Offer</Button> 
                         </Link>
                     </Col>
                 </Row>
