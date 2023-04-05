@@ -31,7 +31,7 @@ function App() {
             <Route path='/settings' element={<Settings/>} />
             <Route path="/profile/:username" element={<ProfileScreen />} />
             <Route path="/offer/product/:productID" element={<CreateOffer/>} />
-            <Route path="/offers/:userID" element={<OffersScreen/>} />
+            <Route path="/offers/:username" element={<OffersScreen/>} />
           </Routes>
         </Container>
       </main>

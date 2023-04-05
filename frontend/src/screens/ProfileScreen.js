@@ -1,5 +1,6 @@
 import {React, useEffect, useState} from 'react'
 import {useParams, useLocation, useNavigate, Link, useSearchParams } from 'react-router-dom'
+
 import Loader from '../components/Loader'
 import Notification from '../components/Notification'
 import Product2 from '../components/Product2'
@@ -28,27 +29,31 @@ function ProfileScreen() {
         <h2>{username}'s Profile Page</h2>
         <hr />
         <Col md={3}>
-            <h4>User Profile</h4>
-            <Image src={userObj ? (userObj.profile.image ? userObj.profile.image : "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg") : "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"} alt="No Profile Picture Uploaded" fluid / >
-            <ListGroup variant='flush'>
-                <ListGroup.Item variant="info">
-                    <div className="fw-bold">Name: {userObj ? userObj.user.name : "No Name"}</div>
-                    Joined: {userObj ? Date(userObj.user.date_joined).toLocaleString() : " - "}
-                    
-                </ListGroup.Item>
-                {/* <ListGroup.Item>
-                    Email
-                </ListGroup.Item> */}
-                {/* <ListGroup.Item>
-                    Phone Number
-                </ListGroup.Item> */}
-                <ListGroup.Item active>
-                    Telegram Handle: @{userObj ? userObj.profile.telegram : "No Telegram"}
-                </ListGroup.Item>
-                <ListGroup.Item variant="light">
-                    Bio: {userObj ? userObj.profile.bio : "-"}
-                </ListGroup.Item>
-            </ListGroup>
+                <Card>
+                <Card.Header>{userObj ? userObj.user.name : "No Name"} </Card.Header>
+                    <Card.Body>
+                        <Card.Title> </Card.Title>
+                        <Card.Text>
+                            <Image src={userObj ? (userObj.profile.image ? userObj.profile.image : "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg") : "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"} alt="No Profile Picture Uploaded" fluid / >
+                        </Card.Text>
+                        
+                        <ListGroup variant='flush'>
+                            <ListGroup.Item variant="info">
+                                <div>Joined: </div>
+                                {userObj ? Date(userObj.user.date_joined).toLocaleString() : " - "}
+                            </ListGroup.Item>
+                            <ListGroup.Item active>
+                                Telegram Handle: 
+                                <div className="fw-bold">@{userObj ? userObj.profile.telegram : "No Telegram"}</div>
+                                
+                            </ListGroup.Item>
+                            <ListGroup.Item variant="light">
+                                Bio: {userObj ? userObj.profile.bio : "-"}
+                            </ListGroup.Item>
+                        </ListGroup>
+                    </Card.Body>
+                </Card>
+
         </Col>
 
         <Col md={9}>

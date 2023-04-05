@@ -148,7 +148,7 @@ export const getUserProfileView = (slug) => async (dispatch) => {
   try {
     dispatch({ type: USER_PROFILE_REQUEST });
     const { data } = await axios.get(`/api/profile/${slug}`);
-    console.log("IDK WHAT IS THIS", data);
+    console.log("GET USER PROFILE RETURNED SUCCESSFULLY! returned data:", data);
     dispatch({ type: USER_PROFILE_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

@@ -18,7 +18,10 @@ urlpatterns = [
     path('users', views.getUsers, name='users'),
 
     # offers
-    path("offer/product/<str:pk>", views.createOffer, name = "offer"),
+    path("offer/product/<str:pk>", views.createOffer, name="offer"),
+    # received offers and sent offers
+    path("offer/received/<str:slug>", views.receivedOffers, name="received-offers"),
+    path("offer/sent/<str:slug>", views.sentOffers, name="sent-offers"),
     path('users', views.getUsers, name='users'),
     
     
