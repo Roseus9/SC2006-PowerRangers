@@ -40,6 +40,9 @@ function Header() {
                                 <LinkContainer to='/create'>
                                     <NavDropdown.Item>Create Listing</NavDropdown.Item>
                                 </LinkContainer>
+                                <LinkContainer to='/bookmarks'>
+                                    <NavDropdown.Item>Bookmarks</NavDropdown.Item>
+                                </LinkContainer>
                                 <LinkContainer to='/settings'>
                                     <NavDropdown.Item>Settings</NavDropdown.Item>
                                 </LinkContainer>
