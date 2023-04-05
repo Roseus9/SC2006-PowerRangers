@@ -11,6 +11,9 @@ import Product from "../components/Product";
 import { getProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useSearchParams } from 'react-router-dom';
+
+
 function Home() {
   // initial state of products is set to an empty array
   // const [products, setProducts] = useState([])
@@ -19,10 +22,13 @@ function Home() {
   const productList = useSelector((state) => state.productList);
   const { error, loading, products } = productList;
 
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get('keyword') || '';
+
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+    dispatch(getProducts(keyword));
+  }, [dispatch, keyword]);
 
   // now we can check the attributes, loading, error otherwise render
   return (

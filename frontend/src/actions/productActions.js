@@ -20,11 +20,11 @@ import {
 // ACTION CREATORS ----------------
 //  Action creator for getting a list of products
 //  action object contains type and payload
-export const getProducts = () => async (dispatch) => {
+export const getProducts = (keyword = '') => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST });
     //Without the curly braces, data would be assigned the entire object returned by axios.get() instead of just the data property.
-    const { data } = await axios.get("/api/products");
+    const { data } = await axios.get(`/api/products?keyword=${keyword}`);
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
