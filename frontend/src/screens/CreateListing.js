@@ -13,12 +13,12 @@ import restrictedItems from "../constants/restrictedItems";
 import { createProduct } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import Notification from '../components/Notification';
+import Notification from "../components/Notification";
 import { useNavigate } from "react-router-dom";
-
+import { PRODUCT_CREATE_RESET } from "../constants/constants";
 function CreateListing() {
   const productCreate = useSelector((state) => state.productCreate);
-  const { product, error, success } = productCreate;
+  var { product, error, success } = productCreate;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -38,18 +38,19 @@ function CreateListing() {
   const handleShow = () => setShow(true);
 
   //user cant access create listing page if not logged in
-  const userRegister = useSelector(state => state.userLogin);
-  let { loading, userInfo} = userRegister;
+  const userRegister = useSelector((state) => state.userLogin);
+  let { loading, userInfo } = userRegister;
 
   useEffect(() => {
     if (success) {
+      dispatch({ type: PRODUCT_CREATE_RESET });
       navigate("/");
     }
     if (!userInfo) {
-        navigate("/login")
+      navigate("/login");
     }
-  }, [userInfo, navigate, success])
-
+  }, [userInfo, navigate, success]);
+  //test
   const cancelClicked = () => {
     navigate("/");
   };
@@ -120,17 +121,6 @@ function CreateListing() {
     listing.append("delivery", deliveryFlag);
     listing.append("notes", deliveryFlag == true ? deliveryNotes : null);
     listing.append("image", file);
-    // const listing = {
-    //   name: title,
-    //   price: price,
-    //   condition: condition == "new" ? true : false,
-    //   tags: tags_str,
-    //   description: blurb,
-    //   pickupLocations: locations_str,
-    //   delivery: deliveryFlag,
-    //   notes: deliveryFlag == true ? deliveryNotes : null,
-    //   image: file,
-    // };
 
     dispatch(createProduct(listing));
     if (success) {
@@ -296,14 +286,18 @@ function CreateListing() {
               >
                 Submit
               </Button>
-              <Button onClick={cancelClicked} variant="outline-secondary" style={{ marginTop: "5px" }}>
+              <Button
+                onClick={cancelClicked}
+                variant="outline-secondary"
+                style={{ marginTop: "5px" }}
+              >
                 Cancel
               </Button>
             </Form.Group>
           </div>
         </div>
       </Form>
-      {error && <Notification variant='danger' message={error}/>}          
+      {error && <Notification variant="danger" message={error} />}
     </div>
   );
 }
