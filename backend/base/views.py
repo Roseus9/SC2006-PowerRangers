@@ -253,3 +253,44 @@ def UserProfileView(request, slug):
     }
 
     return Response(data)
+
+
+@api_view(['GET'])
+def myOffers(request, pk):
+    user = User.objects.get(username=pk) 
+    # then find the profile model for the user
+    try:
+        offer = Offer.objects.filter(seller=user, isAccepted=False)
+        serializedOffer = OfferSerializer(offer, many=True).data
+
+        data = {
+            'offers': serializedOffer,
+            'user': user
+        }
+
+        return Response(data)
+    
+    except:
+        message = {'detail': 'No such offer exists'}
+        return Response(message, status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def sentOffers(request, pk):
+    user = User.objects.get(username=pk) 
+    # then find the profile model for the user
+    try:
+        offer = Offer.objects.filter(buyer=user, isAccepted=False)
+        serializedOffer = OfferSerializer(offer, many=True).data
+
+        data = {
+            'offers': serializedOffer,
+            'user': user
+        }
+
+        return Response(data)
+    
+    except:
+        message = {'detail': 'No such offer exists'}
+        return Response(message, status = status.HTTP_400_BAD_REQUEST)
+
