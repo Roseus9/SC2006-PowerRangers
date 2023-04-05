@@ -12,6 +12,8 @@ import { getProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useSearchParams } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+
 
 
 function Home() {
@@ -38,6 +40,8 @@ function Home() {
         <Loader />
       ) : error ? (
         <Notification variant="danger" message={error} />
+      ) : products.length === 0 ? (
+        <Alert variant = "danger" style={{marginTop: "25px"}}>No results found.</Alert>
       ) : (
         <Row>
           {products.map((product) => (
