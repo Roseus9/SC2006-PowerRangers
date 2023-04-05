@@ -7,9 +7,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-from .models import Product, User, Profile, Offer
+from .models import Product, User, Profile, Offer, Bookmark
 # import the Serializers
-from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer
+from .serializer import BookmarkSerializer, ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer
 
 # JWT imports for customising tokens to return token information directly to front end
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -61,8 +61,9 @@ def getRoutes(request):
             '/api/products/<update>/<id>/',
             '/api/products/<id>/reviews/',
             '/api/products/<id>/reviews/<review_id>/',
-            '/api/offer/product/<id>'
-            '/api/profile/<username>'
+            '/api/offer/product/<id>',
+            '/api/profile/<username>',
+            '/api/bookmark/<productId>',
     ]
 
     return Response(routes)
@@ -253,3 +254,67 @@ def UserProfileView(request, slug):
     }
 
     return Response(data)
+
+@api_view(['POST'])
+def addBookmark(request, pk):
+    bookmark = Bookmark.objects.create(
+        user = request.user,
+        product = Product.objects.get(_id=pk),
+        isBookmarked=True,
+    )
+#class BookmarkSerializer(serializers.ModelSerializer):
+
+    serializer = BookmarkSerializer(bookmark, many=False)
+    return Response(serializer.data)
+
+    # user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+    # product = models.OneToOneField(Product, on_delete=models.SET_NULL, null=True)
+    # isBookmarked = models.BooleanField(default=False, blank=False)
+    # bookmarkedAt = models.DateTimeField(auto_now_add=True)
+    # _id = models.AutoField(primary_key=True, editable=False)
+
+# @api_view(['POST'])
+# # @permission_classes([IsAuthenticated])
+# def createProduct(request):
+#     data = request.data
+#     currUser = request.user
+#     try:
+#         product = Product.objects.create(
+#             seller=currUser,
+#             buyer=None,
+#             name=request.POST.get('name'),
+#             price=request.POST.get('price'),
+#             condition=True if request.POST.get('condition') == "true" else False,
+#             tags=request.POST.get('tags'),
+#             description=request.POST.get('description'),
+#             delivery=True if request.POST.get('delivery') == "true" else False,
+#             notes=request.POST.get('notes'),
+#             pickupLocations=request.POST.get('pickupLocations'),
+#             soldAt=None,
+#             completedAt=None,
+#             image=request.FILES.get('image')
+#         )
+#         serializer = ProductSerializer(product, many=False)
+#         return Response(serializer.data)
+#     except:
+#         return Response({'detail': 'Failed to create product'}, status = status.HTTP_400_BAD_REQUEST)
+
+# @api_view(['POST'])
+# #@permission_classes([IsAuthenticated])
+# def createOffer(request, pk):
+#     data = request.data
+#     currUser = request.user
+#     product = Product.objects.get(_id=pk)
+#     offer = Offer.objects.create(
+#         buyer=currUser,        
+#         seller=product.seller,
+#         product= product,
+#         price=data['price'],
+#         isAccepted=False,
+#         acceptedAt=None,
+#         isComplete=False,
+#         completedAt=None,
+#     )
+#     # offer.save()
+#     serializer = OfferSerializer(offer, many=False)
+#     return Response(serializer.data)

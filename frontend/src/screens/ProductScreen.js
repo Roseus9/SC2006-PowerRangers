@@ -11,6 +11,7 @@ import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProduct } from '../actions/productActions'
 import { useNavigate } from 'react-router-dom';
+import { bookmarkProduct } from '../actions/bookmarkActions';
 
 
 // here we deconstruct the props object, to access match
@@ -29,6 +30,10 @@ function ProductScreen() {
     const alertClicked = () => {
         navigate("/profile/" + product.username);
       };
+
+    function addToBookmarkHandler() {
+        dispatch(bookmarkProduct(itemId))
+    }
 
     // function ProductScreen({match}) {
     // const item = products.find((product)=> product._id === match.params.itemId)
@@ -89,7 +94,13 @@ function ProductScreen() {
         
                             </ListGroup.Item>    */}
                         </ListGroup>
-                        <Button className='my-3' variant='primary'>Bookmark</Button>
+                        <Button
+                            onClick = {addToBookmarkHandler} 
+                            className='my-3' 
+                            variant='primary'
+                            type='button'>
+                            Bookmark
+                        </Button>
                         <Link to={`/offer/product/${product._id}`}>
                             <Button className='my-3' variant='danger' style={{marginLeft: "10px"}}>Make Offer</Button> 
                         </Link>

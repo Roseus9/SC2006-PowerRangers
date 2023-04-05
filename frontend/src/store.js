@@ -10,6 +10,8 @@ import { userDetailsReducer, userLoginReducer, userRegisterReducer } from "./red
 import { configureStore } from "@reduxjs/toolkit";
 import { productCreateReducer } from "./reducers/productReducer";
 import { offerCreateReducer } from "./reducers/offerReducer";
+import { bookmarkCreateReducer } from "./reducers/bookmarkReducer";
+
 // const initialState = {}
 // const middleware = [thunk]
 // const reducer = combineReducers({
@@ -28,6 +30,8 @@ const store = configureStore({
     productCreate: productCreateReducer,
     offerCreate: offerCreateReducer,
     userDetails: userDetailsReducer,
+    bookmarkCreate: bookmarkCreateReducer,
+
   },
   preloadedState: {
     userLogin: {
