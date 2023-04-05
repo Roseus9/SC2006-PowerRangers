@@ -61,8 +61,9 @@ def getRoutes(request):
             '/api/products/<update>/<id>/',
             '/api/products/<id>/reviews/',
             '/api/products/<id>/reviews/<review_id>/',
-            '/api/offer/product/<id>'
-            '/api/profile/<username>'
+            '/api/offer/product/<id>',
+            '/api/profile/<username>',
+            '/api/top'
     ]
 
     return Response(routes)
@@ -256,3 +257,18 @@ def UserProfileView(request, slug):
     }
 
     return Response(data)
+
+@api_view(['GET'])
+def getLatestProducts(request):
+    products = Product.objects.all().order_by('createdAt')[0:5]
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getProducts(request):
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    products = Product.objects.filter(name__icontains=query) # get products model, currently not in json format
+    serializer = ProductSerializer(products, many=True) # many=True means that we have many products and we want to serialize them
+    return Response(serializer.data)

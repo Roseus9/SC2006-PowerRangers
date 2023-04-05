@@ -14,6 +14,9 @@ import {
   PRODUCT_CREATE_REQUEST,
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_CREATE_FAIL,
+  PRODUCT_TOP_REQUEST,
+  PRODUCT_TOP_SUCCESS,
+  PRODUCT_TOP_FAIL,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -40,7 +43,6 @@ export const getProducts = (keyword = '') => async (dispatch) => {
 //  Action creator for getting a single product
 //  action object contains type and payload
 export const getProduct = (itemId) => async (dispatch) => {
-  console.log("HI")
   try {
     dispatch({ type: PRODUCT_ITEM_REQUEST });
     const { data } = await axios.get(`/api/products/${itemId}`);
@@ -81,6 +83,23 @@ export const createProduct = (product) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getTopProducts = (keyword = '') => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_TOP_REQUEST });
+    //Without the curly braces, data would be assigned the entire object returned by axios.get() instead of just the data property.
+    const { data } = await axios.get(`/api/top/`);
+    dispatch({ type: PRODUCT_TOP_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_TOP_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

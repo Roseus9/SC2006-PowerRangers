@@ -3,6 +3,7 @@
 import {
   productListReducer,
   productItemReducer,
+  productTopReducer,
 } from "./reducers/productReducer";
 import { userDetailsReducer, userLoginReducer, userRegisterReducer } from "./reducers/userReducer";
 // import thunk from 'redux-thunk'
@@ -28,6 +29,7 @@ const store = configureStore({
     productCreate: productCreateReducer,
     offerCreate: offerCreateReducer,
     userDetails: userDetailsReducer,
+    productTop: productTopReducer,
   },
   preloadedState: {
     userLogin: {

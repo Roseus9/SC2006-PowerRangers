@@ -38,3 +38,8 @@ export const USER_DETAILS_FAIL = "USER_DETAILS_FAIL";
 export const USER_PROFILE_REQUEST = "USER_PROFILE_REQUEST";
 export const USER_PROFILE_SUCCESS = "USER_PROFILE_SUCCESS";
 export const USER_PROFILE_FAIL = "USER_PROFILE_FAIL";
+
+//  constants for API call to create a new product
+export const PRODUCT_TOP_REQUEST = "PRODUCT_TOP_REQUEST";
+export const PRODUCT_TOP_SUCCESS = "PRODUCT_TOP_SUCCESS";
+export const PRODUCT_TOP_FAIL = "PRODUCT_TOP_FAIL";

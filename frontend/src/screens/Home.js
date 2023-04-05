@@ -6,6 +6,7 @@ import Notification from "../components/Notification";
 // we no longer want to use products here, as we are fetching data from the backend:
 // import products from '../products'
 import Product from "../components/Product";
+import ProductCarousel from "../components/ProductCarousel";
 
 // for dispatching the action
 import { getProducts } from "../actions/productActions";
@@ -35,6 +36,7 @@ function Home() {
   // now we can check the attributes, loading, error otherwise render
   return (
     <div>
+      <ProductCarousel/>
       <h1>Trending Items</h1>
       {loading ? (
         <Loader />

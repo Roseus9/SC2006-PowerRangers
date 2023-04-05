@@ -12,6 +12,9 @@ import {
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_CREATE_FAIL,
   PRODUCT_CREATE_RESET,
+  PRODUCT_TOP_SUCCESS,
+  PRODUCT_TOP_FAIL,
+  PRODUCT_TOP_REQUEST,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -92,4 +95,27 @@ export const productCreateReducer = (state = {}, action) => {
       return state;
   }
 };
-//test
+
+export const productTopReducer = (state = {products:[]}, action) => {
+  switch (action.type) {
+    case PRODUCT_TOP_REQUEST:
+      return {
+        loading: true,
+        products: []
+      };
+
+    case PRODUCT_TOP_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload,
+      };
+    case PRODUCT_TOP_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+

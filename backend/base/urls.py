@@ -17,6 +17,7 @@ urlpatterns = [
     path("create", views.createProduct, name="create-product"),
     path("offer/product/<str:pk>", views.createOffer, name = "offer"),
     path('users', views.getUsers, name='users'),
+    path('top/', views.getLatestProducts, name='latest-products'),
     
     
     # this allows us to access by:
