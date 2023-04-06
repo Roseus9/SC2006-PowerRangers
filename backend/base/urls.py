@@ -22,6 +22,9 @@ urlpatterns = [
     # received offers and sent offers
     path("offer/received/<str:slug>", views.receivedOffers, name="received-offers"),
     path("offer/sent/<str:slug>", views.sentOffers, name="sent-offers"),
+    # sold and bought items
+    path("offer/bought/<str:slug>", views.boughtItems, name="received-offers"),
+    path("offer/sold/<str:slug>", views.soldItems, name="sent-offers"),
     path('users', views.getUsers, name='users'),
     
     

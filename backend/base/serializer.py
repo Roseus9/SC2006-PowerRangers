@@ -67,6 +67,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 # Offer Serializer
 class OfferSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Offer
         fields = '__all__'  # '__all__' means all fields
