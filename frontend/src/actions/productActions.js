@@ -14,6 +14,13 @@ import {
   PRODUCT_CREATE_REQUEST,
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_CREATE_FAIL,
+  PRODUCT_EDIT_REQUEST,
+  PRODUCT_EDIT_SUCCESS,
+  PRODUCT_EDIT_FAIL,
+  PRODUCT_EDIT_RESET,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_SUCCESS,
+  PRODUCT_DELETE_FAIL,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -40,7 +47,6 @@ export const getProducts = () => async (dispatch) => {
 //  Action creator for getting a single product
 //  action object contains type and payload
 export const getProduct = (itemId) => async (dispatch) => {
-  console.log("HI")
   try {
     dispatch({ type: PRODUCT_ITEM_REQUEST });
     const { data } = await axios.get(`/api/products/${itemId}`);
@@ -81,6 +87,68 @@ export const createProduct = (product) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const editProduct = (product) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_EDIT_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "multipart/form-data",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.post("/api/editproduct", product, config);
+    dispatch({
+      type: PRODUCT_EDIT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_EDIT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteProduct = (product) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_DELETE_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    console.log(product);
+    const { data } = await axios.post("/api/deleteproduct", product, config);
+    dispatch({
+      type: PRODUCT_DELETE_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

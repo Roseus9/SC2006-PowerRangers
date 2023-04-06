@@ -61,8 +61,11 @@ def getRoutes(request):
             '/api/products/<update>/<id>/',
             '/api/products/<id>/reviews/',
             '/api/products/<id>/reviews/<review_id>/',
-            '/api/offer/product/<id>'
-            '/api/profile/<username>'
+            '/api/offer/product/<id>',
+            '/api/profile/<username>',
+            '/api/checkbookmark/<pid>/<uid>'
+            '/api/editproduct',
+            '/api/deleteproduct'
     ]
 
     return Response(routes)
@@ -129,7 +132,6 @@ def getProduct(request, pk):
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
 def createProduct(request):
-    data = request.data
     currUser = request.user
     try:
         product = Product.objects.create(
@@ -253,3 +255,32 @@ def UserProfileView(request, slug):
     }
 
     return Response(data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def editProduct(request):
+    p = Product.objects.get(_id=int(request.POST.get('pid')))
+    print(request.data)
+    p.name=request.POST.get('name')
+    p.price=float(request.POST.get('price'))
+    p.condition=True if request.POST.get('condition') == "true" else False
+    p.tags=request.POST.get('tags')
+    p.description=request.POST.get('description')
+    p.delivery=True if request.POST.get('delivery') == "true" else False
+    p.notes=request.POST.get('notes')
+    p.pickupLocations=request.POST.get('pickupLocations')
+    print("image", request.FILES.get('image'))
+    if (request.FILES.get('image') != None): 
+        print("pass condition")
+        p.image = request.FILES.get('image')
+    print(request.data)
+    p.save()
+    serializer = ProductSerializer(p, many=False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteProduct(request):
+    p = Product.objects.get(_id=request.data)
+    p.delete()
+    return Response({'message': 'deleted sucessfully'})

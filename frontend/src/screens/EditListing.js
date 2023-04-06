@@ -10,51 +10,76 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Papa from "papaparse";
 import restrictedItems from "../constants/restrictedItems";
-import { createProduct } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Notification from "../components/Notification";
 import { useNavigate } from "react-router-dom";
-import { PRODUCT_CREATE_RESET } from "../constants/constants";
-function CreateListing() {
-  const productCreate = useSelector((state) => state.productCreate);
-  var { product, error, success } = productCreate;
+import { useParams } from "react-router-dom";
+import { getProduct, editProduct } from "../actions/productActions";
+function EditListing() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [blurb, setBlurb] = useState("");
+  let { productID } = useParams();
+
+  const item = useSelector((state) => state.productItem);
+  const { error, loading, product } = item;
+
+  const productEdit = useSelector((state) => state.productEdit);
+  var { ...success } = productEdit;
+
+  const userRegister = useSelector((state) => state.userLogin);
+  let { userInfo = {} } = userRegister;
+  const [title, setTitle] = useState();
+  const [blurb, setBlurb] = useState();
   const [tags, setTags] = useState([]);
   const [deliveryFlag, setDeliveryFlag] = useState(false);
   const [file, setFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
   const [condition, setCondition] = useState("");
   const [places, setPlaces] = useState([]);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [deliveryNotes, setDeliveryNotes] = useState("");
-
-  // for popup
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  //user cant access create listing page if not logged in
-  const userRegister = useSelector((state) => state.userLogin);
-  let { loading, userInfo } = userRegister;
-
+  let fileChangeFlag = false;
   useEffect(() => {
-    if (success) {
+    dispatch(getProduct(productID));
+    setTitle(product.name);
+    setBlurb(product.description);
+    setCondition(product.condition == true ? "new" : "old");
+    setPrice(product.price);
+    setPreviewURL(product.image);
+    setDeliveryFlag(product.delivery);
+    var location_str_arr = product.pickupLocations.split(",");
+    const options = location_str_arr.map((location) => ({
+      value: location.trim(),
+      label: location.trim(),
+    }));
+    setPlaces(options);
+
+    var tags_str_arr = product.tags.split(",");
+    const tags_arr = tags_str_arr.map((tag) => ({
+      value: tag.trim(),
+      label: tag.trim(),
+    }));
+    setTags(tags_arr);
+
+    if (product.delivery) setDeliveryNotes(product.notes);
+    //prevent unauthorized access
+    if (
+      Object.keys(userInfo).length == 0 ||
+      userInfo._id != item.product.seller
+    ) {
+      console.log("wrong user");
       navigate("/");
     }
-    if (!userInfo) {
-      navigate("/login");
-    }
-  }, [userInfo, navigate, success]);
-  //test
+  }, [productID, dispatch, navigate]);
+
   const cancelClicked = () => {
-    navigate("/");
+    console.log("cancel");
+    navigate(`/product/${productID}`);
   };
 
   const submitHandler = (e) => {
+    console.log("file", file);
     e.preventDefault();
     if (title == "") {
       toast.error("Missing title!");
@@ -64,10 +89,7 @@ function CreateListing() {
       toast.error("Restricted item!");
       return;
     }
-    if (!file) {
-      toast.error("Missing image!");
-      return;
-    }
+
     if (blurb == "") {
       toast.error("Missing description!");
       return;
@@ -81,6 +103,7 @@ function CreateListing() {
       toast.error("Missing price!");
       return;
     }
+
     if (!price.match("^[0-9]+(.[0-9]{1,3})?$")) {
       toast.error("Invalid price!");
       return;
@@ -112,7 +135,7 @@ function CreateListing() {
     var locations_str = locations_arr.join(",");
     let listing = new FormData();
     listing.append("name", title);
-    listing.append("price", price);
+    listing.append("price", parseFloat(price).toFixed(2));
     listing.append("condition", condition == "new" ? true : false);
     listing.append("tags", tags_str);
     listing.append("description", blurb);
@@ -120,10 +143,12 @@ function CreateListing() {
     listing.append("delivery", deliveryFlag);
     listing.append("notes", deliveryFlag == true ? deliveryNotes : null);
     listing.append("image", file);
-
-    dispatch(createProduct(listing));
+    listing.append("pid", productID);
+    console.log("listing", listing);
+    dispatch(editProduct(listing));
+    console.log(success, "producteditsuccess");
     if (success) {
-      navigate("/");
+      navigate(`/product/${productID}`);
     }
   };
   return (
@@ -166,7 +191,6 @@ function CreateListing() {
                   onChange={(e) => {
                     const selectedFile = e.target.files[0];
                     setFile(selectedFile);
-                    console.log(selectedFile);
                     const reader = new FileReader();
                     reader.onload = () => {
                       setPreviewURL(reader.result);
@@ -205,6 +229,7 @@ function CreateListing() {
                 isMulti
                 isSearchable
                 autoFocus
+                value={tags}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -247,6 +272,7 @@ function CreateListing() {
             <Form.Group className="mb-3">
               <Form.Label>Delivery</Form.Label>
               <Form.Check
+                checked={deliveryFlag}
                 value={deliveryFlag}
                 onChange={(e) => {
                   setDeliveryFlag(e.target.checked);
@@ -296,9 +322,8 @@ function CreateListing() {
           </div>
         </div>
       </Form>
-      {error && <Notification variant="danger" message={error} />}
     </div>
   );
 }
 
-export default CreateListing;
+export default EditListing;
