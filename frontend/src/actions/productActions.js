@@ -27,22 +27,24 @@ import {
 // ACTION CREATORS ----------------
 //  Action creator for getting a list of products
 //  action object contains type and payload
-export const getProducts = () => async (dispatch) => {
-  try {
-    dispatch({ type: PRODUCT_LIST_REQUEST });
-    //Without the curly braces, data would be assigned the entire object returned by axios.get() instead of just the data property.
-    const { data } = await axios.get("/api/products");
-    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: PRODUCT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+export const getProducts =
+  (keyword = "") =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_LIST_REQUEST });
+      //Without the curly braces, data would be assigned the entire object returned by axios.get() instead of just the data property.
+      const { data } = await axios.get(`/api/products?keyword=${keyword}`);
+      dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 //  Action creator for getting a single product
 //  action object contains type and payload

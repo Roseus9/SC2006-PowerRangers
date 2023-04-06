@@ -6,6 +6,7 @@ import Notification from "../components/Notification";
 // we no longer want to use products here, as we are fetching data from the backend:
 // import products from '../products'
 import Product from "../components/Product";
+import MainCarousel from "../components/MainCarousel";
 
 // for dispatching the action
 import { getProducts } from "../actions/productActions";
@@ -16,6 +17,9 @@ import {
   PRODUCT_DELETE_RESET,
   PRODUCT_CREATE_RESET,
 } from "../constants/constants";
+import { useSearchParams } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
+
 function Home() {
   // initial state of products is set to an empty array
   // const [products, setProducts] = useState([])
@@ -37,11 +41,14 @@ function Home() {
     toast.success("Listing created!");
   }
 
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
+
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts(keyword));
     dispatch({ type: PRODUCT_CREATE_RESET });
-  }, [dispatch]);
+  }, [dispatch, keyword]);
 
   // now we can check the attributes, loading, error otherwise render
   return (
@@ -58,11 +65,16 @@ function Home() {
         pauseOnHover
         theme="light"
       />
+      {!keyword && <MainCarousel />}
       <h1>Trending Items</h1>
       {loading ? (
         <Loader />
       ) : error ? (
         <Notification variant="danger" message={error} />
+      ) : products.length === 0 ? (
+        <Alert variant="danger" style={{ marginTop: "25px" }}>
+          No results found.
+        </Alert>
       ) : (
         <Row>
           {products.map((product) => (

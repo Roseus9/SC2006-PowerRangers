@@ -101,7 +101,12 @@ function ProductScreen() {
         <Row>
           <Col md={6} sm={12}>
             {/* must add  fluid to ensure the iamge doesnt pop out of the container */}
-            <Image src={product.image} alt={product.name} fluid />
+            <Image
+              src={product.image}
+              alt={product.name}
+              fluid
+              style={{ width: "100%" }}
+            />
           </Col>
           <Col md={3} sm={12}>
             <ListGroup variant="flushed">

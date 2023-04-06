@@ -40,6 +40,9 @@ function Header() {
                                 <LinkContainer to='/create'>
                                     <NavDropdown.Item>Create Listing</NavDropdown.Item>
                                 </LinkContainer>
+                                <LinkContainer to={`offers/${userInfo.username}`}>
+                                    <NavDropdown.Item>Offers</NavDropdown.Item>
+                                </LinkContainer>
                                 <LinkContainer to='/settings'>
                                     <NavDropdown.Item>Settings</NavDropdown.Item>
                                 </LinkContainer>

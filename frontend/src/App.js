@@ -14,6 +14,8 @@ import Settings from "./screens/Settings";
 import ProfileScreen from "./screens/ProfileScreen";
 import CreateOffer from "./screens/CreateOffer";
 import EditListing from "./screens/EditListing";
+import OffersScreen from "./screens/OffersScreen";
+
 function App() {
   return (
     <Router>

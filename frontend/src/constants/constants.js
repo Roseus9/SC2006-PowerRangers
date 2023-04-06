@@ -29,6 +29,17 @@ export const PRODUCT_CREATE_FAIL = "PRODUCT_CREATE_FAIL";
 export const OFFER_CREATE_REQUEST = "OFFER_CREATE_REQUEST";
 export const OFFER_CREATE_SUCCESS = "OFFER_CREATE_SUCCESS";
 export const OFFER_CREATE_FAIL = "OFFER_CREATE_FAIL";
+
+//  constants for API call to get received offers
+export const OFFER_RECEIVED_REQUEST = "OFFER_RECEIVED_REQUEST";
+export const OFFER_RECEIVED_SUCCESS = "OFFER_RECEIVED_SUCCESS";
+export const OFFER_RECEIVED_FAIL = "OFFER_RECEIVED_FAIL";
+
+//  constants for API call to get sent offers
+export const OFFER_SENT_REQUEST = "OFFER_SENT_REQUEST";
+export const OFFER_SENT_SUCCESS = "OFFER_SENT_SUCCESS";
+export const OFFER_SENT_FAIL = "OFFER_SENT_FAIL";
+
 // constants for API call to get user profile details
 export const USER_DETAILS_REQUEST = "USER_DETAILS_REQUEST";
 export const USER_DETAILS_SUCCESS = "USER_DETAILS_SUCCESS";
