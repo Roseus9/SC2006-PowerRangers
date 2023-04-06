@@ -506,3 +506,11 @@ def boughtItems(request, slug):
     }
 
     return Response(data)
+@api_view(['GET'])
+def getProducts(request):
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    products = Product.objects.filter(name__icontains=query) # get products model, currently not in json format
+    serializer = ProductSerializer(products, many=True) # many=True means that we have many products and we want to serialize them
+    return Response(serializer.data)
