@@ -10,10 +10,10 @@ import ReviewScreen from "./screens/ReviewScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import CreateListing from "./screens/CreateListing";
-import Settings from './screens/Settings';
+import Settings from "./screens/Settings";
 import ProfileScreen from "./screens/ProfileScreen";
-import CreateOffer from './screens/CreateOffer';
-
+import CreateOffer from "./screens/CreateOffer";
+import EditListing from "./screens/EditListing";
 function App() {
   return (
     <Router>
@@ -27,9 +27,10 @@ function App() {
             <Route path="/review" element={<ReviewScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/create" element={<CreateListing />} />
-            <Route path='/settings' element={<Settings/>} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/profile/:username" element={<ProfileScreen />} />
-            <Route path="/offer/product/:productID" element={<CreateOffer/>} />
+            <Route path="/offer/product/:productID" element={<CreateOffer />} />
+            <Route path="/edit/product/:productID" element={<EditListing />} />
           </Routes>
         </Container>
       </main>

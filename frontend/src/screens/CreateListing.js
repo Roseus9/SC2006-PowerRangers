@@ -82,7 +82,7 @@ function CreateListing() {
       toast.error("Missing price!");
       return;
     }
-    if (!price.match("^[0-9]+([.[0-9]{1,3}])?$")) {
+    if (!price.match("^[0-9]+(.[0-9]{1,3})?$")) {
       toast.error("Invalid price!");
       return;
     }
@@ -167,7 +167,7 @@ function CreateListing() {
                   onChange={(e) => {
                     const selectedFile = e.target.files[0];
                     setFile(selectedFile);
-
+                    console.log(selectedFile);
                     const reader = new FileReader();
                     reader.onload = () => {
                       setPreviewURL(reader.result);
