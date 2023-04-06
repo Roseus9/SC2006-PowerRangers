@@ -15,6 +15,7 @@ import { PRODUCT_EDIT_RESET } from "../constants/constants";
 import { deleteProduct } from "../actions/productActions";
 import { getProducts } from "../actions/productActions";
 import { PRODUCT_DELETE_RESET } from "../constants/constants";
+import "react-toastify/dist/ReactToastify.css";
 // here we deconstruct the props object, to access match
 function ProductScreen() {
   let navigate = useNavigate();

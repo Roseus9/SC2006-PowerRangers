@@ -11,7 +11,11 @@ import Product from "../components/Product";
 import { getProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
-import { PRODUCT_DELETE_RESET } from "../constants/constants";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  PRODUCT_DELETE_RESET,
+  PRODUCT_CREATE_RESET,
+} from "../constants/constants";
 function Home() {
   // initial state of products is set to an empty array
   // const [products, setProducts] = useState([])
@@ -21,14 +25,22 @@ function Home() {
   const { error, loading, products } = productList;
 
   const Pdelete = useSelector((state) => state.productDelete);
+  const productCreate = useSelector((state) => state.productCreate);
+  console.log(productCreate);
   if (Pdelete.done == true) {
     dispatch({ type: PRODUCT_DELETE_RESET });
     dispatch(getProducts());
     toast.success("Listing deleted!");
   }
+
+  if (productCreate.success == true) {
+    toast.success("Listing created!");
+  }
+
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
     dispatch(getProducts());
+    dispatch({ type: PRODUCT_CREATE_RESET });
   }, [dispatch]);
 
   // now we can check the attributes, loading, error otherwise render

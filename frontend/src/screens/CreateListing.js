@@ -43,7 +43,6 @@ function CreateListing() {
 
   useEffect(() => {
     if (success) {
-      dispatch({ type: PRODUCT_CREATE_RESET });
       navigate("/");
     }
     if (!userInfo) {
