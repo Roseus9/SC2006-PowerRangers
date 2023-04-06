@@ -7,9 +7,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-from .models import Product, User, Profile, Offer, Bookmark
+from .models import Product, User, Profile, Offer
 # import the Serializers
-from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer, BookmarkSerializer
+from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer
 
 # JWT imports for customising tokens to return token information directly to front end
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
