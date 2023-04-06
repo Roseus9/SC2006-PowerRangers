@@ -9,15 +9,8 @@ import { userDetailsReducer, userLoginReducer, userRegisterReducer } from "./red
 // import { combineReducers } from 'redux'
 import { configureStore } from "@reduxjs/toolkit";
 import { productCreateReducer } from "./reducers/productReducer";
-import { offerCreateReducer } from "./reducers/offerReducer";
-// const initialState = {}
-// const middleware = [thunk]
-// const reducer = combineReducers({
-//   productList: productListReducer,
-// })
+import { offerCreateReducer, offerReceivedReducer, offerSentReducer } from "./reducers/offerReducer";
 
-// const store = createStore(reducer, initialState,
-//     composeWithDevTools(applyMiddleware(...middleware)))
 
 const store = configureStore({
   reducer: {
@@ -27,6 +20,8 @@ const store = configureStore({
     userRegister: userRegisterReducer,
     productCreate: productCreateReducer,
     offerCreate: offerCreateReducer,
+    offerSent: offerSentReducer,
+    offerReceived: offerReceivedReducer,
     userDetails: userDetailsReducer,
   },
   preloadedState: {

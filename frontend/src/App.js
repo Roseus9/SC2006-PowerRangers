@@ -13,6 +13,7 @@ import CreateListing from "./screens/CreateListing";
 import Settings from './screens/Settings';
 import ProfileScreen from "./screens/ProfileScreen";
 import CreateOffer from './screens/CreateOffer';
+import OffersScreen from './screens/OffersScreen';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path='/settings' element={<Settings/>} />
             <Route path="/profile/:username" element={<ProfileScreen />} />
             <Route path="/offer/product/:productID" element={<CreateOffer/>} />
+            <Route path="/offers/:username" element={<OffersScreen/>} />
           </Routes>
         </Container>
       </main>
