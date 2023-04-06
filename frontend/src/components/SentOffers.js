@@ -6,7 +6,8 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Image from 'react-bootstrap/Image';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
-function MyOffers({offers}) {
+
+function SentOffers({offers}) {
     const navigate = useNavigate();
     const alertClicked = (slug) => {
         navigate("/profile/" + slug);
@@ -19,8 +20,6 @@ function MyOffers({offers}) {
             Click to Visit Profile
         </Tooltip>
         );
-
-
   return (
     <div>
         <Table striped hover>
@@ -29,7 +28,7 @@ function MyOffers({offers}) {
             <th>#</th>
             <th>Product Name</th>
             <th></th>
-            <th>Buyer Username</th>
+            <th>Seller Username</th>
             <th>Offered Price</th>
             <th>Offered Time</th>
             <th>Actions</th>
@@ -47,13 +46,13 @@ function MyOffers({offers}) {
                     <img src={offer.product.image} alt={offer.product.name} />
                 </td>
 
-                <td onClick={()=> alertClicked(offer.buyer.username)}>
+                <td onClick={()=> alertClicked(offer.seller.username)}>
                     <OverlayTrigger
                     placement="bottom"
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltip}
                     >
-                    <Button variant="primary">@{offer.buyer.username}</Button>
+                    <Button variant="primary">@{offer.seller.username}</Button>
                     </OverlayTrigger>
 
                 </td>
@@ -61,10 +60,10 @@ function MyOffers({offers}) {
                 <td>${offer.price}</td>
                 <td>{new Date(offer.createdAt).toLocaleString()}</td>
                 <td>
-                    <Button variant='success'>Accept</Button>
+                    <Button variant='success'>Edit</Button>
                 </td>
                 <td>
-                    <Button variant='danger'>Decline</Button>
+                    <Button variant='danger'>Delete</Button>
                 </td>
             </tr>
             ))}
@@ -76,4 +75,4 @@ function MyOffers({offers}) {
   )
 }
 
-export default MyOffers
+export default SentOffers
