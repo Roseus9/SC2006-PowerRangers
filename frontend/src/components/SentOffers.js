@@ -43,7 +43,7 @@ function SentOffers({offers}) {
                 </td>
                 <td onClick={()=> productClicked(offer.product._id)} style={{ cursor: 'pointer' }}>{offer.product.name}</td>
                 <td onClick={()=> productClicked(offer.product._id)} style={{ cursor: 'pointer' }}>
-                    <img src={offer.product.image} alt={offer.product.name} />
+                    <img src={offer.product.image} alt={offer.product.name} style={{ height: '200px', width: '350px', objectFit: 'cover' }} />
                 </td>
 
                 <td onClick={()=> alertClicked(offer.seller.username)}>
