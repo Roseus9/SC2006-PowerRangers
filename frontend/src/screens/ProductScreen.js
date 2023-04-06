@@ -12,6 +12,9 @@ import { getProduct } from "../actions/productActions";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { PRODUCT_EDIT_RESET } from "../constants/constants";
+import { deleteProduct } from "../actions/productActions";
+import { getProducts } from "../actions/productActions";
+import { PRODUCT_DELETE_RESET } from "../constants/constants";
 // here we deconstruct the props object, to access match
 function ProductScreen() {
   let navigate = useNavigate();
@@ -22,6 +25,8 @@ function ProductScreen() {
   const bookmark = useSelector((state) => state.bookmark);
   const edit = useSelector((state) => state.productEdit);
   const { error, loading, product } = item;
+  const Pdelete = useSelector((state) => state.productDelete);
+
   if (edit.success == true) {
     dispatch(getProduct(itemId));
     dispatch({ type: PRODUCT_EDIT_RESET });
@@ -36,6 +41,24 @@ function ProductScreen() {
 
   const alertClicked = () => {
     navigate("/profile/" + product.username);
+  };
+  const deleteListing = () => {
+    dispatch(deleteProduct(itemId));
+    navigate("/");
+  };
+
+  const deleteListingToast = () => {
+    toast.error(
+      <div>
+        Are you sure? <br />
+        <Button className="my-3" variant="danger" onClick={deleteListing}>
+          Yes
+        </Button>
+        <Button className="my-3" style={{ marginLeft: "10px" }}>
+          No
+        </Button>
+      </div>
+    );
   };
 
   const userRegister = useSelector((state) => state.userLogin);
@@ -153,15 +176,15 @@ function ProductScreen() {
                   <Button className="my-3" variant="primary">
                     Edit Listing
                   </Button>
-
-                  <Button
-                    className="my-3"
-                    variant="danger"
-                    style={{ marginLeft: "10px" }}
-                  >
-                    Delete Listing
-                  </Button>
                 </Link>
+                <Button
+                  className="my-3"
+                  variant="danger"
+                  style={{ marginLeft: "10px" }}
+                  onClick={deleteListingToast}
+                >
+                  Delete Listing
+                </Button>
               </div>
             )}
           </Col>

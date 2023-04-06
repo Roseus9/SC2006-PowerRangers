@@ -64,7 +64,8 @@ def getRoutes(request):
             '/api/offer/product/<id>',
             '/api/profile/<username>',
             '/api/checkbookmark/<pid>/<uid>'
-            '/api/editproduct'
+            '/api/editproduct',
+            '/api/deleteproduct'
     ]
 
     return Response(routes)
@@ -276,3 +277,10 @@ def editProduct(request):
     p.save()
     serializer = ProductSerializer(p, many=False)
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteProduct(request):
+    p = Product.objects.get(_id=request.data)
+    p.delete()
+    return Response({'message': 'deleted sucessfully'})

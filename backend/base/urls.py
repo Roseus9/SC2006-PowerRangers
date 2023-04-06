@@ -30,5 +30,6 @@ urlpatterns = [
     path('users/login', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     
     #edit listing
-    path('editproduct', views.editProduct, name='edit-product')
-]   
+    path('editproduct', views.editProduct, name='edit-product'),
+    path('deleteproduct', views.deleteProduct, name='delete-product')
+]

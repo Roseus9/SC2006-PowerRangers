@@ -16,6 +16,10 @@ import {
   PRODUCT_EDIT_SUCCESS,
   PRODUCT_EDIT_FAIL,
   PRODUCT_EDIT_RESET,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_SUCCESS,
+  PRODUCT_DELETE_FAIL,
+  PRODUCT_DELETE_RESET,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -120,6 +124,27 @@ export const productEditReducer = (state = {}, action) => {
         loading: false,
         success: false,
       };
+    default:
+      return state;
+  }
+};
+
+export const productDeleteReducer = (
+  state = productListInitialState,
+  action
+) => {
+  switch (action.type) {
+    case PRODUCT_DELETE_REQUEST:
+      return { loading: true, done: false };
+    case PRODUCT_DELETE_SUCCESS:
+      // if succesful, return a payload of data with the products to the state
+      return { loading: false, done: true };
+    // if there is an error, return a new attribute error, passing in the response from the payload
+    case PRODUCT_DELETE_FAIL:
+      return { loading: false, done: false, error: action.payload };
+    case PRODUCT_DELETE_RESET:
+      return { loading: false, done: false };
+    // if none of the above, return the initial state
     default:
       return state;
   }
