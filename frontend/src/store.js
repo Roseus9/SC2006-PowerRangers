@@ -15,8 +15,9 @@ import {
 // import { combineReducers } from 'redux'
 import { configureStore } from "@reduxjs/toolkit";
 import { productCreateReducer } from "./reducers/productReducer";
-import { offerCreateReducer } from "./reducers/offerReducer";
 import { BookmarkReducer } from "./reducers/bookmarkReducer";
+// importing the offer reducers
+import { offerCreateReducer, offerReceivedReducer, offerSentReducer } from "./reducers/offerReducer";
 
 // const initialState = {}
 // const middleware = [thunk]
