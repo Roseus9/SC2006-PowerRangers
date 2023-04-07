@@ -98,7 +98,7 @@ function Home() {
       <h1 style={{ marginTop: '20px' }}>All Listings</h1>
       <div>
       <Dropdown>
-          <Dropdown.Toggle variant="info">
+          <Dropdown.Toggle variant="primary">
             Sort By: {activeSortBy}
           </Dropdown.Toggle>
           <Dropdown.Menu>
