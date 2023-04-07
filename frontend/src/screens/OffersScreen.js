@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Badge from 'react-bootstrap/Badge';
 import Row from "react-bootstrap/Row";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -15,7 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {useParams, useLocation, useNavigate, Link} from 'react-router-dom'
 
 import { getUserProfileView } from "../actions/userLoginActions";
-import { getUserReceivedOffers, getUserSentOffers} from "../actions/offerActions";
+import { getUserReceivedOffers, getUserSentOffers, getUserBoughtOffers, getUserSoldOffers} from "../actions/offerActions";
 import { useDispatch, useSelector } from "react-redux";
 
 import Notification from '../components/Notification';
@@ -46,26 +47,61 @@ function OffersScreen() {
   const userRegister = useSelector(state => state.userLogin);
   let {userInfo} = userRegister;
 
+// states for filtering
+const [activeSortBy, setActiveSortBy] = useState("newest");
+const [accepted, setAccepted] = useState(true);
+const [completed, setCompleted] = useState(true);
+
+// function for filtering accepted or completed listings
+const handleCheckboxChange = (event) => {
+  const { name, checked } = event.target;
+
+  if (name === "checkbox1") {
+    setAccepted(checked);
+  } else if (name === "checkbox2") {
+    setCompleted(checked);
+  }
+};
+
+let listingStatus = "all";
+
+if (accepted && completed) {
+  listingStatus = "all";
+} else if (accepted) {
+  listingStatus = "accepted";
+} else if (completed) {
+  listingStatus = "completed";
+}
+
+// functions for filtering listings
   let sortByOldest = () => {
-    setActiveSortBy("Oldest")
-    dispatch(getUserReceivedOffers(username+"-oldest"))
-    dispatch(getUserSentOffers(username+"-oldest"))
+    setActiveSortBy("oldest")
+    dispatch(getUserReceivedOffers(username+"-"+activeSortBy))
+    dispatch(getUserSentOffers(username+"-"+activeSortBy))
+    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+listingStatus))
+    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+listingStatus))
   }
   let sortByHighest = () => {
-    setActiveSortBy("Highest Price")
-    dispatch(getUserReceivedOffers(username+"-highest"))
-    dispatch(getUserSentOffers(username+"-highest"))
+    setActiveSortBy("highest")
+    dispatch(getUserReceivedOffers(username+"-"+activeSortBy))
+    dispatch(getUserSentOffers(username+"-"+activeSortBy))
+    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+listingStatus))
+    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+listingStatus))
   }
   let sortByLowest = () => {
-    setActiveSortBy("Lowest Price")
-    dispatch(getUserReceivedOffers(username+"-lowest"))
-    dispatch(getUserSentOffers(username+"-lowest"))
+    setActiveSortBy("lowest")
+    dispatch(getUserReceivedOffers(username+"-"+activeSortBy))
+    dispatch(getUserSentOffers(username+"-"+activeSortBy))
+    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+listingStatus))
+    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+listingStatus))
   }
 
   let sortByNewest = () => {
-    setActiveSortBy("Most Recent")
+    setActiveSortBy("newest")
     dispatch(getUserReceivedOffers(username))
     dispatch(getUserSentOffers(username))
+    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+listingStatus))
+    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+listingStatus))
   }
 
   // useEffect is a hook that allows us to run a function when the component loads
@@ -80,10 +116,11 @@ function OffersScreen() {
       dispatch(getUserProfileView(username))
       dispatch(getUserReceivedOffers(username))
       dispatch(getUserSentOffers(username))
+      dispatch(getUserBoughtOffers(username))
+      dispatch(getUserSoldOffers(username))
   }, [userInfo, username, dispatch])
 
 
-  const [activeSortBy, setActiveSortBy] = useState("Most Recent");
   return (
     
     <div>
@@ -104,11 +141,11 @@ function OffersScreen() {
                 <Dropdown.Menu >
                   <Dropdown.Header>Time</Dropdown.Header>
                   {/* <Dropdown.Menu as={ButtonGroup} title="Sort By" id="bg-nested-dropdown"> */}
-                  <Dropdown.Item eventKey="1" onClick={sortByNewest} active={activeSortBy === "Most Recent"}>Newest Date</Dropdown.Item>
-                  <Dropdown.Item eventKey="2" onClick={sortByOldest} active={activeSortBy === "Oldest"}>Oldest Date</Dropdown.Item>
+                  <Dropdown.Item eventKey="1" onClick={sortByNewest} active={activeSortBy === "newest"}>Newest Date</Dropdown.Item>
+                  <Dropdown.Item eventKey="2" onClick={sortByOldest} active={activeSortBy === "oldest"}>Oldest Date</Dropdown.Item>
                   <Dropdown.Header>Offered Price</Dropdown.Header>
-                    <Dropdown.Item eventKey="3" onClick={sortByHighest} active={activeSortBy === "Highest Price"}>Highest Price</Dropdown.Item>
-                    <Dropdown.Item eventKey="4" onClick={sortByLowest} active={activeSortBy === "Lowest Price"}>Lowest Price</Dropdown.Item>
+                    <Dropdown.Item eventKey="3" onClick={sortByHighest} active={activeSortBy === "highest"}>Highest Price</Dropdown.Item>
+                    <Dropdown.Item eventKey="4" onClick={sortByLowest} active={activeSortBy === "lowest"}>Lowest Price</Dropdown.Item>
               </Dropdown.Menu>
               </Dropdown>
               <br></br>
@@ -139,11 +176,11 @@ function OffersScreen() {
                 <Dropdown.Menu >
                   <Dropdown.Header>Time</Dropdown.Header>
                   {/* <Dropdown.Menu as={ButtonGroup} title="Sort By" id="bg-nested-dropdown"> */}
-                  <Dropdown.Item eventKey="1" onClick={sortByNewest} active={activeSortBy === "Most Recent"}>Newest Date</Dropdown.Item>
-                  <Dropdown.Item eventKey="2" onClick={sortByOldest} active={activeSortBy === "Oldest"}>Oldest Date</Dropdown.Item>
+                  <Dropdown.Item eventKey="1" onClick={sortByNewest} active={activeSortBy === "newest"}>Newest Date</Dropdown.Item>
+                  <Dropdown.Item eventKey="2" onClick={sortByOldest} active={activeSortBy === "oldest"}>Oldest Date</Dropdown.Item>
                   <Dropdown.Header>Offered Price</Dropdown.Header>
-                    <Dropdown.Item eventKey="3" onClick={sortByHighest} active={activeSortBy === "Highest Price"}>Highest Price</Dropdown.Item>
-                    <Dropdown.Item eventKey="4" onClick={sortByLowest} active={activeSortBy === "Lowest Price"}>Lowest Price</Dropdown.Item>
+                    <Dropdown.Item eventKey="3" onClick={sortByHighest} active={activeSortBy === "highest"}>Highest Price</Dropdown.Item>
+                    <Dropdown.Item eventKey="4" onClick={sortByLowest} active={activeSortBy === "lowest"}>Lowest Price</Dropdown.Item>
               </Dropdown.Menu>
               </Dropdown>
               <br></br>
@@ -163,11 +200,95 @@ function OffersScreen() {
                                           )}
                                       </Row>
                 )}
-          </Tab>
-
+          </Tab>                             
           <Tab eventKey="sold" title="Sold Items">
+          <h4>My Sold Items</h4>
+              <Dropdown >
+                    <Dropdown.Toggle variant="dark">
+                      Sort By: {activeSortBy}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu >
+                      <Dropdown.Header>Time</Dropdown.Header>
+                      {/* <Dropdown.Menu as={ButtonGroup} title="Sort By" id="bg-nested-dropdown"> */}
+                      <Dropdown.Item eventKey="1" onClick={sortByNewest} active={activeSortBy === "newest"}>Newest Date</Dropdown.Item>
+                      <Dropdown.Item eventKey="2" onClick={sortByOldest} active={activeSortBy === "oldest"}>Oldest Date</Dropdown.Item>
+                      <Dropdown.Header>Offered Price</Dropdown.Header>
+                        <Dropdown.Item eventKey="3" onClick={sortByHighest} active={activeSortBy === "highest"}>Highest Price</Dropdown.Item>
+                        <Dropdown.Item eventKey="4" onClick={sortByLowest} active={activeSortBy === "lowest"}>Lowest Price</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <br></br>
+                <Form>
+                    <div key={`inline-switch`} className="mb-3">
+                      <Form.Check
+                        type="switch"
+                        label="Accepted Listings"
+                        name="checkbox1"
+                        onChange={handleCheckboxChange}
+                        checked={accepted}
+                      />
+                      <Form.Check
+                        type="switch"
+                        label="Completed Listings"
+                        name="checkbox2"
+                        onChange={handleCheckboxChange}
+                        checked={completed}
+                      />
+                    </div>
+
+                  <Form.Group>
+
+                    <Form.Label>
+                      Listing Status: <Badge bg="primary" >{listingStatus ? listingStatus : "None"}</Badge>
+                    </Form.Label>
+                  </Form.Group>
+                </Form>    
+
           </Tab>
           <Tab eventKey="bought" title="Bought Items">
+          <h4>My Bought Items</h4>
+              <Dropdown >
+                    <Dropdown.Toggle variant="dark">
+                      Sort By: {activeSortBy}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu >
+                      <Dropdown.Header>Time</Dropdown.Header>
+                      {/* <Dropdown.Menu as={ButtonGroup} title="Sort By" id="bg-nested-dropdown"> */}
+                      <Dropdown.Item eventKey="1" onClick={sortByNewest} active={activeSortBy === "newest"}>Newest Date</Dropdown.Item>
+                      <Dropdown.Item eventKey="2" onClick={sortByOldest} active={activeSortBy === "oldest"}>Oldest Date</Dropdown.Item>
+                      <Dropdown.Header>Offered Price</Dropdown.Header>
+                        <Dropdown.Item eventKey="3" onClick={sortByHighest} active={activeSortBy === "highest"}>Highest Price</Dropdown.Item>
+                        <Dropdown.Item eventKey="4" onClick={sortByLowest} active={activeSortBy === "lowest"}>Lowest Price</Dropdown.Item>
+                  </Dropdown.Menu>
+                  </Dropdown>
+                  <br></br>
+                <Form>
+                    <div key={`inline-switch`} className="mb-3">
+                      <Form.Check
+                        type="switch"
+                        label="Accepted Listings"
+                        name="checkbox1"
+                        onChange={handleCheckboxChange}
+                        checked={accepted}
+                      />
+                      <Form.Check
+                        type="switch"
+                        label="Completed Listings"
+                        name="checkbox2"
+                        onChange={handleCheckboxChange}
+                        checked={completed}
+                      />
+                    </div>
+
+                  <Form.Group>
+
+                    <Form.Label>
+                      Listing Status: <Badge bg="primary" >{listingStatus ? listingStatus : "None"}</Badge>
+                    </Form.Label>
+                  </Form.Group>
+                </Form>    
           </Tab>
         </Tabs>        
     </div>

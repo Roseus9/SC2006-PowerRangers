@@ -17,6 +17,14 @@ import {
   OFFER_SENT_SUCCESS,
   OFFER_SENT_FAIL,
 
+  OFFER_BOUGHT_REQUEST,
+  OFFER_BOUGHT_SUCCESS,
+  OFFER_BOUGHT_FAIL,
+  
+  OFFER_SOLD_REQUEST,
+  OFFER_SOLD_SUCCESS,
+  OFFER_SOLD_FAIL,
+
 } from "../constants/constants";
 //---------------------------------------
 
@@ -87,6 +95,43 @@ export const getUserSentOffers = (slug) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: OFFER_SENT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+}
+
+
+//  Action creator for getting a single users sold listings
+//  action object contains type and payload
+export const getUserSoldOffers = (slug) => async (dispatch) => {
+  try {
+    dispatch({ type: OFFER_SOLD_REQUEST });
+    const { data } = await axios.get(`/api/offer/sold/${slug}`);
+    dispatch({ type: OFFER_SOLD_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: OFFER_SOLD_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+}
+
+//  Action creator for getting a single users bought listings
+//  action object contains type and payload
+export const getUserBoughtOffers = (slug) => async (dispatch) => {
+  try {
+    dispatch({ type: OFFER_BOUGHT_REQUEST });
+    const { data } = await axios.get(`/api/offer/bought/${slug}`);
+    dispatch({ type: OFFER_BOUGHT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: OFFER_BOUGHT_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

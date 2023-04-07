@@ -72,3 +72,13 @@ export const PRODUCT_DELETE_REQUEST = "PRODUCT_DELETE_REQUEST";
 export const PRODUCT_DELETE_SUCCESS = "PRODUCT_DELETE_SUCCESS";
 export const PRODUCT_DELETE_FAIL = "PRODUCT_DELETE_FAIL";
 export const PRODUCT_DELETE_RESET = "PRODUCT_DELETE_RESET";
+
+//  constants for API call to get bought offers
+export const OFFER_BOUGHT_REQUEST = "OFFER_BOUGHT_REQUEST";
+export const OFFER_BOUGHT_SUCCESS = "OFFER_BOUGHT_SUCCESS";
+export const OFFER_BOUGHT_FAIL = "OFFER_BOUGHT_FAIL";
+
+//  constants for API call to get sold offers
+export const OFFER_SOLD_REQUEST = "OFFER_SOLD_REQUEST";
+export const OFFER_SOLD_SUCCESS = "OFFER_SOLD_SUCCESS";
+export const OFFER_SOLD_FAIL = "OFFER_SOLD_FAIL";
