@@ -61,7 +61,7 @@ def getRoutes(request):
             '/api/products/<update>/<id>/',
             '/api/products/<id>/reviews/',
             '/api/products/<id>/reviews/<review_id>/',
-            '/api/offer/product/<id>',,
+            '/api/offer/product/<id>',
             '/api/offer/received/<username>',
             '/api/offer/sent/<username>',
             '/api/profile/<username>',
