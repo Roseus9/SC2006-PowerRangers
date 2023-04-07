@@ -20,7 +20,7 @@ import {
   getUserSentOffers,
 } from "../actions/offerActions";
 import { useDispatch, useSelector } from "react-redux";
-
+import { OFFER_RESPOND_RESET } from "../constants/constants";
 import Notification from "../components/Notification";
 import Loader from "../components/Loader";
 import MyOffers from "../components/MyOffers";
@@ -37,13 +37,18 @@ function OffersScreen() {
   const offerReceived = useSelector((state) => state.offerReceived);
   // console.log(offerReceived)
   const { errorR, loadingR, offersR } = offerReceived;
-  // console.log(offersR)
+  console.log("dog");
+  console.log(offersR);
   const offerSent = useSelector((state) => state.offerSent);
   const { errorS, loadingS, offersS } = offerSent;
+  console.log("cat");
+  console.log(offersS);
 
   //user cant access create listing page if not logged in
   const userRegister = useSelector((state) => state.userLogin);
   let { userInfo } = userRegister;
+
+  const respondState = useSelector((state) => state.offerRespond);
 
   let sortByOldest = () => {
     setActiveSortBy("Oldest");
@@ -74,14 +79,30 @@ function OffersScreen() {
     } else if (userInfo.username !== username) {
       navigate("/");
     }
+    console.log(respondState);
+    if (respondState.success) {
+      toast.success(respondState.flag ? "offer accepted!" : "offer deleted!");
+    }
     dispatch(getUserProfileView(username));
     dispatch(getUserReceivedOffers(username));
     dispatch(getUserSentOffers(username));
-  }, [userInfo, username, dispatch]);
+  }, [userInfo, username, dispatch, respondState.success, navigate]);
 
   const [activeSortBy, setActiveSortBy] = useState("Most Recent");
   return (
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Tabs
         defaultActiveKey="received"
         id="fill-tab-example"

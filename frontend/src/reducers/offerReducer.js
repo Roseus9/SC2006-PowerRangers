@@ -8,6 +8,10 @@ import {
   OFFER_SENT_REQUEST,
   OFFER_SENT_SUCCESS,
   OFFER_SENT_FAIL,
+  OFFER_RESPOND_REQUEST,
+  OFFER_RESPOND_SUCCESS,
+  OFFER_RESPOND_FAIL,
+  OFFER_RESPOND_RESET,
 } from "../constants/constants";
 
 export const offerCreateReducer = (state = {}, action) => {
@@ -44,6 +48,25 @@ export const offerSentReducer = (state = {}, action) => {
       return { loadingS: false, successS: true, offersS: action.payload };
     case OFFER_SENT_FAIL:
       return { loadingS: false, errorS: action.payload };
+    default:
+      return state;
+  }
+};
+export const offerRespondReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_RESPOND_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_RESPOND_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        message: action.payload,
+        flag: action.flag,
+      };
+    case OFFER_RESPOND_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_RESPOND_RESET:
+      return { loading: false, success: false };
     default:
       return state;
   }

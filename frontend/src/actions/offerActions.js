@@ -14,6 +14,9 @@ import {
   OFFER_SENT_REQUEST,
   OFFER_SENT_SUCCESS,
   OFFER_SENT_FAIL,
+  OFFER_RESPOND_REQUEST,
+  OFFER_RESPOND_SUCCESS,
+  OFFER_RESPOND_FAIL,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -90,6 +93,35 @@ export const getUserSentOffers = (slug) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: OFFER_SENT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const respondOfferAction = (oid, flag) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: OFFER_RESPOND_REQUEST });
+    console.log(oid, flag);
+    console.log(`/api/offer/${oid}/${flag}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/offer/${oid}/${flag}`, {}, config);
+    dispatch({ type: OFFER_RESPOND_SUCCESS, payload: data, flag: flag });
+  } catch (error) {
+    dispatch({
+      type: OFFER_RESPOND_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { Card, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import Image from "react-bootstrap/Image";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-
+import { respondOfferAction } from "../actions/offerActions";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import "react-toastify/dist/ReactToastify.css";
+import { OFFER_RESPOND_RESET } from "../constants/constants";
 function MyOffers({ offers }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const respondState = useSelector((state) => state.offerRespond);
+
   const alertClicked = (slug) => {
     navigate("/profile/" + slug);
   };
@@ -20,6 +28,13 @@ function MyOffers({ offers }) {
     </Tooltip>
   );
 
+  const respondOffer = (offer, acceptFlag) => {
+    dispatch(respondOfferAction(offer._id, acceptFlag));
+  };
+
+  const completeTransaction = (offer) => {};
+
+  const cancelTransaction = (offer) => {};
   return (
     <div>
       <Table striped hover>
@@ -64,7 +79,6 @@ function MyOffers({ offers }) {
                   }}
                 />
               </td>
-
               <td onClick={() => alertClicked(offer.buyer.username)}>
                 <OverlayTrigger
                   placement="bottom"
@@ -74,15 +88,49 @@ function MyOffers({ offers }) {
                   <Button variant="primary">@{offer.buyer.username}</Button>
                 </OverlayTrigger>
               </td>
-
               <td>${offer.price}</td>
               <td>{new Date(offer.createdAt).toLocaleString()}</td>
-              <td>
-                <Button variant="success">Accept</Button>
-              </td>
-              <td>
-                <Button variant="danger">Decline</Button>
-              </td>
+              {!offer.isAccepted && (
+                <div>
+                  <td>
+                    <Button
+                      variant="success"
+                      onClick={() => respondOffer(offer, true)}
+                    >
+                      Accept Offer
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      variant="danger"
+                      onClick={() => respondOffer(offer, false)}
+                    >
+                      Decline Offer
+                    </Button>
+                  </td>
+                </div>
+              )}
+              {offer.isAccepted &&
+                !offer.isComplete(
+                  <div>
+                    <td>
+                      <Button
+                        variant="success"
+                        onClick={() => completeTransaction(offer)}
+                      >
+                        Complete Transaction
+                      </Button>
+                    </td>
+                    <td>
+                      <Button
+                        variant="danger"
+                        onClick={() => cancelTransaction(offer)}
+                      >
+                        Cancel Transaction
+                      </Button>
+                    </td>
+                  </div>
+                )}
             </tr>
           ))}
         </tbody>
