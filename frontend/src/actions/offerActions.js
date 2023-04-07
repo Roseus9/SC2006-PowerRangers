@@ -91,6 +91,7 @@ export const getUserSentOffers = (slug) => async (dispatch) => {
   try {
     dispatch({ type: OFFER_SENT_REQUEST });
     const { data } = await axios.get(`/api/offer/sent/${slug}`);
+    console.log("GET SENT OFFERS RETURNED SUCCESSFULLY! returned data:", data);
     dispatch({ type: OFFER_SENT_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -110,6 +111,7 @@ export const getUserSoldOffers = (slug) => async (dispatch) => {
   try {
     dispatch({ type: OFFER_SOLD_REQUEST });
     const { data } = await axios.get(`/api/offer/sold/${slug}`);
+    console.log("GET SOLD OFFERS RETURNED SUCCESSFULLY! returned data:", data);
     dispatch({ type: OFFER_SOLD_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -128,6 +130,7 @@ export const getUserBoughtOffers = (slug) => async (dispatch) => {
   try {
     dispatch({ type: OFFER_BOUGHT_REQUEST });
     const { data } = await axios.get(`/api/offer/bought/${slug}`);
+    console.log("GET BOUGHT OFFERS RETURNED SUCCESSFULLY! returned data:", data);
     dispatch({ type: OFFER_BOUGHT_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

@@ -11,6 +11,7 @@ import FormContainer from "../components/FormContainer";
 import { useParams } from 'react-router-dom';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { FormLabel } from "react-bootstrap";
+import { OFFER_CREATE_RESET } from "../constants/constants";
 
 
 function CreateOffer() {
@@ -35,6 +36,7 @@ function CreateOffer() {
   useEffect(() => {
     setProduct(productID)
     if (success) {
+       dispatch({ type: OFFER_CREATE_RESET });
        navigate("/");
      }
     if (!userInfo) {

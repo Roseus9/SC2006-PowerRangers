@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo} from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
@@ -23,7 +23,8 @@ import Notification from '../components/Notification';
 import Loader from '../components/Loader'
 import MyOffers from "../components/MyOffers";
 import SentOffers from "../components/SentOffers";
-
+import BoughtOffers from "../components/BoughtOffers";
+import SoldOffers from "../components/SoldOffers";
 
 function OffersScreen() {
   let { username } = useParams();
@@ -36,73 +37,67 @@ function OffersScreen() {
   const offerReceived = useSelector(state => state.offerReceived);
   // console.log(offerReceived)
   const {errorR, loadingR, offersR} = offerReceived;
-  console.log('dog')
-  console.log(offersR)
   const offerSent = useSelector(state => state.offerSent);
   const {errorS, loadingS, offersS} = offerSent;
-  console.log('cat')
-  console.log(offersS)
+  const offerBought = useSelector(state => state.offerBought);
+  const {errorB, loadingB, offersB} = offerBought;
+  // console.log("offersB", offersB)
+  const offerSold = useSelector(state => state.offerSold);
+  const {errorSO, loadingSO, offersSO} = offerSold;
+  // console.log(offersSO)
+
 
   //user cant access create listing page if not logged in
   const userRegister = useSelector(state => state.userLogin);
   let {userInfo} = userRegister;
 
 // states for filtering
+// consists of active sort by for time, and price
+// and listing status for accepted, completed, or all
 const [activeSortBy, setActiveSortBy] = useState("newest");
+const [listingStatus, setListingStatus] = useState("all");
+// accepted and completed are individual states for the 2 sliders
 const [accepted, setAccepted] = useState(true);
 const [completed, setCompleted] = useState(true);
 
-// function for filtering accepted or completed listings
-const handleCheckboxChange = (event) => {
+// handlers for sliders
+const handleCompletedChange = (event) => {
   const { name, checked } = event.target;
-
-  if (name === "checkbox1") {
-    setAccepted(checked);
-  } else if (name === "checkbox2") {
-    setCompleted(checked);
+  if (checked == true){
+    setCompleted(true);
+  }
+  else{
+    setCompleted(false);
   }
 };
 
-let listingStatus = "all";
+const handleAcceptedChange = (event) => {
+  const { name, checked } = event.target;
+  if (checked == true){
+    setAccepted(true);
+  }
+  else{
+    setAccepted(false);
+  }
+};
 
-if (accepted && completed) {
-  listingStatus = "all";
-} else if (accepted) {
-  listingStatus = "accepted";
-} else if (completed) {
-  listingStatus = "completed";
-}
 
 // functions for filtering listings
   let sortByOldest = () => {
     setActiveSortBy("oldest")
-    dispatch(getUserReceivedOffers(username+"-"+activeSortBy))
-    dispatch(getUserSentOffers(username+"-"+activeSortBy))
-    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+listingStatus))
-    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+listingStatus))
   }
   let sortByHighest = () => {
     setActiveSortBy("highest")
-    dispatch(getUserReceivedOffers(username+"-"+activeSortBy))
-    dispatch(getUserSentOffers(username+"-"+activeSortBy))
-    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+listingStatus))
-    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+listingStatus))
   }
   let sortByLowest = () => {
     setActiveSortBy("lowest")
-    dispatch(getUserReceivedOffers(username+"-"+activeSortBy))
-    dispatch(getUserSentOffers(username+"-"+activeSortBy))
-    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+listingStatus))
-    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+listingStatus))
   }
 
   let sortByNewest = () => {
     setActiveSortBy("newest")
-    dispatch(getUserReceivedOffers(username))
-    dispatch(getUserSentOffers(username))
-    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+listingStatus))
-    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+listingStatus))
   }
+
+
 
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
@@ -113,12 +108,30 @@ if (accepted && completed) {
       else if (userInfo.username !== username) {
         navigate("/")
       }
+
+      let status = "all"
+      if (accepted && completed) {
+        status = "all"
+      } else if (accepted) {
+        status = "accepted"
+      } else if (completed) {
+        status = "completed"
+      }
+      else {
+        status = "all"
+      }
+      console.log("Listing Status:", status)
+      console.log("Sort By Time/Price:", activeSortBy)
+      setListingStatus(status)
+
       dispatch(getUserProfileView(username))
-      dispatch(getUserReceivedOffers(username))
-      dispatch(getUserSentOffers(username))
-      dispatch(getUserBoughtOffers(username))
-      dispatch(getUserSoldOffers(username))
-  }, [userInfo, username, dispatch])
+      dispatch(getUserReceivedOffers(username+"-"+activeSortBy))
+      dispatch(getUserSentOffers(username+"-"+activeSortBy))
+      dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+status))
+      dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+status))
+
+      
+  }, [userInfo, accepted, completed, activeSortBy, username, dispatch])
 
 
   return (
@@ -225,14 +238,14 @@ if (accepted && completed) {
                         type="switch"
                         label="Accepted Listings"
                         name="checkbox1"
-                        onChange={handleCheckboxChange}
+                        onChange={handleAcceptedChange}
                         checked={accepted}
                       />
                       <Form.Check
                         type="switch"
                         label="Completed Listings"
                         name="checkbox2"
-                        onChange={handleCheckboxChange}
+                        onChange={handleCompletedChange}
                         checked={completed}
                       />
                     </div>
@@ -244,7 +257,22 @@ if (accepted && completed) {
                     </Form.Label>
                   </Form.Group>
                 </Form>    
-
+                {loadingSO ? (<Loader />) 
+                  : errorSO
+                      ? (<Notification variant="danger" message={errorSO} />) 
+                          : offersSO == null
+                              ? (<Notification variant="danger" message="No Sent Offers found" />)
+                                  : (
+                                      <Row>
+                                          {offersSO.offers.length === 0 ? (
+                                          <Alert variant="danger" className="d-none d-lg-block">
+                                              No Sold Items
+                                          </Alert>
+                                          ) : (
+                                            <BoughtOffers offers={offersSO.offers}/>
+                                          )}
+                                      </Row>
+                )}   
           </Tab>
           <Tab eventKey="bought" title="Bought Items">
           <h4>My Bought Items</h4>
@@ -270,14 +298,14 @@ if (accepted && completed) {
                         type="switch"
                         label="Accepted Listings"
                         name="checkbox1"
-                        onChange={handleCheckboxChange}
+                        onChange={handleAcceptedChange}
                         checked={accepted}
                       />
                       <Form.Check
                         type="switch"
                         label="Completed Listings"
                         name="checkbox2"
-                        onChange={handleCheckboxChange}
+                        onChange={handleCompletedChange}
                         checked={completed}
                       />
                     </div>
@@ -288,7 +316,23 @@ if (accepted && completed) {
                       Listing Status: <Badge bg="primary" >{listingStatus ? listingStatus : "None"}</Badge>
                     </Form.Label>
                   </Form.Group>
-                </Form>    
+                </Form>   
+                {loadingB ? (<Loader />) 
+                  : errorB
+                      ? (<Notification variant="danger" message={errorB} />) 
+                          : offersB == null
+                              ? (<Notification variant="danger" message="No Sent Offers found" />)
+                                  : (
+                                      <Row>
+                                          {offersB.offers.length === 0 ? (
+                                          <Alert variant="danger" className="d-none d-lg-block">
+                                              No Bought Items
+                                          </Alert>
+                                          ) : (
+                                            <BoughtOffers offers={offersB.offers}/>
+                                          )}
+                                      </Row>
+                )}                               
           </Tab>
         </Tabs>        
     </div>

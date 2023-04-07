@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
+
 from .models import Product, User, Profile, Offer
 # import the Serializers
 from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer
@@ -407,7 +408,7 @@ def soldItems(request, slug):
     serializedUser = UserSerializerWithToken(user, many=False).data
     # get his offers
     try:
-        if status == "complete":
+        if status == "completed":
             if orderType == "highest":
                 offer = Offer.objects.filter(seller=user, isComplete=True).order_by('-price')
             elif orderType == "lowest":
@@ -467,6 +468,7 @@ def soldItems(request, slug):
     return Response(data)
 
 
+@api_view(['GET'])
 def boughtItems(request, slug):
     orderType = "newest"
     status = "all"
@@ -478,7 +480,7 @@ def boughtItems(request, slug):
     serializedUser = UserSerializerWithToken(user, many=False).data
     # get his offers
     try:
-        if status == "complete":
+        if status == "completed":
             if orderType == "highest":
                 offer = Offer.objects.filter(buyer=user, isComplete=True).order_by('-price')
             elif orderType == "lowest":
@@ -536,11 +538,4 @@ def boughtItems(request, slug):
     }
 
     return Response(data)
-@api_view(['GET'])
-def getProducts(request):
-    query = request.query_params.get('keyword')
-    if query == None:
-        query = ''
-    products = Product.objects.filter(name__icontains=query) # get products model, currently not in json format
-    serializer = ProductSerializer(products, many=True) # many=True means that we have many products and we want to serialize them
-    return Response(serializer.data)
+
