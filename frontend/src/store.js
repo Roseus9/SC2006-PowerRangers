@@ -9,6 +9,7 @@ import { userDetailsReducer, userLoginReducer, userRegisterReducer } from "./red
 // import { combineReducers } from 'redux'
 import { configureStore } from "@reduxjs/toolkit";
 import { productCreateReducer } from "./reducers/productReducer";
+// importing the offer reducers
 import { offerCreateReducer, offerReceivedReducer, offerSentReducer } from "./reducers/offerReducer";
 
 
