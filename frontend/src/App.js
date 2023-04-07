@@ -33,6 +33,7 @@ function App() {
             <Route path="/profile/:username" element={<ProfileScreen />} />
             <Route path="/offer/product/:productID" element={<CreateOffer />} />
             <Route path="/edit/product/:productID" element={<EditListing />} />
+            <Route path="/offers/:username" element={<OffersScreen/>} />
           </Routes>
         </Container>
       </main>

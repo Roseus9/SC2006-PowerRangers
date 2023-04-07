@@ -35,9 +35,12 @@ function OffersScreen() {
   const offerReceived = useSelector(state => state.offerReceived);
   // console.log(offerReceived)
   const {errorR, loadingR, offersR} = offerReceived;
-  // console.log(offersR)
+  console.log('dog')
+  console.log(offersR)
   const offerSent = useSelector(state => state.offerSent);
   const {errorS, loadingS, offersS} = offerSent;
+  console.log('cat')
+  console.log(offersS)
 
   //user cant access create listing page if not logged in
   const userRegister = useSelector(state => state.userLogin);
