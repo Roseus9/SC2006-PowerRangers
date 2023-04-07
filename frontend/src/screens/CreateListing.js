@@ -154,6 +154,17 @@ function CreateListing() {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Choose price..."
+                value={price}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
+              />
+            </Form.Group>
             <Form.Group controlId="formFile" className="mb-3">
               <Col>
                 <Form.Label>Display Picture</Form.Label>
@@ -208,17 +219,6 @@ function CreateListing() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Choose price..."
-                value={price}
-                onChange={(e) => {
-                  setPrice(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
               <Form.Label>Condition</Form.Label>
               <Form.Select
                 value={condition}
@@ -265,7 +265,7 @@ function CreateListing() {
               <Form.Label>Delivery Notes</Form.Label>
               <Form.Control
                 as="textarea"
-                placeholder="Write your deliveryNotes..."
+                placeholder="Write your delivery notes..."
                 style={{ height: "200px", marginTop: "0px" }}
                 value={deliveryNotes}
                 onChange={(e) => {
