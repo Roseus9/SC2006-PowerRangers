@@ -42,3 +42,4 @@ urlpatterns = [
     path('editproduct', views.editProduct, name='edit-product'),
     path('deleteproduct', views.deleteProduct, name='delete-product')
 ]
+
