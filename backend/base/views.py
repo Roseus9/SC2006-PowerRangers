@@ -61,8 +61,17 @@ def getRoutes(request):
             '/api/products/<update>/<id>/',
             '/api/products/<id>/reviews/',
             '/api/products/<id>/reviews/<review_id>/',
-            '/api/offer/product/<id>'
-            '/api/profile/<username>'
+            '/api/offer/product/<id>',
+            '/api/offer/received/<username>',
+            '/api/offer/sent/<username>',
+            '/api/profile/<username>',
+            '/api/checkbookmark/<pid>/<uid>'
+            '/api/editproduct',
+            '/api/deleteproduct',
+            '/api/users/profile/<user_id>',
+            '/api/users/register',
+            '/api/users/login',
+            'api/users',
     ]
 
     return Response(routes)
@@ -110,14 +119,21 @@ def getUsers(request):
 
 @api_view(['GET'])
 def getProducts(request):
-    query = request.query_params.get('keyword')
-    if query == None:
-        query = ''
-    products = Product.objects.filter(name__icontains=query) # get products model, currently not in json format
-    serializer = ProductSerializer(products, many=True) # many=True means that we have many products and we want to serialize them
+    query = request.query_params.get('keyword', '')
+    tags = request.query_params.get('tags', '')
+
+    if query and tags:
+        products = Product.objects.filter(name__icontains=query, tags__icontains=tags)
+    elif query: 
+        products = Product.objects.filter(name__icontains=query)
+    elif tags:
+        products = Product.objects.filter(tags__icontains=tags)
+    else:
+        products = Product.objects.all()
+
+    serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
-    # return Response(products)
-    # return JsonResponse(products, safe=False)
+
 
 @api_view(['GET'])
 def getProduct(request, pk):
@@ -132,7 +148,6 @@ def getProduct(request, pk):
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
 def createProduct(request):
-    data = request.data
     currUser = request.user
     try:
         product = Product.objects.create(
@@ -241,13 +256,12 @@ def UserProfileView(request, slug):
         serializedProducts = ProductSerializer(products, many=True).data
 
     except:
-        return(
-            {
-                'profile': serializedProfile,
-                'products': "No products found",
-                'user': UserSerializerWithToken(user, many=False).data
-            }
-        )
+        data = {
+            'profile': serializedProfile,
+            'products': "No products found",
+            'user': UserSerializerWithToken(user, many=False).data
+        }
+        Response(data)
     
     data = {
         'profile': serializedProfile,
@@ -257,11 +271,276 @@ def UserProfileView(request, slug):
 
     return Response(data)
 
-@api_view(['GET'])
-def getProducts(request):
-    query = request.query_params.get('keyword')
-    if query == None:
-        query = ''
-    products = Product.objects.filter(name__icontains=query) # get products model, currently not in json format
-    serializer = ProductSerializer(products, many=True) # many=True means that we have many products and we want to serialize them
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def editProduct(request):
+    p = Product.objects.get(_id=int(request.POST.get('pid')))
+    print(request.data)
+    p.name=request.POST.get('name')
+    p.price=float(request.POST.get('price'))
+    p.condition=True if request.POST.get('condition') == "true" else False
+    p.tags=request.POST.get('tags')
+    p.description=request.POST.get('description')
+    p.delivery=True if request.POST.get('delivery') == "true" else False
+    p.notes=request.POST.get('notes')
+    p.pickupLocations=request.POST.get('pickupLocations')
+    print("image", request.FILES.get('image'))
+    if (request.FILES.get('image') != None): 
+        print("pass condition")
+        p.image = request.FILES.get('image')
+    print(request.data)
+    p.save()
+    serializer = ProductSerializer(p, many=False)
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteProduct(request):
+    p = Product.objects.get(_id=request.data)
+    p.delete()
+    return Response({'message': 'deleted sucessfully'})
+
+@api_view(['GET'])
+def receivedOffers(request, slug):
+    orderType = "newest"
+    if "-" in slug:
+        slug, orderType = slug.split("-")  
+    # first find the seller
+    user = User.objects.get(username=slug) 
+    serializedUser = UserSerializerWithToken(user, many=False).data
+    # get his offers
+    try:
+        if orderType == "highest":
+            offer = Offer.objects.filter(seller=user, isAccepted=False).order_by('-price')
+        elif orderType == "lowest":
+            offer = Offer.objects.filter(seller=user, isAccepted=False).order_by('price')
+        elif orderType == "oldest":
+            offer = Offer.objects.filter(seller=user, isAccepted=False).order_by('createdAt')
+        else:   
+            offer = Offer.objects.filter(seller=user, isAccepted=False).order_by('-createdAt')
+        serializedOffer = OfferSerializer(offer, many=True).data
+
+    except:
+        message = {'detail': 'No offers exist'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+    # and get his products for these offers
+    try:
+        for offer in serializedOffer:
+            offer['product'] = ProductSerializer(Product.objects.get(_id=offer['product']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the product in the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+        # and get his products for these offers
+    try:
+        for offer in serializedOffer:
+            offer['buyer'] = UserSerializer(User.objects.get(id=offer['buyer']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the buyer for the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+    data = {
+        'offers': serializedOffer,
+        'user': serializedUser
+    }
+
+    return Response(data)
+
+
+@api_view(['GET'])
+def sentOffers(request, slug):
+    orderType = "newest"
+    if "-" in slug:
+        slug, orderType = slug.split("-")
+
+    # first find the buyer
+    user = User.objects.get(username=slug) 
+    serializedUser = UserSerializerWithToken(user, many=False).data
+    # get his offers
+    try:
+        if orderType == "highest":
+            offer = Offer.objects.filter(buyer=user, isAccepted=False).order_by('-price')
+        elif orderType == "lowest":
+            offer = Offer.objects.filter(buyer=user, isAccepted=False).order_by('price')
+        elif orderType == "oldest":
+            offer = Offer.objects.filter(buyer=user, isAccepted=False).order_by('createdAt')
+        else:   
+            offer = Offer.objects.filter(buyer=user, isAccepted=False).order_by('-createdAt')
+        serializedOffer = OfferSerializer(offer, many=True).data
+
+    except:
+        message = {'detail': 'No offers exist'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+    # and get his products for these offers
+    try:
+        for offer in serializedOffer:
+            offer['product'] = ProductSerializer(Product.objects.get(_id=offer['product']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the product in the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+        # and get his products for these offers
+    try:
+        for offer in serializedOffer:
+            offer['seller'] = UserSerializer(User.objects.get(id=offer['seller']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the seller for the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+    data = {
+        'offers': serializedOffer,
+        'user': serializedUser
+    }
+
+    return Response(data)
+
+
+
+@api_view(['GET'])
+def soldItems(request, slug):
+    orderType = "newest"
+    status = "all"
+    if "-" in slug:
+        slug, orderType, status = slug.split("-")
+
+    # first find the seller
+    user = User.objects.get(username=slug) 
+    serializedUser = UserSerializerWithToken(user, many=False).data
+    # get his offers
+    try:
+        if status == "complete":
+            if orderType == "highest":
+                offer = Offer.objects.filter(seller=user, isComplete=True).order_by('-price')
+            elif orderType == "lowest":
+                offer = Offer.objects.filter(seller=user, isComplete=True).order_by('price')
+            elif orderType == "oldest":
+                offer = Offer.objects.filter(seller=user, isComplete=True).order_by('createdAt')
+            else:   
+                offer = Offer.objects.filter(seller=user, isComplete=True).order_by('-createdAt')
+        elif status == "accepted":
+            if orderType == "highest":
+                offer = Offer.objects.filter(seller=user, isAccepted=True, isComplete=False).order_by('-price')
+            elif orderType == "lowest":
+                offer = Offer.objects.filter(seller=user, isAccepted=True, isComplete=False).order_by('price')
+            elif orderType == "oldest":
+                offer = Offer.objects.filter(seller=user, isAccepted=True, isComplete=False).order_by('createdAt')
+            else:   
+                offer = Offer.objects.filter(seller=user, isAccepted=True, isComplete=False).order_by('-createdAt')
+        else:
+            if orderType == "highest":
+                offer = Offer.objects.filter(seller=user, isAccepted=True).order_by('-price')
+            elif orderType == "lowest":
+                offer = Offer.objects.filter(seller=user, isAccepted=True).order_by('price')
+            elif orderType == "oldest":
+                offer = Offer.objects.filter(seller=user, isAccepted=True).order_by('createdAt')
+            else:   
+                offer = Offer.objects.filter(seller=user, isAccepted=True).order_by('-createdAt')
+
+        serializedOffer = OfferSerializer(offer, many=True).data
+
+    except:
+        message = {'detail': 'No offers exist'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+    # and get his products for these offers
+    try:
+        for offer in serializedOffer:
+            offer['product'] = ProductSerializer(Product.objects.get(_id=offer['product']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the product in the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+        # and get his products for these offers
+    try:
+        for offer in serializedOffer:
+            offer['buyer'] = UserSerializer(User.objects.get(id=offer['buyer']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the buyer for the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+    data = {
+        'offers': serializedOffer,
+        'user': serializedUser
+    }
+
+    return Response(data)
+
+
+def boughtItems(request, slug):
+    orderType = "newest"
+    status = "all"
+    if "-" in slug:
+        slug, orderType, status = slug.split("-")
+
+    # first find the buyer
+    user = User.objects.get(username=slug) 
+    serializedUser = UserSerializerWithToken(user, many=False).data
+    # get his offers
+    try:
+        if status == "complete":
+            if orderType == "highest":
+                offer = Offer.objects.filter(buyer=user, isComplete=True).order_by('-price')
+            elif orderType == "lowest":
+                offer = Offer.objects.filter(buyer=user, isComplete=True).order_by('price')
+            elif orderType == "oldest":
+                offer = Offer.objects.filter(buyer=user, isComplete=True).order_by('createdAt')
+            else:   
+                offer = Offer.objects.filter(buyer=user, isComplete=True).order_by('-createdAt')
+        elif status == "accepted":
+            if orderType == "highest":
+                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('-price')
+            elif orderType == "lowest":
+                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('price')
+            elif orderType == "oldest":
+                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('createdAt')
+            else:   
+                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('-createdAt')
+        else:
+            if orderType == "highest":
+                offer = Offer.objects.filter(buyer=user, isAccepted=True).order_by('-price')
+            elif orderType == "lowest":
+                offer = Offer.objects.filter(buyer=user, isAccepted=True).order_by('price')
+            elif orderType == "oldest":
+                offer = Offer.objects.filter(buyer=user, isAccepted=True).order_by('createdAt')
+            else:   
+                offer = Offer.objects.filter(buyer=user, isAccepted=True).order_by('-createdAt')
+
+        serializedOffer = OfferSerializer(offer, many=True).data
+
+    except:
+        message = {'detail': 'No offers exist'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+    # and get his products for these offers
+    try:
+        for offer in serializedOffer:
+            offer['product'] = ProductSerializer(Product.objects.get(_id=offer['product']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the product in the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+        # and get his products for these offers
+    try:
+        for offer in serializedOffer:
+            offer['seller'] = UserSerializer(User.objects.get(id=offer['seller']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the seller for the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+    data = {
+        'offers': serializedOffer,
+        'user': serializedUser
+    }
+
+    return Response(data)
+
