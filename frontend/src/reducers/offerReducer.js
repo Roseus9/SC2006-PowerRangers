@@ -2,6 +2,7 @@ import {
     OFFER_CREATE_REQUEST,
     OFFER_CREATE_SUCCESS,
     OFFER_CREATE_FAIL,
+    OFFER_CREATE_RESET,
 
     OFFER_RECEIVED_REQUEST,
     OFFER_RECEIVED_SUCCESS,
@@ -10,6 +11,14 @@ import {
     OFFER_SENT_REQUEST,
     OFFER_SENT_SUCCESS,
     OFFER_SENT_FAIL,
+
+    OFFER_BOUGHT_REQUEST,
+    OFFER_BOUGHT_SUCCESS,
+    OFFER_BOUGHT_FAIL,
+    
+    OFFER_SOLD_REQUEST,
+    OFFER_SOLD_SUCCESS,
+    OFFER_SOLD_FAIL,
 
   } from '../constants/constants';
   
@@ -21,6 +30,8 @@ import {
         return { loading: false, success: true, offer: action.payload };
       case OFFER_CREATE_FAIL:
         return { loading: false, error: action.payload };
+      case OFFER_CREATE_RESET:
+        return { loading: false, success:false, error: null};
       default:
         return state;
     }
@@ -48,6 +59,33 @@ import {
         return { loadingS: false, successS: true, offersS: action.payload };
       case OFFER_SENT_FAIL:
         return { loadingS: false, errorS: action.payload };
+      default:
+        return state;
+    }
+  };
+
+
+  export const offerBoughtReducer = (state = {}, action) => {
+    switch (action.type) {
+      case OFFER_BOUGHT_REQUEST:
+        return { loadingB: true };
+      case OFFER_BOUGHT_SUCCESS:
+        return { loadingB: false, successB: true, offersB: action.payload };
+      case OFFER_BOUGHT_FAIL:
+        return { loadingB: false, errorB: action.payload };
+      default:
+        return state;
+    }
+  };
+
+  export const offerSoldReducer = (state = {}, action) => {
+    switch (action.type) {
+      case OFFER_SOLD_REQUEST:
+        return { loadingSO: true };
+      case OFFER_SOLD_SUCCESS:
+        return { loadingSO: false, successSO: true, offersSO: action.payload };
+      case OFFER_SOLD_FAIL:
+        return { loadingSO: false, errorSO: action.payload };
       default:
         return state;
     }

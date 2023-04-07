@@ -52,7 +52,7 @@ export const userRegisterReducer = (state = userInitialState, action) => {
     case USER_REGISTER_REQUEST:
       return { loading: true }
     case USER_REGISTER_SUCCESS:
-      // if succesful, return a payload of data with the products to the state
+      // if succesful, return a payload of data with the user to the state
       return { loading: false, userInfo: action.payload }
       // if there is an error, return a new attribute error, passing in the response from the payload
     case USER_REGISTER_FAIL:

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
@@ -8,17 +8,15 @@ import locations from "../constants/locations";
 import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Papa from "papaparse";
 import restrictedItems from "../constants/restrictedItems";
 import { createProduct } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import Notification from "../components/Notification";
+import Notification from '../components/Notification';
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_CREATE_RESET } from "../constants/constants";
 function CreateListing() {
   const productCreate = useSelector((state) => state.productCreate);
-  var { product, error, success } = productCreate;
+  let { product, error, success } = productCreate;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -38,18 +36,20 @@ function CreateListing() {
   const handleShow = () => setShow(true);
 
   //user cant access create listing page if not logged in
-  const userRegister = useSelector((state) => state.userLogin);
-  let { loading, userInfo } = userRegister;
+  const userRegister = useSelector(state => state.userLogin);
+  let { loading, userInfo} = userRegister;
 
   useEffect(() => {
+
     if (success) {
+      dispatch({ type: PRODUCT_CREATE_RESET });
       navigate("/");
     }
     if (!userInfo) {
-      navigate("/login");
+        navigate("/login")
     }
-  }, [userInfo, navigate, success]);
-  //test
+  }, [userInfo, navigate, success])
+
   const cancelClicked = () => {
     navigate("/");
   };
@@ -81,7 +81,7 @@ function CreateListing() {
       toast.error("Missing price!");
       return;
     }
-    if (!price.match("^[0-9]+(.[0-9]{1,3})?$")) {
+    if (!price.match("^[0-9]+([.[0-9]{1,3}])?$")) {
       toast.error("Invalid price!");
       return;
     }
@@ -120,6 +120,17 @@ function CreateListing() {
     listing.append("delivery", deliveryFlag);
     listing.append("notes", deliveryFlag == true ? deliveryNotes : null);
     listing.append("image", file);
+    // const listing = {
+    //   name: title,
+    //   price: price,
+    //   condition: condition == "new" ? true : false,
+    //   tags: tags_str,
+    //   description: blurb,
+    //   pickupLocations: locations_str,
+    //   delivery: deliveryFlag,
+    //   notes: deliveryFlag == true ? deliveryNotes : null,
+    //   image: file,
+    // };
 
     dispatch(createProduct(listing));
     if (success) {
@@ -166,7 +177,7 @@ function CreateListing() {
                   onChange={(e) => {
                     const selectedFile = e.target.files[0];
                     setFile(selectedFile);
-                    console.log(selectedFile);
+
                     const reader = new FileReader();
                     reader.onload = () => {
                       setPreviewURL(reader.result);
@@ -296,7 +307,7 @@ function CreateListing() {
           </div>
         </div>
       </Form>
-      {error && <Notification variant="danger" message={error} />}
+      {error && <Notification variant='danger' message={error}/>}          
     </div>
   );
 }
