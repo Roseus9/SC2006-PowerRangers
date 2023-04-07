@@ -74,6 +74,7 @@ def getRoutes(request):
             'api/users',
     ]
 
+
     return Response(routes)
     # return JsonResponse(routes, safe=False)
 
