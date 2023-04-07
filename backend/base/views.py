@@ -119,14 +119,21 @@ def getUsers(request):
 
 @api_view(['GET'])
 def getProducts(request):
-    query = request.query_params.get('keyword')
-    if query == None:
-        query = ''
-    products = Product.objects.filter(name__icontains=query) # get products model, currently not in json format
-    serializer = ProductSerializer(products, many=True) # many=True means that we have many products and we want to serialize them
+    query = request.query_params.get('keyword', '')
+    tags = request.query_params.get('tags', '')
+
+    if query and tags:
+        products = Product.objects.filter(name__icontains=query, tags__icontains=tags)
+    elif query: 
+        products = Product.objects.filter(name__icontains=query)
+    elif tags:
+        products = Product.objects.filter(tags__icontains=tags)
+    else:
+        products = Product.objects.all()
+
+    serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
-    # return Response(products)
-    # return JsonResponse(products, safe=False)
+
 
 @api_view(['GET'])
 def getProduct(request, pk):
@@ -536,11 +543,4 @@ def boughtItems(request, slug):
     }
 
     return Response(data)
-@api_view(['GET'])
-def getProducts(request):
-    query = request.query_params.get('keyword')
-    if query == None:
-        query = ''
-    products = Product.objects.filter(name__icontains=query) # get products model, currently not in json format
-    serializer = ProductSerializer(products, many=True) # many=True means that we have many products and we want to serialize them
-    return Response(serializer.data)
+

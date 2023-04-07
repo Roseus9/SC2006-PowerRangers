@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, } from "react-bootstrap";
 import Loader from "../components/Loader";
 import Notification from "../components/Notification";
 
@@ -7,6 +7,7 @@ import Notification from "../components/Notification";
 // import products from '../products'
 import Product from "../components/Product";
 import MainCarousel from "../components/MainCarousel";
+
 
 // for dispatching the action
 import { getProducts } from "../actions/productActions";
@@ -20,6 +21,7 @@ import {
 import { useSearchParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
+
 function Home() {
   // initial state of products is set to an empty array
   // const [products, setProducts] = useState([])
@@ -30,6 +32,7 @@ function Home() {
 
   const Pdelete = useSelector((state) => state.productDelete);
   const productCreate = useSelector((state) => state.productCreate);
+
   console.log(productCreate);
   if (Pdelete.done == true) {
     dispatch({ type: PRODUCT_DELETE_RESET });
@@ -42,13 +45,16 @@ function Home() {
   }
 
   const [searchParams] = useSearchParams();
-  const keyword = searchParams.get("keyword") || "";
+  let keyword = searchParams.get("keyword") || "";
+  let tags = searchParams.get("tags") || "";
 
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
-    dispatch(getProducts(keyword));
+    // console.log(keyword)
+    // console.log(tags);
+    dispatch(getProducts(keyword, tags));
     dispatch({ type: PRODUCT_CREATE_RESET });
-  }, [dispatch, keyword]);
+  }, [dispatch, keyword, tags]);
 
   // now we can check the attributes, loading, error otherwise render
   return (
@@ -65,8 +71,8 @@ function Home() {
         pauseOnHover
         theme="light"
       />
-      {!keyword && <MainCarousel />}
-      <h1>Trending Items</h1>
+      {!keyword && !tags && <MainCarousel />}
+      <h1 style={{ marginTop: '20px' }}>All Listings</h1>
       {loading ? (
         <Loader />
       ) : error ? (
