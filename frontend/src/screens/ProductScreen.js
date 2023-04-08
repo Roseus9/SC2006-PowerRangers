@@ -88,7 +88,10 @@ function ProductScreen() {
   const date = new Date(dateString);
   const formattedDate = date.toLocaleString();
 
-  const isCreator = product && product.seller == userInfo._id;
+  const isCreator = false;
+  if (userInfo) {
+    isCreator = product && product.seller == userInfo._id;
+  }
   return (
     <div>
       <ToastContainer

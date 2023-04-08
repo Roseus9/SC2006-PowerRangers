@@ -14,11 +14,13 @@ export const USER_LOGIN_REQUEST = "USER_LOGIN_REQUEST";
 export const USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
 export const USER_LOGIN_FAIL = "USER_LOGIN_FAIL";
 export const USER_LOGOUT = "USER_LOGOUT";
+export const USER_LOGIN_RESET = "USER_LOGIN_RESET";
 
 //  constants for API call for registering users
 export const USER_REGISTER_REQUEST = "USER_REGISTER_REQUEST";
 export const USER_REGISTER_SUCCESS = "USER_REGISTER_SUCCESS";
 export const USER_REGISTER_FAIL = "USER_REGISTER_FAIL";
+export const USER_REGISTER_RESET = "USER_REGISTER_RESET";
 
 //  constants for API call to create a new product
 export const PRODUCT_CREATE_REQUEST = "PRODUCT_CREATE_REQUEST";
