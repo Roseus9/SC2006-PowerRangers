@@ -32,9 +32,6 @@ function MyOffers({ offers }) {
     dispatch(respondOfferAction(offer._id, acceptFlag));
   };
 
-  const completeTransaction = (offer) => {};
-
-  const cancelTransaction = (offer) => {};
   return (
     <div>
       <Table striped hover>
