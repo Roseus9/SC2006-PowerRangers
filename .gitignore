@@ -4,7 +4,6 @@
 *.pyc
 __pycache__
 media
-node_modules
 # Backup files # 
 *.bak 
 
