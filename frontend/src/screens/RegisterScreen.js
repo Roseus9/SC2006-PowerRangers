@@ -27,8 +27,12 @@ function CreateListing() {
   let { loading, userInfo, error } = userRegister;
   useEffect(() => {
     error = null;
+    
     if (userInfo) {
         navigate(redirect)
+    }
+    else {
+      dispatch({type: USER_LOGIN_RESET})
     }
   }, [userInfo, redirect])
 

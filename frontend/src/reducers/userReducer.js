@@ -42,7 +42,7 @@ export const userLoginReducer = (state = userInitialState, action) => {
     case USER_LOGOUT:
       return { logout: true}
     case USER_LOGIN_RESET:
-      return { error : null, logout: false}
+      return { error : null, logout: false, userInfo: action.payload }
       // if none of the above, return the initial state
     default:
       return state
