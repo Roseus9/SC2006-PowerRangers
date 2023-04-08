@@ -91,7 +91,7 @@ function MyOffers({ offers }) {
               <td>${offer.price}</td>
               <td>{new Date(offer.createdAt).toLocaleString()}</td>
               {!offer.isAccepted && (
-                <div>
+                <>
                   <td>
                     <Button
                       variant="success"
@@ -108,7 +108,7 @@ function MyOffers({ offers }) {
                       Decline Offer
                     </Button>
                   </td>
-                </div>
+                </>
               )}
             </tr>
           ))}

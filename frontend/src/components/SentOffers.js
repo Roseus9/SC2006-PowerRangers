@@ -49,7 +49,6 @@ function SentOffers({ offers }) {
   };
 
   const deleteOffer = (offer) => {
-    console.log("deleteoffer");
     dispatch(deleteOfferAction(offer._id));
   };
   return (
