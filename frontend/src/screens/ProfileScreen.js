@@ -30,13 +30,14 @@ function ProfileScreen() {
         <hr />
         <Col md={3}>
                 <Card>
-                <Card.Header>{userObj ? userObj.user.name : "No Name"} </Card.Header>
+                <Card.Header>🤗 {userObj ? userObj.user.name : "No Name"}</Card.Header>
                     <Card.Body>
                         <Card.Title> </Card.Title>
                         <Card.Text>
                             <Image src={userObj ? (userObj.profile.image ? userObj.profile.image : "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg") : "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"} alt="No Profile Picture Uploaded" fluid / >
                         </Card.Text>
-                        
+                        <br></br>
+                        <h6>✏️User Details: </h6>
                         <ListGroup variant='flush'>
                             <ListGroup.Item variant="info">
                                 <div>Joined: </div>
@@ -57,7 +58,7 @@ function ProfileScreen() {
         </Col>
 
         <Col md={9}>
-            <h4>Listings</h4>
+            <h4>Listings 📌</h4>
             {loading ? (<Loader />) 
                 : error 
                     ? (<Notification variant="danger" message={error} />) 

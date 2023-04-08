@@ -14,11 +14,13 @@ export const USER_LOGIN_REQUEST = "USER_LOGIN_REQUEST";
 export const USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
 export const USER_LOGIN_FAIL = "USER_LOGIN_FAIL";
 export const USER_LOGOUT = "USER_LOGOUT";
+export const USER_LOGIN_RESET = "USER_LOGIN_RESET";
 
 //  constants for API call for registering users
 export const USER_REGISTER_REQUEST = "USER_REGISTER_REQUEST";
 export const USER_REGISTER_SUCCESS = "USER_REGISTER_SUCCESS";
 export const USER_REGISTER_FAIL = "USER_REGISTER_FAIL";
+export const USER_REGISTER_RESET = "USER_REGISTER_RESET";
 
 //  constants for API call to create a new product
 export const PRODUCT_CREATE_REQUEST = "PRODUCT_CREATE_REQUEST";
@@ -29,6 +31,7 @@ export const PRODUCT_CREATE_FAIL = "PRODUCT_CREATE_FAIL";
 export const OFFER_CREATE_REQUEST = "OFFER_CREATE_REQUEST";
 export const OFFER_CREATE_SUCCESS = "OFFER_CREATE_SUCCESS";
 export const OFFER_CREATE_FAIL = "OFFER_CREATE_FAIL";
+export const OFFER_CREATE_RESET = "OFFER_CREATE_RESET";
 
 //  constants for API call to get received offers
 export const OFFER_RECEIVED_REQUEST = "OFFER_RECEIVED_REQUEST";
@@ -73,6 +76,15 @@ export const PRODUCT_DELETE_SUCCESS = "PRODUCT_DELETE_SUCCESS";
 export const PRODUCT_DELETE_FAIL = "PRODUCT_DELETE_FAIL";
 export const PRODUCT_DELETE_RESET = "PRODUCT_DELETE_RESET";
 
+//  constants for API call to get bought offers
+export const OFFER_BOUGHT_REQUEST = "OFFER_BOUGHT_REQUEST";
+export const OFFER_BOUGHT_SUCCESS = "OFFER_BOUGHT_SUCCESS";
+export const OFFER_BOUGHT_FAIL = "OFFER_BOUGHT_FAIL";
+
+//  constants for API call to get sold offers
+export const OFFER_SOLD_REQUEST = "OFFER_SOLD_REQUEST";
+export const OFFER_SOLD_SUCCESS = "OFFER_SOLD_SUCCESS";
+export const OFFER_SOLD_FAIL = "OFFER_SOLD_FAIL";
 export const OFFER_RESPOND_REQUEST = "OFFER_RESPOND_REQUEST";
 export const OFFER_RESPOND_SUCCESS = "OFFER_RESPOND_SUCCESS";
 export const OFFER_RESPOND_FAIL = "OFFER_RESPOND_FAIL";

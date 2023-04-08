@@ -6,6 +6,7 @@ import {login} from '../actions/userLoginActions'
 import Notification from '../components/Notification'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
+import { ToastContainer, toast } from "react-toastify";
 
 function LoginScreen() {
     //router props
@@ -27,11 +28,14 @@ function LoginScreen() {
     //  useEffect second parameter is array of dependencies, the effect will only run when dependencies change
     //      performance optimization that can help avoid unnecessary re-renders
     useEffect(() => {
-        error = null;
+        // error = null;
         if (userInfo) {
             navigate(redirect)
         }
-    }, [userInfo, redirect])
+        if (error) {
+            toast.error("😿 Invalid Login Credentials");
+        }
+    }, [userInfo, redirect, error])
 
     //  useState for email and password
     //      email and password are needed to be passed into our login() action creator
@@ -47,9 +51,21 @@ function LoginScreen() {
     return (
 
         <FormContainer>
+            <ToastContainer
+                position="top-right"
+                hideProgressBar={true}
+                autoClose={1500}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="dark"
+            />
             <h3>Login</h3>
-            {/* if there is an error, display the error message */}
-            {error && <Notification variant='danger' message={error}/>}
+            {/* if there is an error, display the error message
+            {error && <Notification variant='danger' message={error}/>} */}
             {/* if loading, display the loading message */}
             {loading && <Loader/>}
             <Form onSubmit={submitHandler}>

@@ -4,8 +4,7 @@ import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Notification from "../components/Notification";
 import { Link } from "react-router-dom";
-
-import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
+import { Row, Col, Image, ListGroup, Button, Badge, OverlayTrigger, Tooltip, Modal } from "react-bootstrap";
 
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "../actions/productActions";
@@ -17,6 +16,7 @@ import { getProducts } from "../actions/productActions";
 import { PRODUCT_DELETE_RESET } from "../constants/constants";
 import "react-toastify/dist/ReactToastify.css";
 // here we deconstruct the props object, to access match
+
 function ProductScreen() {
   let navigate = useNavigate();
   // useParam is a hook that allows us to access the url parameters
@@ -31,7 +31,7 @@ function ProductScreen() {
   if (edit.success == true) {
     dispatch(getProduct(itemId));
     dispatch({ type: PRODUCT_EDIT_RESET });
-    toast.success("Product edited!");
+    toast.success("Product Edited!");
   }
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
@@ -62,14 +62,24 @@ function ProductScreen() {
     );
   };
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  const handleIconClick = () => {
+    setShowModal(true);
+  };
+
   const userRegister = useSelector((state) => state.userLogin);
   let { userInfo = {} } = userRegister;
   function handleBookmarkClick() {
     if (Object.keys(userInfo).length == 0) {
-      toast.error("You're not logged in!");
+      toast.error("You're Not Logged In!");
     }
     if (product.seller == userInfo._id)
-      toast.error("cannot bookmark your own listing!");
+      toast.error("Cannot Bookmark Your Own Listing!");
     //todo
     else return;
   }
@@ -78,7 +88,10 @@ function ProductScreen() {
   const date = new Date(dateString);
   const formattedDate = date.toLocaleString();
 
-  const isCreator = product && product.seller == userInfo._id;
+  let isCreator = false;
+  if (userInfo) {
+    isCreator = (product && product.seller == userInfo._id);
+  }
   return (
     <div>
       <ToastContainer
@@ -91,7 +104,7 @@ function ProductScreen() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
       {loading ? (
         <Loader />
@@ -100,55 +113,85 @@ function ProductScreen() {
       ) : (
         <Row>
           <Col md={6} sm={12}>
-            {/* must add  fluid to ensure the iamge doesnt pop out of the container */}
+          <div className="product-image-container">
+          <OverlayTrigger
+            placement="bottom"
+            overlay={<Tooltip>View full image</Tooltip>}
+          >
             <Image
               src={product.image}
               alt={product.name}
               fluid
-              style={{ width: "100%" }}
+              onClick={handleIconClick}
+              style={{ cursor: 'pointer' }}
             />
+          </OverlayTrigger>
+          <Modal show={showModal} onHide={handleModalClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>{product.name}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Image src={product.image} alt={product.name} fluid />
+            </Modal.Body>
+          </Modal>
+          </div>
           </Col>
           <Col md={3} sm={12}>
             <ListGroup variant="flushed">
               <ListGroup.Item>
-                <h3>{product.name}</h3>
+                <h3>{product.name}</h3> 
+                {!product.delivery&&
+                  <Badge bg="warning">
+                  Pick-Up
+                  </Badge>
+                }
+                {product.delivery&& 
+                  <>
+                    <Badge bg="warning" style={{marginRight: "6px"}}>
+                      Pick-Up
+                    </Badge> 
+                    <Badge bg="info">
+                      Delivery
+                    </Badge>
+                  </>
+                }
               </ListGroup.Item>
               <ListGroup.Item>
-                <Rating value={product.rating} />
-              </ListGroup.Item>
-              <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+                <strong>Price:</strong> ${product.price}
+                </ListGroup.Item>
               <ListGroup.Item>
-                Condition: {product.condition ? "New" : "Used"}
+                <strong>Description:</strong> {product.description}
               </ListGroup.Item>
               <ListGroup.Item>
-                Description: {product.description}
+                <strong>Condition:</strong> {product.condition ? "New" : "Used"}
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <strong>Tags: </strong> 
+                  <em>{product.tags}</em>
               </ListGroup.Item>
               {product.delivery && (
                 <div>
-                  <ListGroup.Item>Pick Up & Delivery Available!</ListGroup.Item>
                   <ListGroup.Item>
-                    Pickup Locations: {product.pickupLocations}
+                    <strong>Pick-Up Locations: </strong>{product.pickupLocations}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    Delivery Notes: {product.notes}
+                    <strong>Delivery Notes: </strong>{product.notes}
                   </ListGroup.Item>
                 </div>
               )}
               {!product.delivery && (
                 <div>
-                  <ListGroup.Item>Pick Up Available!</ListGroup.Item>
                   <ListGroup.Item>
-                    Pickup Locations: {product.pickupLocations}
+                    <strong>Pick-Up Locations:</strong> {product.pickupLocations}
                   </ListGroup.Item>
                 </div>
               )}
-              <ListGroup.Item>Tags: {product.tags}</ListGroup.Item>
               <ListGroup.Item>
-                Listed Time: {formattedDate}
+                <strong>Listed Time:</strong> {formattedDate}
                 {/* Listed Time: {product.createdAt} */}
               </ListGroup.Item>
               <ListGroup.Item action variant="warning" onClick={alertClicked}>
-                Sold By: {product.username}
+                <strong>Sold By:</strong> {product.username}
                 {/* Listed Time: {product.createdAt} */}
               </ListGroup.Item>
               {/* <ListGroup.Item>

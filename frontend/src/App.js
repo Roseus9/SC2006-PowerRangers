@@ -13,8 +13,9 @@ import CreateListing from "./screens/CreateListing";
 import Settings from "./screens/Settings";
 import ProfileScreen from "./screens/ProfileScreen";
 import CreateOffer from "./screens/CreateOffer";
-import EditListing from "./screens/EditListing";
+
 import OffersScreen from "./screens/OffersScreen";
+import EditListing from "./screens/EditListing";
 
 function App() {
   return (

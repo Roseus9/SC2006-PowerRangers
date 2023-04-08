@@ -1,24 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import producttags from "../constants/producttags";
 import locations from "../constants/locations";
-import Select from "react-select";
+import Select from "react-select"; 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Papa from "papaparse";
 import restrictedItems from "../constants/restrictedItems";
 import { createProduct } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import Notification from "../components/Notification";
+import Notification from '../components/Notification';
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_CREATE_RESET } from "../constants/constants";
+import Loader from "../components/Loader";
 function CreateListing() {
-  const productCreate = useSelector((state) => state.productCreate);
-  var { product, error, success } = productCreate;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -37,19 +34,26 @@ function CreateListing() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // product creation
+  const productCreate = useSelector((state) => state.productCreate);
+  let { product, error, success } = productCreate;
+
   //user cant access create listing page if not logged in
-  const userRegister = useSelector((state) => state.userLogin);
-  let { loading, userInfo } = userRegister;
+  const userRegister = useSelector(state => state.userLogin);
+  let { loading, userInfo} = userRegister;
+
 
   useEffect(() => {
+
     if (success) {
+      dispatch({ type: PRODUCT_CREATE_RESET });
       navigate("/");
     }
     if (!userInfo) {
-      navigate("/login");
+        navigate("/login")
     }
-  }, [userInfo, navigate, success]);
-  //test
+  }, [userInfo, navigate, success])
+
   const cancelClicked = () => {
     navigate("/");
   };
@@ -81,7 +85,7 @@ function CreateListing() {
       toast.error("Missing price!");
       return;
     }
-    if (!price.match("^[0-9]+(.[0-9]{1,3})?$")) {
+    if (!price.match("^[0-9]+([.[0-9]{1,3}])?$")) {
       toast.error("Invalid price!");
       return;
     }
@@ -120,6 +124,17 @@ function CreateListing() {
     listing.append("delivery", deliveryFlag);
     listing.append("notes", deliveryFlag == true ? deliveryNotes : null);
     listing.append("image", file);
+    // const listing = {
+    //   name: title,
+    //   price: price,
+    //   condition: condition == "new" ? true : false,
+    //   tags: tags_str,
+    //   description: blurb,
+    //   pickupLocations: locations_str,
+    //   delivery: deliveryFlag,
+    //   notes: deliveryFlag == true ? deliveryNotes : null,
+    //   image: file,
+
 
     dispatch(createProduct(listing));
     if (success) {
@@ -138,7 +153,7 @@ function CreateListing() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
 
       <Form onSubmit={submitHandler}>
@@ -154,6 +169,17 @@ function CreateListing() {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Choose price..."
+                value={price}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
+              />
+            </Form.Group>
             <Form.Group controlId="formFile" className="mb-3">
               <Col>
                 <Form.Label>Display Picture</Form.Label>
@@ -166,7 +192,7 @@ function CreateListing() {
                   onChange={(e) => {
                     const selectedFile = e.target.files[0];
                     setFile(selectedFile);
-                    console.log(selectedFile);
+
                     const reader = new FileReader();
                     reader.onload = () => {
                       setPreviewURL(reader.result);
@@ -208,17 +234,6 @@ function CreateListing() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Choose price..."
-                value={price}
-                onChange={(e) => {
-                  setPrice(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
               <Form.Label>Condition</Form.Label>
               <Form.Select
                 value={condition}
@@ -247,7 +262,7 @@ function CreateListing() {
             <Form.Group className="mb-3">
               <Form.Label>Delivery</Form.Label>
               <Form.Check
-                value={deliveryFlag}
+                value={deliveryFlag} 
                 onChange={(e) => {
                   setDeliveryFlag(e.target.checked);
                   var locationBox = document.getElementById("deliveryBox");
@@ -265,7 +280,7 @@ function CreateListing() {
               <Form.Label>Delivery Notes</Form.Label>
               <Form.Control
                 as="textarea"
-                placeholder="Write your deliveryNotes..."
+                placeholder="Write any additional delivery information for the buyer..."
                 style={{ height: "200px", marginTop: "0px" }}
                 value={deliveryNotes}
                 onChange={(e) => {
@@ -274,29 +289,34 @@ function CreateListing() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Button
-                type="submit"
-                variant="secondary"
-                style={{
-                  backgroundColor: "#F24E1E",
-                  marginRight: "8px",
-                  marginTop: "5px",
-                }}
-              >
-                Submit
-              </Button>
-              <Button
-                onClick={cancelClicked}
-                variant="outline-secondary"
-                style={{ marginTop: "5px" }}
-              >
-                Cancel
-              </Button>
+
+              {productCreate.loading ? <Loader/> :
+                 <> 
+                    <Button
+                      type="submit"
+                      variant="secondary"
+                      style={{
+                        backgroundColor: "#F24E1E",
+                        marginRight: "8px",
+                        marginTop: "5px",
+                      }}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      onClick={cancelClicked}
+                      variant="outline-secondary"
+                      style={{ marginTop: "5px" }}
+                    >
+                      Cancel
+                    </Button>
+                  </>              
+                }
             </Form.Group>
           </div>
         </div>
       </Form>
-      {error && <Notification variant="danger" message={error} />}
+      {error && <Notification variant='danger' message={error}/>}          
     </div>
   );
 }

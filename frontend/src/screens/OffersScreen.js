@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
+
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -18,13 +20,18 @@ import { getUserProfileView } from "../actions/userLoginActions";
 import {
   getUserReceivedOffers,
   getUserSentOffers,
+  getUserBoughtOffers,
+  getUserSoldOffers,
 } from "../actions/offerActions";
+
 import { useDispatch, useSelector } from "react-redux";
 import { OFFER_RESPOND_RESET } from "../constants/constants";
 import Notification from "../components/Notification";
 import Loader from "../components/Loader";
 import MyOffers from "../components/MyOffers";
 import SentOffers from "../components/SentOffers";
+import BoughtOffers from "../components/BoughtOffers";
+import SoldOffers from "../components/SoldOffers";
 
 function OffersScreen() {
   let { username } = useParams();
@@ -37,12 +44,13 @@ function OffersScreen() {
   const offerReceived = useSelector((state) => state.offerReceived);
   // console.log(offerReceived)
   const { errorR, loadingR, offersR } = offerReceived;
-  console.log("dog");
-  console.log(offersR);
   const offerSent = useSelector((state) => state.offerSent);
   const { errorS, loadingS, offersS } = offerSent;
-  console.log("cat");
-  console.log(offersS);
+  const offerBought = useSelector((state) => state.offerBought);
+  const { errorB, loadingB, offersB } = offerBought;
+  // console.log("offersB", offersB)
+  const offerSold = useSelector((state) => state.offerSold);
+  const { errorSO, loadingSO, offersSO } = offerSold;
 
   //user cant access create listing page if not logged in
   const userRegister = useSelector((state) => state.userLogin);
@@ -50,26 +58,50 @@ function OffersScreen() {
 
   const respondState = useSelector((state) => state.offerRespond);
 
+  // states for filtering
+  // consists of active sort by for time, and price
+  // and listing status for accepted, completed, or all
+  const [activeSortBy, setActiveSortBy] = useState("newest");
+  const [listingStatus, setListingStatus] = useState("all");
+  // accepted and completed are individual states for the 2 sliders
+  const [accepted, setAccepted] = useState(true);
+  const [completed, setCompleted] = useState(true);
+
+  // handlers for sliders
+  const handleCompletedChange = (event) => {
+    const { name, checked } = event.target;
+    if (checked == true) {
+      setCompleted(true);
+    } else {
+      setCompleted(false);
+    }
+  };
+
+  const handleAcceptedChange = (event) => {
+    const { name, checked } = event.target;
+    if (checked == true) {
+      setAccepted(true);
+    } else {
+      setAccepted(false);
+    }
+  };
+
+  // functions for filtering listings
+
   let sortByOldest = () => {
-    setActiveSortBy("Oldest");
-    dispatch(getUserReceivedOffers(username + "-oldest"));
-    dispatch(getUserSentOffers(username + "-oldest"));
+    setActiveSortBy("oldest");
   };
+
   let sortByHighest = () => {
-    setActiveSortBy("Highest Price");
-    dispatch(getUserReceivedOffers(username + "-highest"));
-    dispatch(getUserSentOffers(username + "-highest"));
+    setActiveSortBy("highest");
   };
+
   let sortByLowest = () => {
-    setActiveSortBy("Lowest Price");
-    dispatch(getUserReceivedOffers(username + "-lowest"));
-    dispatch(getUserSentOffers(username + "-lowest"));
+    setActiveSortBy("lowest");
   };
 
   let sortByNewest = () => {
-    setActiveSortBy("Most Recent");
-    dispatch(getUserReceivedOffers(username));
-    dispatch(getUserSentOffers(username));
+    setActiveSortBy("newest");
   };
 
   // useEffect is a hook that allows us to run a function when the component loads
@@ -79,16 +111,41 @@ function OffersScreen() {
     } else if (userInfo.username !== username) {
       navigate("/");
     }
-    console.log(respondState);
-    if (respondState.success) {
-      toast.success(respondState.flag ? "offer accepted!" : "offer deleted!");
-    }
-    dispatch(getUserProfileView(username));
-    dispatch(getUserReceivedOffers(username));
-    dispatch(getUserSentOffers(username));
-  }, [userInfo, username, dispatch, respondState.success, navigate]);
 
-  const [activeSortBy, setActiveSortBy] = useState("Most Recent");
+    if (respondState.success) {
+      toast.success(respondState.flag ? "Offer Accepted!" : "Offer Deleted!");
+      dispatch({ type: OFFER_RESPOND_RESET });
+    }
+
+    let status = "all";
+    if (accepted && completed) {
+      status = "all";
+    } else if (accepted) {
+      status = "accepted";
+    } else if (completed) {
+      status = "completed";
+    } else {
+      status = "all";
+    }
+    console.log("Listing Status:", status);
+    console.log("Sort By Time/Price:", activeSortBy);
+    setListingStatus(status);
+
+    dispatch(getUserProfileView(username));
+    dispatch(getUserReceivedOffers(username + "-" + activeSortBy));
+    dispatch(getUserSentOffers(username + "-" + activeSortBy));
+    dispatch(getUserBoughtOffers(username + "-" + activeSortBy + "-" + status));
+    dispatch(getUserSoldOffers(username + "-" + activeSortBy + "-" + status));
+  }, [
+    userInfo,
+    accepted,
+    completed,
+    activeSortBy,
+    username,
+    respondState.success,
+    dispatch,
+  ]);
+
   return (
     <div>
       <ToastContainer
@@ -122,14 +179,14 @@ function OffersScreen() {
               <Dropdown.Item
                 eventKey="1"
                 onClick={sortByNewest}
-                active={activeSortBy === "Most Recent"}
+                active={activeSortBy === "newest"}
               >
                 Newest Date
               </Dropdown.Item>
               <Dropdown.Item
                 eventKey="2"
                 onClick={sortByOldest}
-                active={activeSortBy === "Oldest"}
+                active={activeSortBy === "oldest"}
               >
                 Oldest Date
               </Dropdown.Item>
@@ -137,14 +194,14 @@ function OffersScreen() {
               <Dropdown.Item
                 eventKey="3"
                 onClick={sortByHighest}
-                active={activeSortBy === "Highest Price"}
+                active={activeSortBy === "highest"}
               >
                 Highest Price
               </Dropdown.Item>
               <Dropdown.Item
                 eventKey="4"
                 onClick={sortByLowest}
-                active={activeSortBy === "Lowest Price"}
+                active={activeSortBy === "lowest"}
               >
                 Lowest Price
               </Dropdown.Item>
@@ -182,14 +239,14 @@ function OffersScreen() {
               <Dropdown.Item
                 eventKey="1"
                 onClick={sortByNewest}
-                active={activeSortBy === "Most Recent"}
+                active={activeSortBy === "newest"}
               >
                 Newest Date
               </Dropdown.Item>
               <Dropdown.Item
                 eventKey="2"
                 onClick={sortByOldest}
-                active={activeSortBy === "Oldest"}
+                active={activeSortBy === "oldest"}
               >
                 Oldest Date
               </Dropdown.Item>
@@ -197,14 +254,14 @@ function OffersScreen() {
               <Dropdown.Item
                 eventKey="3"
                 onClick={sortByHighest}
-                active={activeSortBy === "Highest Price"}
+                active={activeSortBy === "highest"}
               >
                 Highest Price
               </Dropdown.Item>
               <Dropdown.Item
                 eventKey="4"
                 onClick={sortByLowest}
-                active={activeSortBy === "Lowest Price"}
+                active={activeSortBy === "lowest"}
               >
                 Lowest Price
               </Dropdown.Item>
@@ -229,9 +286,180 @@ function OffersScreen() {
             </Row>
           )}
         </Tab>
+        <Tab eventKey="sold" title="Sold Items">
+          <h4>My Sold Items</h4>
+          <Dropdown>
+            <Dropdown.Toggle variant="dark">
+              Sort By: {activeSortBy}
+            </Dropdown.Toggle>
 
-        <Tab eventKey="sold" title="Sold Items"></Tab>
-        <Tab eventKey="bought" title="Bought Items"></Tab>
+            <Dropdown.Menu>
+              <Dropdown.Header>Time</Dropdown.Header>
+              {/* <Dropdown.Menu as={ButtonGroup} title="Sort By" id="bg-nested-dropdown"> */}
+              <Dropdown.Item
+                eventKey="1"
+                onClick={sortByNewest}
+                active={activeSortBy === "newest"}
+              >
+                Newest Date
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="2"
+                onClick={sortByOldest}
+                active={activeSortBy === "oldest"}
+              >
+                Oldest Date
+              </Dropdown.Item>
+              <Dropdown.Header>Offered Price</Dropdown.Header>
+              <Dropdown.Item
+                eventKey="3"
+                onClick={sortByHighest}
+                active={activeSortBy === "highest"}
+              >
+                Highest Price
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="4"
+                onClick={sortByLowest}
+                active={activeSortBy === "lowest"}
+              >
+                Lowest Price
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <br></br>
+          <Form>
+            <div key={`inline-switch`} className="mb-3">
+              <Form.Check
+                type="switch"
+                label="Accepted Listings"
+                name="checkbox1"
+                onChange={handleAcceptedChange}
+                checked={accepted}
+              />
+              <Form.Check
+                type="switch"
+                label="Completed Listings"
+                name="checkbox2"
+                onChange={handleCompletedChange}
+                checked={completed}
+              />
+            </div>
+
+            <Form.Group>
+              <Form.Label>
+                Listing Status:{" "}
+                <Badge bg="primary">
+                  {listingStatus ? listingStatus : "None"}
+                </Badge>
+              </Form.Label>
+            </Form.Group>
+          </Form>
+          {loadingSO ? (
+            <Loader />
+          ) : errorSO ? (
+            <Notification variant="danger" message={errorSO} />
+          ) : offersSO == null ? (
+            <Notification variant="danger" message="No Sent Offers found" />
+          ) : (
+            <Row>
+              {offersSO.offers.length === 0 ? (
+                <Alert variant="danger" className="d-none d-lg-block">
+                  No Sold Items
+                </Alert>
+              ) : (
+                <BoughtOffers offers={offersSO.offers} />
+              )}
+            </Row>
+          )}
+        </Tab>
+        <Tab eventKey="bought" title="Bought Items">
+          <h4>My Bought Items</h4>
+          <Dropdown>
+            <Dropdown.Toggle variant="dark">
+              Sort By: {activeSortBy}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Header>Time</Dropdown.Header>
+              {/* <Dropdown.Menu as={ButtonGroup} title="Sort By" id="bg-nested-dropdown"> */}
+              <Dropdown.Item
+                eventKey="1"
+                onClick={sortByNewest}
+                active={activeSortBy === "newest"}
+              >
+                Newest Date
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="2"
+                onClick={sortByOldest}
+                active={activeSortBy === "oldest"}
+              >
+                Oldest Date
+              </Dropdown.Item>
+              <Dropdown.Header>Offered Price</Dropdown.Header>
+              <Dropdown.Item
+                eventKey="3"
+                onClick={sortByHighest}
+                active={activeSortBy === "highest"}
+              >
+                Highest Price
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="4"
+                onClick={sortByLowest}
+                active={activeSortBy === "lowest"}
+              >
+                Lowest Price
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <br></br>
+          <Form>
+            <div key={`inline-switch`} className="mb-3">
+              <Form.Check
+                type="switch"
+                label="Accepted Listings"
+                name="checkbox1"
+                onChange={handleAcceptedChange}
+                checked={accepted}
+              />
+              <Form.Check
+                type="switch"
+                label="Completed Listings"
+                name="checkbox2"
+                onChange={handleCompletedChange}
+                checked={completed}
+              />
+            </div>
+
+            <Form.Group>
+              <Form.Label>
+                Listing Status:{" "}
+                <Badge bg="primary">
+                  {listingStatus ? listingStatus : "None"}
+                </Badge>
+              </Form.Label>
+            </Form.Group>
+          </Form>
+          {loadingB ? (
+            <Loader />
+          ) : errorB ? (
+            <Notification variant="danger" message={errorB} />
+          ) : offersB == null ? (
+            <Notification variant="danger" message="No Sent Offers found" />
+          ) : (
+            <Row>
+              {offersB.offers.length === 0 ? (
+                <Alert variant="danger" className="d-none d-lg-block">
+                  No Bought Items
+                </Alert>
+              ) : (
+                <BoughtOffers offers={offersB.offers} />
+              )}
+            </Row>
+          )}
+        </Tab>
       </Tabs>
     </div>
   );
