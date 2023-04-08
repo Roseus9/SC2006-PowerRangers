@@ -23,18 +23,7 @@ import {
 
 } from "../constants/constants";
 
-export const offerCreateReducer = (state = {}, action) => {
-  switch (action.type) {
-    case OFFER_CREATE_REQUEST:
-      return { loading: true };
-    case OFFER_CREATE_SUCCESS:
-      return { loading: false, success: true, offer: action.payload };
-    case OFFER_CREATE_FAIL:
-      return { loading: false, error: action.payload };
-    default:
-      return state;
-  }
-};
+
 
 export const offerReceivedReducer = (state = {}, action) => {
   switch (action.type) {
@@ -65,7 +54,6 @@ export const offerReceivedReducer = (state = {}, action) => {
         return state;
     }
   };
-
 
 
   export const offerSentReducer = (state = {}, action) => {

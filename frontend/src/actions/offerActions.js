@@ -121,8 +121,8 @@ export const getUserSoldOffers = (slug) => async (dispatch) => {
     console.log("GET SOLD OFFERS RETURNED SUCCESSFULLY! returned data:", data);
     dispatch({ type: OFFER_SOLD_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: OFFER_SOLD_FAIL,
+    dispatch({type: OFFER_SOLD_FAIL})
+  }
 }
 
 export const respondOfferAction = (oid, flag) => async (dispatch, getState) => {

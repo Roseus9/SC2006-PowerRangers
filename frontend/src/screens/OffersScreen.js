@@ -16,25 +16,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 
 import { getUserProfileView } from "../actions/userLoginActions";
-<<<<<<< HEAD
 import { getUserReceivedOffers, getUserSentOffers, getUserBoughtOffers, getUserSoldOffers} from "../actions/offerActions";
-=======
-import {
-  getUserReceivedOffers,
-  getUserSentOffers,
-} from "../actions/offerActions";
->>>>>>> haixiang
 import { useDispatch, useSelector } from "react-redux";
 import { OFFER_RESPOND_RESET } from "../constants/constants";
 import Notification from "../components/Notification";
 import Loader from "../components/Loader";
 import MyOffers from "../components/MyOffers";
 import SentOffers from "../components/SentOffers";
-<<<<<<< HEAD
 import BoughtOffers from "../components/BoughtOffers";
 import SoldOffers from "../components/SoldOffers";
-=======
->>>>>>> haixiang
 
 function OffersScreen() {
   let { username } = useParams();
