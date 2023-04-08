@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import producttags from "../constants/producttags";
 import locations from "../constants/locations";
-import Select from "react-select";
+import Select from "react-select"; 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import restrictedItems from "../constants/restrictedItems";
@@ -130,7 +130,7 @@ function CreateListing() {
     //   delivery: deliveryFlag,
     //   notes: deliveryFlag == true ? deliveryNotes : null,
     //   image: file,
-    // };
+
 
     dispatch(createProduct(listing));
     if (success) {
@@ -163,6 +163,17 @@ function CreateListing() {
                 placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Choose price..."
+                value={price}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
               />
             </Form.Group>
             <Form.Group controlId="formFile" className="mb-3">
@@ -219,17 +230,6 @@ function CreateListing() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Choose price..."
-                value={price}
-                onChange={(e) => {
-                  setPrice(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
               <Form.Label>Condition</Form.Label>
               <Form.Select
                 value={condition}
@@ -258,7 +258,7 @@ function CreateListing() {
             <Form.Group className="mb-3">
               <Form.Label>Delivery</Form.Label>
               <Form.Check
-                value={deliveryFlag}
+                value={deliveryFlag} 
                 onChange={(e) => {
                   setDeliveryFlag(e.target.checked);
                   var locationBox = document.getElementById("deliveryBox");
