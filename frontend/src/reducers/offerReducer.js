@@ -23,10 +23,19 @@ import {
   OFFER_SOLD_REQUEST,
   OFFER_SOLD_SUCCESS,
   OFFER_SOLD_FAIL,
-
+  OFFER_DELETE_REQUEST,
+  OFFER_DELETE_SUCCESS,
+  OFFER_DELETE_FAIL,
+  OFFER_DELETE_RESET,
+  OFFER_GET_FAIL,
+  OFFER_GET_REQUEST,
+  OFFER_GET_SUCCESS,
+  OFFER_GET_RESET,
+  OFFER_EDIT_REQUEST,
+  OFFER_EDIT_SUCCESS,
+  OFFER_EDIT_FAIL,
+  OFFER_EDIT_RESET,
 } from "../constants/constants";
-
-
 
 export const offerReceivedReducer = (state = {}, action) => {
   switch (action.type) {
@@ -41,63 +50,59 @@ export const offerReceivedReducer = (state = {}, action) => {
   }
 };
 
- 
-  
-  export const offerCreateReducer = (state = {}, action) => {
-    switch (action.type) {
-      case OFFER_CREATE_REQUEST:
-        return { oloading: true };
-      case OFFER_CREATE_SUCCESS:
-        return { oloading: false, success: true, offer: action.payload };
-      case OFFER_CREATE_FAIL:
-        return { oloading: false, error: action.payload };
-      case OFFER_CREATE_RESET:
-        return { oloading: false, success:false, error: null};
-      default:
-        return state;
-    }
-  };
+export const offerCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_CREATE_REQUEST:
+      return { oloading: true };
+    case OFFER_CREATE_SUCCESS:
+      return { oloading: false, success: true, offer: action.payload };
+    case OFFER_CREATE_FAIL:
+      return { oloading: false, error: action.payload };
+    case OFFER_CREATE_RESET:
+      return { oloading: false, success: false, error: null };
+    default:
+      return state;
+  }
+};
 
+export const offerSentReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_SENT_REQUEST:
+      return { loadingS: true };
+    case OFFER_SENT_SUCCESS:
+      return { loadingS: false, successS: true, offersS: action.payload };
+    case OFFER_SENT_FAIL:
+      return { loadingS: false, errorS: action.payload };
+    default:
+      return state;
+  }
+};
 
-  export const offerSentReducer = (state = {}, action) => {
-    switch (action.type) {
-      case OFFER_SENT_REQUEST:
-        return { loadingS: true };
-      case OFFER_SENT_SUCCESS:
-        return { loadingS: false, successS: true, offersS: action.payload };
-      case OFFER_SENT_FAIL:
-        return { loadingS: false, errorS: action.payload };
-      default:
-        return state;
-    }
-  };
+export const offerBoughtReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_BOUGHT_REQUEST:
+      return { loadingB: true };
+    case OFFER_BOUGHT_SUCCESS:
+      return { loadingB: false, successB: true, offersB: action.payload };
+    case OFFER_BOUGHT_FAIL:
+      return { loadingB: false, errorB: action.payload };
+    default:
+      return state;
+  }
+};
 
-
-  export const offerBoughtReducer = (state = {}, action) => {
-    switch (action.type) {
-      case OFFER_BOUGHT_REQUEST:
-        return { loadingB: true };
-      case OFFER_BOUGHT_SUCCESS:
-        return { loadingB: false, successB: true, offersB: action.payload };
-      case OFFER_BOUGHT_FAIL:
-        return { loadingB: false, errorB: action.payload };
-      default:
-        return state;
-    }
-  };
-
-  export const offerSoldReducer = (state = {}, action) => {
-    switch (action.type) {
-      case OFFER_SOLD_REQUEST:
-        return { loadingSO: true };
-      case OFFER_SOLD_SUCCESS:
-        return { loadingSO: false, successSO: true, offersSO: action.payload };
-      case OFFER_SOLD_FAIL:
-        return { loadingSO: false, errorSO: action.payload };
-      default:
-        return state;
-    }
-  };
+export const offerSoldReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_SOLD_REQUEST:
+      return { loadingSO: true };
+    case OFFER_SOLD_SUCCESS:
+      return { loadingSO: false, successSO: true, offersSO: action.payload };
+    case OFFER_SOLD_FAIL:
+      return { loadingSO: false, errorSO: action.payload };
+    default:
+      return state;
+  }
+};
 
 export const offerRespondReducer = (state = {}, action) => {
   switch (action.type) {
@@ -119,6 +124,62 @@ export const offerRespondReducer = (state = {}, action) => {
   }
 };
 
+export const offerDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_DELETE_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_DELETE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        message: action.payload,
+      };
+    case OFFER_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_DELETE_RESET:
+      return { loading: false, success: false };
+    default:
+      return state;
+  }
+};
+
+export const getOfferReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_GET_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_GET_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        offer: action.payload,
+      };
+    case OFFER_GET_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_GET_RESET:
+      return { loading: false, success: false };
+    default:
+      return state;
+  }
+};
+
+export const editOfferReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_EDIT_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_EDIT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        offer: action.payload,
+      };
+    case OFFER_EDIT_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_EDIT_RESET:
+      return { loading: false, success: false };
+    default:
+      return state;
+  }
+};
 
 export const offerCompleteReducer = (state = {}, action) => {
   switch (action.type) {

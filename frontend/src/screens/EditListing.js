@@ -40,39 +40,82 @@ function EditListing() {
   const [price, setPrice] = useState(0);
   const [deliveryNotes, setDeliveryNotes] = useState("");
   let fileChangeFlag = false;
+  // useEffect(() => {
+  //   dispatch(getProduct(productID));
+
+  //   if (product != {}) {
+  //     console.log(product);
+  //     setTitle(product.name);
+  //     setBlurb(product.description);
+  //     setCondition(product.condition == true ? "new" : "old");
+  //     setPrice(product.price);
+  //     setPreviewURL(product.image);
+  //     setDeliveryFlag(product.delivery);
+
+  //     console.log(product);
+  //     var location_str_arr = product?.pickupLocations.split(",");
+  //     const options = location_str_arr.map((location) => ({
+  //       value: location.trim(),
+  //       label: location.trim(),
+  //     }));
+  //     setPlaces(options);
+
+  //     var tags_str_arr = product.tags.split(",");
+  //     const tags_arr = tags_str_arr.map((tag) => ({
+  //       value: tag.trim(),
+  //       label: tag.trim(),
+  //     }));
+  //     setTags(tags_arr);
+
+  //     if (product.delivery) setDeliveryNotes(product.notes);
+  //     //prevent unauthorized access
+  //     if (
+  //       Object.keys(userInfo).length == 0 ||
+  //       userInfo._id != item.product.seller
+  //     ) {
+  //       console.log("wrong user");
+  //       navigate("/");
+  //     }
+  //   }
+  // }, [productID, dispatch, navigate]);
+
   useEffect(() => {
     dispatch(getProduct(productID));
-    setTitle(product.name);
-    setBlurb(product.description);
-    setCondition(product.condition == true ? "new" : "old");
-    setPrice(product.price);
-    setPreviewURL(product.image);
-    setDeliveryFlag(product.delivery);
-    var location_str_arr = product.pickupLocations.split(",");
-    const options = location_str_arr.map((location) => ({
-      value: location.trim(),
-      label: location.trim(),
-    }));
-    setPlaces(options);
+  }, [productID, navigate]);
 
-    var tags_str_arr = product.tags.split(",");
-    const tags_arr = tags_str_arr.map((tag) => ({
-      value: tag.trim(),
-      label: tag.trim(),
-    }));
-    setTags(tags_arr);
-
-    if (product.delivery) setDeliveryNotes(product.notes);
-    //prevent unauthorized access
-    if (
-      Object.keys(userInfo).length == 0 ||
-      userInfo._id != item.product.seller
-    ) {
-      console.log("wrong user");
-      navigate("/");
+  useEffect(() => {
+    if (item.done == true) {
+      console.log("effect", product);
+      setTitle(product.name);
+      setBlurb(product.description);
+      setCondition(product.condition == true ? "new" : "old");
+      setPrice(product.price);
+      setPreviewURL(product.image);
+      setDeliveryFlag(product.delivery);
+      console.log(product);
+      var location_str_arr = product?.pickupLocations.split(",");
+      const options = location_str_arr.map((location) => ({
+        value: location.trim(),
+        label: location.trim(),
+      }));
+      setPlaces(options);
+      var tags_str_arr = product.tags.split(",");
+      const tags_arr = tags_str_arr.map((tag) => ({
+        value: tag.trim(),
+        label: tag.trim(),
+      }));
+      setTags(tags_arr);
+      if (product.delivery) setDeliveryNotes(product.notes);
+      //prevent unauthorized access
+      if (
+        Object.keys(userInfo).length == 0 ||
+        userInfo._id != item.product.seller
+      ) {
+        console.log("wrong user");
+        navigate("/");
+      }
     }
-  }, [productID, dispatch, navigate]);
-
+  }, [item]);
   const cancelClicked = () => {
     console.log("cancel");
     navigate(`/product/${productID}`);

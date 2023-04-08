@@ -8,7 +8,6 @@ import Notification from "../components/Notification";
 import Product from "../components/Product";
 import MainCarousel from "../components/MainCarousel";
 
-
 // for dispatching the action
 import { getProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,11 +18,10 @@ import {
   PRODUCT_CREATE_RESET,
   OFFER_CREATE_RESET,
   USER_LOGIN_RESET,
-  USER_REGISTER_RESET
+  USER_REGISTER_RESET,
 } from "../constants/constants";
 import { useSearchParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
-
 
 function Home() {
   // initial state of products is set to an empty array
@@ -39,11 +37,6 @@ function Home() {
   const uRegister = useSelector((state) => state.userRegister);
   const offerCreate = useSelector((state) => state.offerCreate);
 
-  console.log(productCreate);
-
-  console.log(uRegister)
-
-
   const [searchParams] = useSearchParams();
   let keyword = searchParams.get("keyword") || "";
   let tags = searchParams.get("tags") || "";
@@ -51,6 +44,11 @@ function Home() {
   const [activeSortBy, setActiveSortBy] = useState("Most Recent");
   const [sortedProducts, setSortedProducts] = useState([]);
 
+  useEffect(() => {
+    if (productCreate && productCreate.success) {
+      console.log("yay");
+    }
+  }, [productCreate]);
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
     // console.log(keyword)
@@ -73,24 +71,37 @@ function Home() {
     }
 
     if (productCreate.success == true) {
+      console.log("works");
       toast.success("Listing created!");
       dispatch({ type: PRODUCT_CREATE_RESET });
-
     }
-  
+
     if (offerCreate.success == true) {
       toast.success("Offer created!");
       dispatch({ type: OFFER_CREATE_RESET });
     }
-  }, [dispatch, keyword, tags, Pdelete.done, productCreate.success, offerCreate.success, uRegister.success, uLogin.logout]);
+  }, [
+    dispatch,
+    keyword,
+    tags,
+    Pdelete.done,
+    productCreate,
+    offerCreate.success,
+    uRegister.success,
+    uLogin.logout,
+  ]);
 
   useEffect(() => {
     if (products && products.length > 0) {
       let sorted = [];
       if (activeSortBy === "Most Recent") {
-        sorted = [...products].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        sorted = [...products].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
       } else if (activeSortBy === "Oldest") {
-        sorted = [...products].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        sorted = [...products].sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
       } else if (activeSortBy === "Highest Price") {
         sorted = [...products].sort((a, b) => b.price - a.price);
       } else if (activeSortBy === "Lowest Price") {
@@ -109,7 +120,7 @@ function Home() {
     <div>
       <ToastContainer
         position="top-right"
-        autoClose={1500}
+        autoClose={3000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
@@ -120,9 +131,9 @@ function Home() {
         theme="dark"
       />
       {!keyword && !tags && <MainCarousel />}
-      <h1 style={{ marginTop: '20px' }}>All Listings</h1>
+      <h1 style={{ marginTop: "20px" }}>All Listings</h1>
       <div>
-      <Dropdown>
+        <Dropdown>
           <Dropdown.Toggle variant="primary">
             Sort By: {activeSortBy}
           </Dropdown.Toggle>

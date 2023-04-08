@@ -29,6 +29,12 @@ urlpatterns = [
     path("offer/<str:oid>/<str:flag>", views.respondOffer, name="respond-offer"),
     # complete offer
     path("offer/complete/<str:id>/<str:flag>", views.completeOffer, name="complete-offer"),
+    #deleting offers
+    path("offerdelete/<str:oid>",views.deleteOffer, name="delete-offer" ),
+    #get offer details 
+    path("getoffer/<str:oid>", views.getOffer, name='get-offer'),
+    #edit offer
+    path("editoffer/<str:oid>", views.editOffer, name='edit-offer'),
     path('users', views.getUsers, name='users'),
     
     # this allows us to access by:

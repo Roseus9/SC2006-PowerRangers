@@ -32,7 +32,6 @@ function MyOffers({ offers }) {
     dispatch(respondOfferAction(offer._id, acceptFlag));
   };
 
-
   return (
     <div>
       <Table striped hover>
@@ -77,13 +76,18 @@ function MyOffers({ offers }) {
                   }}
                 />
               </td>
-              <td >
+              <td>
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 400 }}
                   overlay={renderTooltip}
                 >
-                  <Button variant="outline-dark" onClick={() => alertClicked(offer.buyer.username)}>@{offer.buyer.username}</Button>
+                  <Button
+                    variant="outline-dark"
+                    onClick={() => alertClicked(offer.buyer.username)}
+                  >
+                    @{offer.buyer.username}
+                  </Button>
                 </OverlayTrigger>
               </td>
               <td>${offer.price}</td>
