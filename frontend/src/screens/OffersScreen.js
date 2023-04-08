@@ -4,37 +4,47 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Badge from 'react-bootstrap/Badge';
 import Row from "react-bootstrap/Row";
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import Alert from 'react-bootstrap/Alert';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown';
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import Alert from "react-bootstrap/Alert";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {useParams, useLocation, useNavigate, Link} from 'react-router-dom'
+import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 
 import { getUserProfileView } from "../actions/userLoginActions";
+<<<<<<< HEAD
 import { getUserReceivedOffers, getUserSentOffers, getUserBoughtOffers, getUserSoldOffers} from "../actions/offerActions";
+=======
+import {
+  getUserReceivedOffers,
+  getUserSentOffers,
+} from "../actions/offerActions";
+>>>>>>> haixiang
 import { useDispatch, useSelector } from "react-redux";
-
-import Notification from '../components/Notification';
-import Loader from '../components/Loader'
+import { OFFER_RESPOND_RESET } from "../constants/constants";
+import Notification from "../components/Notification";
+import Loader from "../components/Loader";
 import MyOffers from "../components/MyOffers";
 import SentOffers from "../components/SentOffers";
+<<<<<<< HEAD
 import BoughtOffers from "../components/BoughtOffers";
 import SoldOffers from "../components/SoldOffers";
+=======
+>>>>>>> haixiang
 
 function OffersScreen() {
   let { username } = useParams();
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const userDetails = useSelector(state => state.userDetails);
-  const {error, loading, userObj} = userDetails;
+  const userDetails = useSelector((state) => state.userDetails);
+  const { error, loading, userObj } = userDetails;
   // console.log(userDetails)
 
-  const offerReceived = useSelector(state => state.offerReceived);
+  const offerReceived = useSelector((state) => state.offerReceived);
   // console.log(offerReceived)
   const {errorR, loadingR, offersR} = offerReceived;
   const offerSent = useSelector(state => state.offerSent);
@@ -48,8 +58,10 @@ function OffersScreen() {
 
 
   //user cant access create listing page if not logged in
-  const userRegister = useSelector(state => state.userLogin);
-  let {userInfo} = userRegister;
+  const userRegister = useSelector((state) => state.userLogin);
+  let { userInfo } = userRegister;
+
+  const respondState = useSelector((state) => state.offerRespond);
 
 // states for filtering
 // consists of active sort by for time, and price
@@ -109,6 +121,10 @@ const handleAcceptedChange = (event) => {
         navigate("/")
       }
 
+      if (respondState.success) {
+        toast.success(respondState.flag ? "offer accepted!" : "offer deleted!");
+      }
+
       let status = "all"
       if (accepted && completed) {
         status = "all"
@@ -131,25 +147,35 @@ const handleAcceptedChange = (event) => {
       dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+status))
 
       
-  }, [userInfo, accepted, completed, activeSortBy, username, dispatch])
+  }, [userInfo, accepted, completed, activeSortBy, username, respondState.success, dispatch])
 
 
   return (
-    
     <div>
-        <Tabs
-            defaultActiveKey="received"
-            id="fill-tab-example"
-            className="mb-3"
-            fill
-        >
-            
-            <Tab eventKey="received" title="Received Offers">
-            <h4>My Received Offers</h4>
-              <Dropdown>
-                <Dropdown.Toggle variant="dark">
-                  Sort By: {activeSortBy}
-                </Dropdown.Toggle>
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <Tabs
+        defaultActiveKey="received"
+        id="fill-tab-example"
+        className="mb-3"
+        fill
+      >
+        <Tab eventKey="received" title="Received Offers">
+          <h4>My Received Offers</h4>
+          <Dropdown>
+            <Dropdown.Toggle variant="dark">
+              Sort By: {activeSortBy}
+            </Dropdown.Toggle>
 
                 <Dropdown.Menu >
                   <Dropdown.Header>Time</Dropdown.Header>
@@ -182,9 +208,9 @@ const handleAcceptedChange = (event) => {
           <Tab eventKey="sent" title="Sent Offers">
           <h4>My Sent Offers</h4>
           <Dropdown>
-                <Dropdown.Toggle variant="dark">
-                  Sort By: {activeSortBy}
-                </Dropdown.Toggle>
+            <Dropdown.Toggle variant="dark">
+              Sort By: {activeSortBy}
+            </Dropdown.Toggle>
 
                 <Dropdown.Menu >
                   <Dropdown.Header>Time</Dropdown.Header>
@@ -336,14 +362,7 @@ const handleAcceptedChange = (event) => {
           </Tab>
         </Tabs>        
     </div>
-
-  )
+  );
 }
 
-
-
-
-
-
-
-export default OffersScreen
+export default OffersScreen;

@@ -33,7 +33,11 @@ function App() {
             <Route path="/profile/:username" element={<ProfileScreen />} />
             <Route path="/offer/product/:productID" element={<CreateOffer />} />
             <Route path="/edit/product/:productID" element={<EditListing />} />
+<<<<<<< HEAD
             <Route path="/offers/:username" element={<OffersScreen/>} />
+=======
+            <Route path="/offers/:username" element={<OffersScreen />} />
+>>>>>>> haixiang
           </Routes>
         </Container>
       </main>

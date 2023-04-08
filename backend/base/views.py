@@ -15,7 +15,7 @@ from .serializer import ProductSerializer, UserSerializer, UserSerializerWithTok
 # JWT imports for customising tokens to return token information directly to front end
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from datetime import datetime 
 # password hashing
 from django.contrib.auth.hashers import make_password
 
@@ -65,6 +65,7 @@ def getRoutes(request):
             '/api/offer/product/<id>',
             '/api/offer/received/<username>',
             '/api/offer/sent/<username>',
+            '/api/offer/<oid>/<flag>',
             '/api/profile/<username>',
             '/api/checkbookmark/<pid>/<uid>'
             '/api/editproduct',
@@ -401,6 +402,22 @@ def sentOffers(request, slug):
 
     return Response(data)
 
+@api_view(['PUT'])
+#@permission_classes([IsAuthenticated])
+def respondOffer(request, oid, flag):
+    print("oid", oid)
+    o = Offer.objects.get(_id=oid)
+    #flag = True means the seller has accepted the offer. 
+    if flag == 'true' or flag == 'True':
+        o.isAccepted = True
+        o.acceptedAt = datetime.now()
+        o.save()
+        serializer = OfferSerializer(o, many=False)
+        return Response(serializer.data)
+    else: 
+        #delete offer
+        o.delete()
+        return Response({'message': 'declined successfully'})
 
 
 @api_view(['GET'])

@@ -25,6 +25,8 @@ urlpatterns = [
     # sold and bought items
     path("offer/bought/<str:slug>", views.boughtItems, name="received-offers"),
     path("offer/sold/<str:slug>", views.soldItems, name="sent-offers"),
+    #responding to offers
+    path("offer/<str:oid>/<str:flag>", views.respondOffer, name="respond-offer"),
     path('users', views.getUsers, name='users'),
     
     # this allows us to access by:
