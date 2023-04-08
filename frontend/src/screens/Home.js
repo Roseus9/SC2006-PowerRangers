@@ -17,6 +17,8 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   PRODUCT_DELETE_RESET,
   PRODUCT_CREATE_RESET,
+  USER_LOGIN_RESET,
+  USER_REGISTER_RESET
 } from "../constants/constants";
 import { useSearchParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
@@ -32,8 +34,17 @@ function Home() {
 
   const Pdelete = useSelector((state) => state.productDelete);
   const productCreate = useSelector((state) => state.productCreate);
+  const uLogin = useSelector((state) => state.userLogin);
+  const uRegister = useSelector((state) => state.userRegister);
 
   console.log(productCreate);
+  if (uLogin.logout == true) {
+    dispatch({ type: USER_LOGIN_RESET });
+    toast.success("Successfully Logged Out");
+  }
+  console.log(uRegister)
+
+
   if (Pdelete.done == true) {
     dispatch({ type: PRODUCT_DELETE_RESET });
     dispatch(getProducts());
@@ -54,6 +65,10 @@ function Home() {
     // console.log(tags);
     dispatch(getProducts(keyword, tags));
     dispatch({ type: PRODUCT_CREATE_RESET });
+    if (uRegister.success == true) {
+      dispatch({ type: USER_REGISTER_RESET });
+      toast.success("Account Created Successfully");
+    }
   }, [dispatch, keyword, tags]);
 
   // now we can check the attributes, loading, error otherwise render

@@ -276,7 +276,7 @@ function CreateListing() {
               <Form.Label>Delivery Notes</Form.Label>
               <Form.Control
                 as="textarea"
-                placeholder="Write your deliveryNotes..."
+                placeholder="Write any additional delivery information for the buyer..."
                 style={{ height: "200px", marginTop: "0px" }}
                 value={deliveryNotes}
                 onChange={(e) => {

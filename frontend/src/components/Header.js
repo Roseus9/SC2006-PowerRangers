@@ -5,16 +5,18 @@ import shop from '../resources/shop.svg';
 import SearchBar from './SearchBar';
 import {useSelector, useDispatch} from 'react-redux';
 import {logout} from '../actions/userLoginActions'
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
     const userLogin = useSelector(state => state.userLogin);
     const { loading, userInfo, error } = userLogin;
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // to dispatch the action we created for USER_LOGOUT
     const logoutHandler = () => {
         dispatch(logout());
+        navigate('/')
         console.log('logged out');
     }
 
