@@ -28,6 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   OFFER_RESPOND_RESET,
   OFFER_DELETE_RESET,
+  OFFER_EDIT_RESET,
 } from "../constants/constants";
 import Notification from "../components/Notification";
 import Loader from "../components/Loader";
@@ -57,6 +58,7 @@ function OffersScreen() {
 
   const respondState = useSelector((state) => state.offerRespond);
   const deleteState = useSelector((state) => state.offerDelete);
+  const editOfferState = useSelector((state) => state.offerEdit);
   // states for filtering
   // consists of active sort by for time, and price
   // and listing status for accepted, completed, or all
@@ -102,7 +104,12 @@ function OffersScreen() {
   let sortByNewest = () => {
     setActiveSortBy("newest");
   };
-
+  useEffect(() => {
+    if (editOfferState && editOfferState.success) {
+      toast.success("Offer edited!");
+      dispatch({ type: OFFER_EDIT_RESET });
+    }
+  });
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
     console.log(

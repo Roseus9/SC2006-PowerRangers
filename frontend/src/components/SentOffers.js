@@ -24,7 +24,10 @@ function SentOffers({ offers }) {
     </Tooltip>
   );
 
-  const editOffer = (offer) => {};
+  const editOffer = (offer) => {
+    console.log("editoffer", offer);
+    navigate("/edit/offer/" + offer._id);
+  };
 
   const deleteToast = (offer) => {
     const toastId = toast.dark(

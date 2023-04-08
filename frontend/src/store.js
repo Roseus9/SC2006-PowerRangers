@@ -25,6 +25,8 @@ import {
   offerSoldReducer,
   offerRespondReducer,
   offerDeleteReducer,
+  getOfferReducer,
+  editOfferReducer,
 } from "./reducers/offerReducer";
 
 // const initialState = {}
@@ -42,9 +44,11 @@ const store = configureStore({
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     productCreate: productCreateReducer,
+    getOffer: getOfferReducer,
     offerCreate: offerCreateReducer,
     offerDelete: offerDeleteReducer,
     offerSent: offerSentReducer,
+    offerEdit: editOfferReducer,
     offerReceived: offerReceivedReducer,
     offerRespond: offerRespondReducer,
     offerBought: offerBoughtReducer,

@@ -26,6 +26,13 @@ import {
   OFFER_DELETE_REQUEST,
   OFFER_DELETE_SUCCESS,
   OFFER_DELETE_FAIL,
+  OFFER_GET_REQUEST,
+  OFFER_GET_SUCCESS,
+  OFFER_GET_FAIL,
+  OFFER_GET_RESET,
+  OFFER_EDIT_REQUEST,
+  OFFER_EDIT_SUCCESS,
+  OFFER_EDIT_FAIL,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -178,7 +185,6 @@ export const getUserBoughtOffers = (slug) => async (dispatch) => {
 export const deleteOfferAction = (oid) => async (dispatch, getState) => {
   try {
     dispatch({ type: OFFER_DELETE_REQUEST });
-    console.log(`/api/offer/delete/${oid}`);
     const {
       userLogin: { userInfo },
     } = getState();
@@ -195,6 +201,65 @@ export const deleteOfferAction = (oid) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: OFFER_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getOffer = (oid) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: OFFER_GET_REQUEST });
+    console.log(typeof oid);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/getoffer/${oid}`, {}, config);
+    dispatch({ type: OFFER_GET_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: OFFER_GET_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const editOffer = (oid, price) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: OFFER_EDIT_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/editoffer/${oid}`,
+      { price: price },
+      config
+    );
+    dispatch({ type: OFFER_EDIT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: OFFER_EDIT_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -16,6 +16,7 @@ import CreateOffer from "./screens/CreateOffer";
 
 import OffersScreen from "./screens/OffersScreen";
 import EditListing from "./screens/EditListing";
+import EditOffer from "./screens/EditOffer";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/offer/product/:productID" element={<CreateOffer />} />
             <Route path="/edit/product/:productID" element={<EditListing />} />
             <Route path="/offers/:username" element={<OffersScreen />} />
+            <Route path="/edit/offer/:oid" element={<EditOffer />} />
           </Routes>
         </Container>
       </main>

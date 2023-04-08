@@ -23,6 +23,14 @@ import {
   OFFER_DELETE_SUCCESS,
   OFFER_DELETE_FAIL,
   OFFER_DELETE_RESET,
+  OFFER_GET_FAIL,
+  OFFER_GET_REQUEST,
+  OFFER_GET_SUCCESS,
+  OFFER_GET_RESET,
+  OFFER_EDIT_REQUEST,
+  OFFER_EDIT_SUCCESS,
+  OFFER_EDIT_FAIL,
+  OFFER_EDIT_RESET,
 } from "../constants/constants";
 
 export const offerReceivedReducer = (state = {}, action) => {
@@ -125,6 +133,44 @@ export const offerDeleteReducer = (state = {}, action) => {
     case OFFER_DELETE_FAIL:
       return { loading: false, error: action.payload };
     case OFFER_DELETE_RESET:
+      return { loading: false, success: false };
+    default:
+      return state;
+  }
+};
+
+export const getOfferReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_GET_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_GET_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        offer: action.payload,
+      };
+    case OFFER_GET_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_GET_RESET:
+      return { loading: false, success: false };
+    default:
+      return state;
+  }
+};
+
+export const editOfferReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_EDIT_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_EDIT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        offer: action.payload,
+      };
+    case OFFER_EDIT_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_EDIT_RESET:
       return { loading: false, success: false };
     default:
       return state;
