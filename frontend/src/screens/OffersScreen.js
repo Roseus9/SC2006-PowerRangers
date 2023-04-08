@@ -18,7 +18,7 @@ import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { getUserProfileView } from "../actions/userLoginActions";
 import { getUserReceivedOffers, getUserSentOffers, getUserBoughtOffers, getUserSoldOffers} from "../actions/offerActions";
 import { useDispatch, useSelector } from "react-redux";
-import { OFFER_RESPOND_RESET } from "../constants/constants";
+import { OFFER_RESPOND_RESET, OFFER_COMPLETE_RESET } from "../constants/constants";
 import Notification from "../components/Notification";
 import Loader from "../components/Loader";
 import MyOffers from "../components/MyOffers";
@@ -52,6 +52,7 @@ function OffersScreen() {
   let { userInfo } = userRegister;
 
   const respondState = useSelector((state) => state.offerRespond);
+  const completeState = useSelector((state) => state.offerComplete);
 
 // states for filtering
 // consists of active sort by for time, and price
@@ -116,6 +117,11 @@ const handleAcceptedChange = (event) => {
         dispatch({ type: OFFER_RESPOND_RESET });
       }
 
+      if (completeState.success) {
+        toast.success(completeState.flag ? "Offer Completed, all other offers for the same product have been declined!" : "Offer Deleted!");
+        dispatch({ type: OFFER_COMPLETE_RESET });
+      }
+
       let status = "all"
       if (accepted && completed) {
         status = "all"
@@ -138,22 +144,23 @@ const handleAcceptedChange = (event) => {
       dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+status))
 
       
-  }, [userInfo, accepted, completed, activeSortBy, username, respondState.success, dispatch])
+  }, [userInfo, accepted, completed, activeSortBy, username, respondState.success, completeState.success, dispatch])
 
 
   return (
     <div>
       <ToastContainer
+        toastId= "toastID"
         position="top-right"
-        autoClose={1500}
-        hideProgressBar={true}
+        autoClose={3500}
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
       <Tabs
         defaultActiveKey="received"
@@ -286,7 +293,7 @@ const handleAcceptedChange = (event) => {
                                               No Sold Items
                                           </Alert>
                                           ) : (
-                                            <BoughtOffers offers={offersSO.offers}/>
+                                            <SoldOffers offers={offersSO.offers}/>
                                           )}
                                       </Row>
                 )}   

@@ -28,7 +28,7 @@ function SentOffers({offers}) {
             <th>#</th>
             <th>Product Name</th>
             <th></th>
-            <th>Seller Username</th>
+            <th>Seller Profile</th>
             <th>Offered Price</th>
             <th>Offered Time</th>
             <th>Actions</th>
@@ -43,16 +43,16 @@ function SentOffers({offers}) {
                 </td>
                 <td onClick={()=> productClicked(offer.product._id)} style={{ cursor: 'pointer' }}>{offer.product.name}</td>
                 <td onClick={()=> productClicked(offer.product._id)} style={{ cursor: 'pointer' }}>
-                    <img src={offer.product.image} alt={offer.product.name} style={{ height: '200px', width: '350px', objectFit: 'cover' }} />
+                    <img src={offer.product.image} alt={offer.product.name} style={{ height: '150px', width: '250px', objectFit: 'cover' }} />
                 </td>
 
-                <td onClick={()=> alertClicked(offer.seller.username)}>
+                <td >
                     <OverlayTrigger
                     placement="bottom"
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltip}
                     >
-                    <Button variant="primary">@{offer.seller.username}</Button>
+                    <Button variant="outline-dark" onClick={()=> alertClicked(offer.seller.username)}>@{offer.seller.username}</Button>
                     </OverlayTrigger>
 
                 </td>
@@ -60,10 +60,10 @@ function SentOffers({offers}) {
                 <td>${offer.price}</td>
                 <td>{new Date(offer.createdAt).toLocaleString()}</td>
                 <td>
-                    <Button variant='success'>Edit</Button>
+                    <Button variant='success'>Edit Offer</Button>
                 </td>
                 <td>
-                    <Button variant='danger'>Delete</Button>
+                    <Button variant='danger'>Delete Offer</Button>
                 </td>
             </tr>
             ))}

@@ -59,9 +59,10 @@ function ProfileScreen() {
 
         <Col md={9}>
             <h4>Listings 📌</h4>
+            <br></br>
             {loading ? (<Loader />) 
                 : error 
-                    ? (<Notification variant="danger" message={error} />) 
+                    ? (<Notification variant="danger" message={"This User has not listed any items."} />) 
                         : userObj == null
                             ? (<Notification variant="danger" message="User not found" />)
                                 : (

@@ -4,6 +4,7 @@ import { Card, Button } from 'react-bootstrap'
 import { Link, useNavigate } from "react-router-dom";
 import Tooltip from 'react-bootstrap/Tooltip';
 import Image from 'react-bootstrap/Image';
+import { ToastContainer, toast } from "react-toastify";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
 function BoughtOffers({offers}) {
@@ -19,6 +20,28 @@ function BoughtOffers({offers}) {
             Click to Visit Profile
         </Tooltip>
         );
+    const renderTooltipTelegram = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            Redirect to Telegram Web Chat
+        </Tooltip>
+        );
+    const telegramClicked = (tele) => {
+        toast.clearWaitingQueue();
+        toast.dark(
+            <div>
+                ⚠️ This will redirect you to an external site, "telegram.com", proceed? <br />
+                <Button className="my-3" onClick={() => {redirect(tele)}}>
+                Yes
+                </Button>
+                <Button className="my-3" variant="danger" style={{ marginLeft: "10px" }}>
+                No
+                </Button>
+            </div>
+            , {toastId: "toastID", limit: 1});
+    };
+    const redirect = (tele) => {
+        window.location.href = "https://web.telegram.org/k/#@"+tele;
+    }
 
 
   return (
@@ -29,10 +52,12 @@ function BoughtOffers({offers}) {
             <th>#</th>
             <th>Product Name</th>
             <th></th>
-            <th>Buyer Username</th>
-            <th>Offered Price</th>
-            <th>Offered Time</th>
-            <th>Actions</th>
+            <th>Seller Profile</th>
+            <th>Telegram Chat</th>
+            <th>Offered</th>
+            <th>Accepted⭕</th>
+            <th>Completed🔴</th>
+            <th>Manage Transaction</th>
             <th></th>
             </tr>
         </thead>
@@ -47,24 +72,41 @@ function BoughtOffers({offers}) {
                     <img src={offer.product.image} alt={offer.product.name} style={{ height: '200px', width: '350px', objectFit: 'cover' }}/>
                 </td>
 
-                <td onClick={()=> alertClicked(offer.buyer.username)}>
+                <td >
                     <OverlayTrigger
                     placement="bottom"
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltip}
                     >
-                    <Button variant="primary">@{offer.buyer.username}</Button>
+                    <Button variant="outline-dark" onClick={()=> alertClicked(offer.seller.username)}>@{offer.seller.username}</Button>
+                    </OverlayTrigger>
+
+                </td>
+                <td >
+                    <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipTelegram}
+                    >
+                    <Button variant="primary" onClick={()=> telegramClicked(offer.profile.telegram)}>@{offer.profile.telegram}</Button>
                     </OverlayTrigger>
 
                 </td>
 
                 <td>${offer.price}</td>
-                <td>{new Date(offer.createdAt).toLocaleString()}</td>
+                <td>{new Date(offer.acceptedAt).toLocaleString()}</td>
+                <td>{new Date(offer.completedAt ? offer.completedAt : "").toLocaleString()}</td>
                 <td>
-                    <Button variant='success'>Accept</Button>
+                    {offer.isComplete
+                        ? <Button variant='success' disabled>Sold</Button>
+                        : <Button variant='warning' disabled>Pending</Button>
+                    }
                 </td>
                 <td>
-                    <Button variant='danger'>Decline</Button>
+                    {offer.isComplete
+                        ? <></>
+                        : <></>
+                    }
                 </td>
             </tr>
             ))}

@@ -430,6 +430,7 @@ def soldItems(request, slug):
     # first find the seller
     user = User.objects.get(username=slug) 
     serializedUser = UserSerializerWithToken(user, many=False).data
+
     # get his offers
     try:
         if status == "completed":
@@ -478,7 +479,9 @@ def soldItems(request, slug):
         # and get his products for these offers
     try:
         for offer in serializedOffer:
-            offer['buyer'] = UserSerializer(User.objects.get(id=offer['buyer']), many=False).data
+            buyerID = offer['buyer']
+            offer['buyer'] = UserSerializer(User.objects.get(id=buyerID), many=False).data
+            offer['profile'] = UserProfilesSerializer(Profile.objects.get(user=buyerID)).data
 
     except:
         message = {'detail': 'Cant find the buyer for the offer'}
@@ -550,7 +553,10 @@ def boughtItems(request, slug):
         # and get his products for these offers
     try:
         for offer in serializedOffer:
-            offer['seller'] = UserSerializer(User.objects.get(id=offer['seller']), many=False).data
+            sellerID = offer['seller']
+            offer['seller'] = UserSerializer(User.objects.get(id=sellerID), many=False).data
+            offer['profile'] = UserProfilesSerializer(Profile.objects.get(user=sellerID)).data
+
 
     except:
         message = {'detail': 'Cant find the seller for the offer'}
@@ -563,3 +569,23 @@ def boughtItems(request, slug):
 
     return Response(data)
 
+
+
+@api_view(['PUT'])
+def completeOffer(request, id, flag):
+    o = Offer.objects.get(_id=id)
+    #   if flag, complete the offer
+    #   also cascade delete on all other offers for the same product
+    if flag.lower() == 'true':
+        o.isComplete = True
+        o.completedAt = datetime.now()
+        o.save()
+        # delete all other offers for the same product
+        Offer.objects.filter(product=o.product).exclude(_id=id).delete()
+        serializer = OfferSerializer(o, many=False)
+        return Response(serializer.data)
+
+    else: 
+        #   delete offer
+        o.delete()
+        return Response({'message': 'declined successfully'})

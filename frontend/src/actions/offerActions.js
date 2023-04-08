@@ -18,6 +18,10 @@ import {
   OFFER_BOUGHT_REQUEST,
   OFFER_BOUGHT_SUCCESS,
   OFFER_BOUGHT_FAIL,
+
+  OFFER_COMPLETE_REQUEST,
+  OFFER_COMPLETE_SUCCESS,
+  OFFER_COMPLETE_FAIL,
   
   OFFER_SOLD_REQUEST,
   OFFER_SOLD_SUCCESS,
@@ -173,3 +177,34 @@ export const getUserBoughtOffers = (slug) => async (dispatch) => {
   }
 };
 
+
+//  Action creator for putting in a completed offer
+// flag == true means the offer is completed
+// flag == false means the offer is to be declined
+//  action object contains type and payload
+export const completeOffer = (id, flag) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: OFFER_COMPLETE_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api/offer/complete/${id}/${flag}`, {}, config);
+    console.log("COMPLETE OFFERS SUCCESSFULLY UPDATED! returned data:", data);
+    dispatch({ type: OFFER_COMPLETE_SUCCESS, payload: data, flag: flag });
+  } catch (error) {
+    dispatch({
+      type: OFFER_COMPLETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

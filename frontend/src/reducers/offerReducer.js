@@ -16,7 +16,10 @@ import {
   OFFER_BOUGHT_REQUEST,
   OFFER_BOUGHT_SUCCESS,
   OFFER_BOUGHT_FAIL,
-  
+  OFFER_COMPLETE_REQUEST,
+  OFFER_COMPLETE_SUCCESS,
+  OFFER_COMPLETE_FAIL,
+  OFFER_COMPLETE_RESET,
   OFFER_SOLD_REQUEST,
   OFFER_SOLD_SUCCESS,
   OFFER_SOLD_FAIL,
@@ -111,6 +114,27 @@ export const offerRespondReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case OFFER_RESPOND_RESET:
       return { loading: false, success: false };
+    default:
+      return state;
+  }
+};
+
+
+export const offerCompleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_COMPLETE_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_COMPLETE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        message: action.payload,
+        flag: action.flag,
+      };
+    case OFFER_COMPLETE_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_COMPLETE_RESET:
+      return { loading: false, success: false, flag: null };
     default:
       return state;
   }

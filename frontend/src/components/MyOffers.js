@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { OFFER_RESPOND_RESET } from "../constants/constants";
+
 function MyOffers({ offers }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,9 +32,7 @@ function MyOffers({ offers }) {
     dispatch(respondOfferAction(offer._id, acceptFlag));
   };
 
-  const completeTransaction = (offer) => {};
 
-  const cancelTransaction = (offer) => {};
   return (
     <div>
       <Table striped hover>
@@ -43,7 +41,7 @@ function MyOffers({ offers }) {
             <th>#</th>
             <th>Product Name</th>
             <th></th>
-            <th>Buyer Username</th>
+            <th>Buyer Profile</th>
             <th>Offered Price</th>
             <th>Offered Time</th>
             <th>Actions</th>
@@ -73,64 +71,40 @@ function MyOffers({ offers }) {
                   src={offer.product.image}
                   alt={offer.product.name}
                   style={{
-                    height: "200px",
-                    width: "350px",
+                    height: "150px",
+                    width: "250px",
                     objectFit: "cover",
                   }}
                 />
               </td>
-              <td onClick={() => alertClicked(offer.buyer.username)}>
+              <td >
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 400 }}
                   overlay={renderTooltip}
                 >
-                  <Button variant="primary">@{offer.buyer.username}</Button>
+                  <Button variant="outline-dark" onClick={() => alertClicked(offer.buyer.username)}>@{offer.buyer.username}</Button>
                 </OverlayTrigger>
               </td>
               <td>${offer.price}</td>
               <td>{new Date(offer.createdAt).toLocaleString()}</td>
-              {!offer.isAccepted && (
-                <div>
-                  <td>
-                    <Button
-                      variant="success"
-                      onClick={() => respondOffer(offer, true)}
-                    >
-                      Accept Offer
-                    </Button>
-                  </td>
-                  <td>
-                    <Button
-                      variant="danger"
-                      onClick={() => respondOffer(offer, false)}
-                    >
-                      Decline Offer
-                    </Button>
-                  </td>
-                </div>
-              )}
-              {offer.isAccepted &&
-                !offer.isComplete(
-                  <div>
-                    <td>
-                      <Button
-                        variant="success"
-                        onClick={() => completeTransaction(offer)}
-                      >
-                        Complete Transaction
-                      </Button>
-                    </td>
-                    <td>
-                      <Button
-                        variant="danger"
-                        onClick={() => cancelTransaction(offer)}
-                      >
-                        Cancel Transaction
-                      </Button>
-                    </td>
-                  </div>
-                )}
+
+              <td>
+                <Button
+                  variant="success"
+                  onClick={() => respondOffer(offer, true)}
+                >
+                  Accept Offer
+                </Button>
+              </td>
+              <td>
+                <Button
+                  variant="danger"
+                  onClick={() => respondOffer(offer, false)}
+                >
+                  Decline Offer
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>

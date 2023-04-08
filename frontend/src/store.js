@@ -17,7 +17,15 @@ import {
 import { configureStore } from "@reduxjs/toolkit";
 import { BookmarkReducer } from "./reducers/bookmarkReducer";
 // importing the offer reducers
-import { offerCreateReducer, offerReceivedReducer, offerSentReducer, offerBoughtReducer, offerSoldReducer,  offerRespondReducer } from "./reducers/offerReducer";
+import { 
+  offerCreateReducer, 
+  offerReceivedReducer, 
+  offerSentReducer, 
+  offerBoughtReducer, 
+  offerSoldReducer,  
+  offerRespondReducer, 
+  offerCompleteReducer 
+} from "./reducers/offerReducer";
 
 // const initialState = {}
 // const middleware = [thunk]
@@ -40,6 +48,7 @@ const store = configureStore({
     offerRespond: offerRespondReducer,
     offerBought: offerBoughtReducer,
     offerSold: offerSoldReducer,
+    offerComplete: offerCompleteReducer,
     userDetails: userDetailsReducer,
     bookmark: BookmarkReducer,
   },

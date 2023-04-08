@@ -143,10 +143,12 @@ function Home() {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
+        <br></br>
         {loading ? (
           <Loader />
         ) : error ? (
-          <Notification variant="danger" message={error} />
+          
+          <Notification variant="danger" message={"There are no listings on the site. ("+error +")"} />
         ) : products.length === 0 ? (
           <Alert variant="danger" style={{ marginTop: "25px" }}>
             No results found.
