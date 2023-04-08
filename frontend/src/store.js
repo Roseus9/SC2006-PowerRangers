@@ -17,15 +17,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { productCreateReducer } from "./reducers/productReducer";
 import { BookmarkReducer } from "./reducers/bookmarkReducer";
 // importing the offer reducers
-import {
-  offerSentReducer,
-  offerReceivedReducer,
-  offerRespondReducer,
-  offerCreateReducer, 
-  offerBoughtReducer,
-  offerSoldReducer
+import { offerCreateReducer, offerReceivedReducer, offerSentReducer,  offerRespondReducer, } from "./reducers/offerReducer";
 
-} from "./reducers/offerReducer";
 // const initialState = {}
 // const middleware = [thunk]
 // const reducer = combineReducers({
@@ -44,12 +37,7 @@ const store = configureStore({
     offerCreate: offerCreateReducer,
     offerSent: offerSentReducer,
     offerReceived: offerReceivedReducer,
-<<<<<<< HEAD
-    offerBought: offerBoughtReducer,
-    offerSold: offerSoldReducer,
-=======
     offerRespond: offerRespondReducer,
->>>>>>> haixiang
     userDetails: userDetailsReducer,
     bookmark: BookmarkReducer,
   },
