@@ -43,13 +43,13 @@ export const offerReceivedReducer = (state = {}, action) => {
   export const offerCreateReducer = (state = {}, action) => {
     switch (action.type) {
       case OFFER_CREATE_REQUEST:
-        return { loading: true };
+        return { oloading: true };
       case OFFER_CREATE_SUCCESS:
-        return { loading: false, success: true, offer: action.payload };
+        return { oloading: false, success: true, offer: action.payload };
       case OFFER_CREATE_FAIL:
-        return { loading: false, error: action.payload };
+        return { oloading: false, error: action.payload };
       case OFFER_CREATE_RESET:
-        return { loading: false, success:false, error: null};
+        return { oloading: false, success:false, error: null};
       default:
         return state;
     }

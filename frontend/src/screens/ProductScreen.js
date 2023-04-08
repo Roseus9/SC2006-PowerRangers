@@ -31,7 +31,7 @@ function ProductScreen() {
   if (edit.success == true) {
     dispatch(getProduct(itemId));
     dispatch({ type: PRODUCT_EDIT_RESET });
-    toast.success("Product edited!");
+    toast.success("Product Edited!");
   }
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
@@ -76,10 +76,10 @@ function ProductScreen() {
   let { userInfo = {} } = userRegister;
   function handleBookmarkClick() {
     if (Object.keys(userInfo).length == 0) {
-      toast.error("You're not logged in!");
+      toast.error("You're Not Logged In!");
     }
     if (product.seller == userInfo._id)
-      toast.error("cannot bookmark your own listing!");
+      toast.error("Cannot Bookmark Your Own Listing!");
     //todo
     else return;
   }
@@ -88,9 +88,9 @@ function ProductScreen() {
   const date = new Date(dateString);
   const formattedDate = date.toLocaleString();
 
-  const isCreator = false;
+  let isCreator = false;
   if (userInfo) {
-    isCreator = product && product.seller == userInfo._id;
+    isCreator = (product && product.seller == userInfo._id);
   }
   return (
     <div>
@@ -104,7 +104,7 @@ function ProductScreen() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
       {loading ? (
         <Loader />

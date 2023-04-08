@@ -17,6 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   PRODUCT_DELETE_RESET,
   PRODUCT_CREATE_RESET,
+  OFFER_CREATE_RESET,
   USER_LOGIN_RESET,
   USER_REGISTER_RESET
 } from "../constants/constants";
@@ -36,24 +37,12 @@ function Home() {
   const productCreate = useSelector((state) => state.productCreate);
   const uLogin = useSelector((state) => state.userLogin);
   const uRegister = useSelector((state) => state.userRegister);
+  const offerCreate = useSelector((state) => state.offerCreate);
 
   console.log(productCreate);
-  if (uLogin.logout == true) {
-    dispatch({ type: USER_LOGIN_RESET });
-    toast.success("Successfully Logged Out");
-  }
+
   console.log(uRegister)
 
-
-  if (Pdelete.done == true) {
-    dispatch({ type: PRODUCT_DELETE_RESET });
-    dispatch(getProducts());
-    toast.success("Listing deleted!");
-  }
-
-  if (productCreate.success == true) {
-    toast.success("Listing created!");
-  }
 
   const [searchParams] = useSearchParams();
   let keyword = searchParams.get("keyword") || "";
@@ -67,15 +56,36 @@ function Home() {
     // console.log(keyword)
     // console.log(tags);
     dispatch(getProducts(keyword, tags));
-    dispatch({ type: PRODUCT_CREATE_RESET });
-    if (uRegister.success == true) {
-      dispatch({ type: USER_REGISTER_RESET });
-      toast.success("Account Created Successfully");
+    if (uLogin.logout == true) {
+      toast.dark("Bye 👋, Successfully Logged Out!");
+      dispatch({ type: USER_LOGIN_RESET });
     }
-  }, [dispatch, keyword, tags]);
+
+    if (uRegister.success == true) {
+      toast.dark("✅ Success! Welcome Aboard!");
+      dispatch({ type: USER_REGISTER_RESET });
+    }
+
+    if (Pdelete.done == true) {
+      dispatch(getProducts());
+      toast.success("Listing deleted!");
+      dispatch({ type: PRODUCT_DELETE_RESET });
+    }
+
+    if (productCreate.success == true) {
+      toast.success("Listing created!");
+      dispatch({ type: PRODUCT_CREATE_RESET });
+
+    }
+  
+    if (offerCreate.success == true) {
+      toast.success("Offer created!");
+      dispatch({ type: OFFER_CREATE_RESET });
+    }
+  }, [dispatch, keyword, tags, Pdelete.done, productCreate.success, offerCreate.success, uRegister.success, uLogin.logout]);
 
   useEffect(() => {
-    if (products.length > 0) {
+    if (products && products.length > 0) {
       let sorted = [];
       if (activeSortBy === "Most Recent") {
         sorted = [...products].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -107,7 +117,7 @@ function Home() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
       {!keyword && !tags && <MainCarousel />}
       <h1 style={{ marginTop: '20px' }}>All Listings</h1>

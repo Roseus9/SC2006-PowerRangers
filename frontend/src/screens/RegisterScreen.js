@@ -23,18 +23,23 @@ function CreateListing() {
   //if user already logged in, they cannot register again
   const dispatch = useDispatch();
   const redirect = location.search ? location.search.split('=')[1] : '/'
-  const userRegister = useSelector(state => state.userLogin);
-  let { loading, userInfo, error } = userRegister;
+  const userLogin = useSelector(state => state.userLogin);
+  let { loading, userInfo} = userLogin;
+  const userRegister = useSelector(state => state.userRegister);
+  let {error} = userRegister;
+
+
   useEffect(() => {
-    error = null;
-    
     if (userInfo) {
         navigate(redirect)
     }
     else {
       dispatch({type: USER_LOGIN_RESET})
     }
-  }, [userInfo, redirect])
+    if (error && !userInfo) {
+      toast.dark("❌ Username already Exists")
+    }
+  }, [userInfo, redirect, error])
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -56,7 +61,6 @@ function CreateListing() {
       } else {
         dispatch(register(name, username, email, password, telegram));
       }
-
   }
   return (
     <FormContainer>
@@ -70,12 +74,9 @@ function CreateListing() {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme="light"
+      theme="dark"
       />
       <h4>Register New User</h4>
-      {/* if there is an error, display the error message */}
-      {message && <Notification variant='danger' message={message}/>}
-      {error && <Notification variant='danger' message={error}/>}
       {/* if loading, display the loading message */}
       {loading && <Loader/>}
       <hr / >

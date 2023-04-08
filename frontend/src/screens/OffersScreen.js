@@ -112,7 +112,8 @@ const handleAcceptedChange = (event) => {
       }
 
       if (respondState.success) {
-        toast.success(respondState.flag ? "offer accepted!" : "offer deleted!");
+        toast.success(respondState.flag ? "Offer Accepted!" : "Offer Deleted!");
+        dispatch({ type: OFFER_RESPOND_RESET });
       }
 
       let status = "all"

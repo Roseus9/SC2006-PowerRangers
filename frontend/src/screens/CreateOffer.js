@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { FormLabel } from "react-bootstrap";
 import { OFFER_CREATE_RESET } from "../constants/constants";
+import Loader from "../components/Loader";
 
 
 function CreateOffer() {
@@ -19,7 +20,7 @@ function CreateOffer() {
   const navigate = useNavigate();
 
   const offerCreate = useSelector((state) => state.offerCreate);
-  const { offer, error, success } = offerCreate;
+  const { offer, error, success, oloading } = offerCreate;
 
   const [price, setPrice] = useState("");
   const [product, setProduct] = useState("");
@@ -70,7 +71,7 @@ function CreateOffer() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
       <FormContainer>
         <h4>Make an offer</h4>
@@ -93,20 +94,25 @@ function CreateOffer() {
               </InputGroup>
             </Form.Group>
               <Form.Group className="mb-3">
-                <Button
-                  type="submit"
-                  variant="secondary"
-                  style={{
-                    backgroundColor: "#F24E1E",
-                    marginRight: "8px",
-                    marginTop: "5px",
-                  }}
-                >
-                  Submit
-                </Button>
+                {oloading ? <Loader/> :
+                 <> 
+                  <Button
+                    type="submit"
+                    variant="secondary"
+                    style={{
+                      backgroundColor: "#F24E1E",
+                      marginRight: "8px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    Submit
+                  </Button>
                   <Button onClick={cancelClicked} variant="outline-secondary" style={{ marginTop: "5px" }}>
                     Cancel
-                  </Button>
+                  </Button>  
+                  </>              
+                }
+
               </Form.Group>
             </div>
           </div>

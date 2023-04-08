@@ -23,7 +23,7 @@ function Product({product}) {
                     {product.rating} from {product.numReviews} reviews
                 </div>
             </Card.Text>
-            <Card.Text as='h3' className={`my-3 ${Number(product.price) === 0.00 ? 'text-primary' : ''}`}>
+            <Card.Text as='h3' className={`my-3`} style={{ color: Number(product.price) === 0.00 ? '#F24E1E' : '' }}>
                 {Number(product.price) === 0.00 ? 'Free' : '$'+ product.price}
             </Card.Text>
             <Button variant='primary'>Bookmark</Button>

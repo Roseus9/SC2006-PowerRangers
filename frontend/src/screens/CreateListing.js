@@ -14,9 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Notification from '../components/Notification';
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_CREATE_RESET } from "../constants/constants";
+import Loader from "../components/Loader";
 function CreateListing() {
-  const productCreate = useSelector((state) => state.productCreate);
-  let { product, error, success } = productCreate;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -35,9 +34,14 @@ function CreateListing() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // product creation
+  const productCreate = useSelector((state) => state.productCreate);
+  let { product, error, success } = productCreate;
+
   //user cant access create listing page if not logged in
   const userRegister = useSelector(state => state.userLogin);
   let { loading, userInfo} = userRegister;
+
 
   useEffect(() => {
 
@@ -149,7 +153,7 @@ function CreateListing() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
 
       <Form onSubmit={submitHandler}>
@@ -285,24 +289,29 @@ function CreateListing() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Button
-                type="submit"
-                variant="secondary"
-                style={{
-                  backgroundColor: "#F24E1E",
-                  marginRight: "8px",
-                  marginTop: "5px",
-                }}
-              >
-                Submit
-              </Button>
-              <Button
-                onClick={cancelClicked}
-                variant="outline-secondary"
-                style={{ marginTop: "5px" }}
-              >
-                Cancel
-              </Button>
+
+              {productCreate.loading ? <Loader/> :
+                 <> 
+                    <Button
+                      type="submit"
+                      variant="secondary"
+                      style={{
+                        backgroundColor: "#F24E1E",
+                        marginRight: "8px",
+                        marginTop: "5px",
+                      }}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      onClick={cancelClicked}
+                      variant="outline-secondary"
+                      style={{ marginTop: "5px" }}
+                    >
+                      Cancel
+                    </Button>
+                  </>              
+                }
             </Form.Group>
           </div>
         </div>
