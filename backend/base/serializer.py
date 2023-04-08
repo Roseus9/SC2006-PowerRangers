@@ -77,6 +77,9 @@ class UserProfilesSerializer(serializers.ModelSerializer):
 
 # Bookmark Serializer        
 class BookmarkSerializer(serializers.ModelSerializer):
+    product = serializers.CharField(source='product.name', read_only=True)
+    user = serializers.CharField(source='user.username', read_only=True)
+    isBookmarked = serializers.BooleanField(required=False, default=False)
     class Meta:
         model = Bookmark
         fields = '__all__' # '__all__' means all fields

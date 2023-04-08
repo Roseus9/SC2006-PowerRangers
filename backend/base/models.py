@@ -24,6 +24,7 @@ class Product(models.Model):
     _id = models.AutoField(primary_key=True, editable=False)
     image = models.ImageField(null=True, blank=True)
     likes = models.IntegerField(default=0, null=False, blank=True, editable=False)
+    #bookmarks = models.ManyToManyField(User, through='Bookmark', related_name='bookmarks')
 
     def __str__(self):
         return self.name
@@ -64,12 +65,15 @@ class Offer(models.Model):
 class Bookmark(models.Model):
     # (null=True) allows the database to store a NULL value for the field.
     # (blank=True) allows the field to be empty in a form or in the admin interface.
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
-    product = models.OneToOneField(Product, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     isBookmarked = models.BooleanField(default=False, blank=False)
     bookmarkedAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
+    class Meta:
+        unique_together = ('user', 'product')
+    
     def __str__(self):
         return str(self.bookmarkedAt)
 
