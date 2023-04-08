@@ -21,15 +21,10 @@ import {
   offerCreateReducer,
   offerReceivedReducer,
   offerSentReducer,
-} from "./reducers/offerReducer";
-
-import {
-  offerCreateReducer,
-  offerReceivedReducer,
-  offerSentReducer,
   offerBoughtReducer,
   offerSoldReducer,
   offerRespondReducer,
+  offerDeleteReducer,
 } from "./reducers/offerReducer";
 
 // const initialState = {}
@@ -48,11 +43,13 @@ const store = configureStore({
     userRegister: userRegisterReducer,
     productCreate: productCreateReducer,
     offerCreate: offerCreateReducer,
+    offerDelete: offerDeleteReducer,
     offerSent: offerSentReducer,
     offerReceived: offerReceivedReducer,
     offerRespond: offerRespondReducer,
     offerBought: offerBoughtReducer,
     offerSold: offerSoldReducer,
+
     userDetails: userDetailsReducer,
     bookmark: BookmarkReducer,
   },

@@ -27,6 +27,8 @@ urlpatterns = [
     path("offer/sold/<str:slug>", views.soldItems, name="sent-offers"),
     #responding to offers
     path("offer/<str:oid>/<str:flag>", views.respondOffer, name="respond-offer"),
+    #deleting offers
+    path("offerdelete/<str:oid>",views.deleteOffer, name="delete-offer" ),
     path('users', views.getUsers, name='users'),
     
     # this allows us to access by:

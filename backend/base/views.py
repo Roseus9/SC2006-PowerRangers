@@ -66,6 +66,7 @@ def getRoutes(request):
             '/api/offer/received/<username>',
             '/api/offer/sent/<username>',
             '/api/offer/<oid>/<flag>',
+            '/api/offerdelete/<oid>',
             '/api/profile/<username>',
             '/api/checkbookmark/<pid>/<uid>'
             '/api/editproduct',
@@ -405,7 +406,6 @@ def sentOffers(request, slug):
 @api_view(['PUT'])
 #@permission_classes([IsAuthenticated])
 def respondOffer(request, oid, flag):
-    print("oid", oid)
     o = Offer.objects.get(_id=oid)
     #flag = True means the seller has accepted the offer. 
     if flag == 'true' or flag == 'True':
@@ -419,6 +419,11 @@ def respondOffer(request, oid, flag):
         o.delete()
         return Response({'message': 'declined successfully'})
 
+@api_view(['PUT'])
+def deleteOffer(request, oid):
+    o = Offer.objects.get(_id=oid)
+    o.delete()
+    return Response({'message': 'deleted successfully'})
 
 @api_view(['GET'])
 def soldItems(request, slug):

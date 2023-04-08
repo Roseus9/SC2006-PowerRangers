@@ -25,7 +25,10 @@ import {
 } from "../actions/offerActions";
 
 import { useDispatch, useSelector } from "react-redux";
-import { OFFER_RESPOND_RESET } from "../constants/constants";
+import {
+  OFFER_RESPOND_RESET,
+  OFFER_DELETE_RESET,
+} from "../constants/constants";
 import Notification from "../components/Notification";
 import Loader from "../components/Loader";
 import MyOffers from "../components/MyOffers";
@@ -39,16 +42,12 @@ function OffersScreen() {
   const dispatch = useDispatch();
   const userDetails = useSelector((state) => state.userDetails);
   const { error, loading, userObj } = userDetails;
-  // console.log(userDetails)
-
   const offerReceived = useSelector((state) => state.offerReceived);
-  // console.log(offerReceived)
   const { errorR, loadingR, offersR } = offerReceived;
   const offerSent = useSelector((state) => state.offerSent);
   const { errorS, loadingS, offersS } = offerSent;
   const offerBought = useSelector((state) => state.offerBought);
   const { errorB, loadingB, offersB } = offerBought;
-  // console.log("offersB", offersB)
   const offerSold = useSelector((state) => state.offerSold);
   const { errorSO, loadingSO, offersSO } = offerSold;
 
@@ -57,7 +56,7 @@ function OffersScreen() {
   let { userInfo } = userRegister;
 
   const respondState = useSelector((state) => state.offerRespond);
-
+  const deleteState = useSelector((state) => state.offerDelete);
   // states for filtering
   // consists of active sort by for time, and price
   // and listing status for accepted, completed, or all
@@ -106,6 +105,22 @@ function OffersScreen() {
 
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
+    console.log(
+      "userInfo:",
+      userInfo,
+      " accepted:",
+      accepted,
+      " completed:",
+      completed,
+      " activeSortBy:",
+      activeSortBy,
+      " username:",
+      username,
+      " respondState.success:",
+      respondState.success,
+      " deleteState.success:",
+      deleteState.success
+    );
     if (!userInfo) {
       navigate("/login");
     } else if (userInfo.username !== username) {
@@ -115,6 +130,11 @@ function OffersScreen() {
     if (respondState.success) {
       toast.success(respondState.flag ? "Offer Accepted!" : "Offer Deleted!");
       dispatch({ type: OFFER_RESPOND_RESET });
+    }
+
+    if (deleteState.success) {
+      toast.success("Offer Deleted!");
+      dispatch({ type: OFFER_DELETE_RESET });
     }
 
     let status = "all";
@@ -143,6 +163,7 @@ function OffersScreen() {
     activeSortBy,
     username,
     respondState.success,
+    deleteState.success,
     dispatch,
   ]);
 

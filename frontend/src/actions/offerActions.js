@@ -14,18 +14,18 @@ import {
   OFFER_SENT_REQUEST,
   OFFER_SENT_SUCCESS,
   OFFER_SENT_FAIL,
-
   OFFER_BOUGHT_REQUEST,
   OFFER_BOUGHT_SUCCESS,
   OFFER_BOUGHT_FAIL,
-  
   OFFER_SOLD_REQUEST,
   OFFER_SOLD_SUCCESS,
   OFFER_SOLD_FAIL,
-
   OFFER_RESPOND_REQUEST,
   OFFER_RESPOND_SUCCESS,
   OFFER_RESPOND_FAIL,
+  OFFER_DELETE_REQUEST,
+  OFFER_DELETE_SUCCESS,
+  OFFER_DELETE_FAIL,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -111,7 +111,6 @@ export const getUserSentOffers = (slug) => async (dispatch) => {
   }
 };
 
-
 //  Action creator for getting a single users sold listings
 //  action object contains type and payload
 export const getUserSoldOffers = (slug) => async (dispatch) => {
@@ -121,9 +120,9 @@ export const getUserSoldOffers = (slug) => async (dispatch) => {
     console.log("GET SOLD OFFERS RETURNED SUCCESSFULLY! returned data:", data);
     dispatch({ type: OFFER_SOLD_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({type: OFFER_SOLD_FAIL})
+    dispatch({ type: OFFER_SOLD_FAIL });
   }
-}
+};
 
 export const respondOfferAction = (oid, flag) => async (dispatch, getState) => {
   try {
@@ -160,7 +159,10 @@ export const getUserBoughtOffers = (slug) => async (dispatch) => {
   try {
     dispatch({ type: OFFER_BOUGHT_REQUEST });
     const { data } = await axios.get(`/api/offer/bought/${slug}`);
-    console.log("GET BOUGHT OFFERS RETURNED SUCCESSFULLY! returned data:", data);
+    console.log(
+      "GET BOUGHT OFFERS RETURNED SUCCESSFULLY! returned data:",
+      data
+    );
     dispatch({ type: OFFER_BOUGHT_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -173,3 +175,30 @@ export const getUserBoughtOffers = (slug) => async (dispatch) => {
   }
 };
 
+export const deleteOfferAction = (oid) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: OFFER_DELETE_REQUEST });
+    console.log(`/api/offer/delete/${oid}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/offerdelete/${oid}`, {}, config);
+    dispatch({ type: OFFER_DELETE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: OFFER_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

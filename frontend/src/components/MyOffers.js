@@ -110,27 +110,6 @@ function MyOffers({ offers }) {
                   </td>
                 </div>
               )}
-              {offer.isAccepted &&
-                !offer.isComplete(
-                  <div>
-                    <td>
-                      <Button
-                        variant="success"
-                        onClick={() => completeTransaction(offer)}
-                      >
-                        Complete Transaction
-                      </Button>
-                    </td>
-                    <td>
-                      <Button
-                        variant="danger"
-                        onClick={() => cancelTransaction(offer)}
-                      >
-                        Cancel Transaction
-                      </Button>
-                    </td>
-                  </div>
-                )}
             </tr>
           ))}
         </tbody>
