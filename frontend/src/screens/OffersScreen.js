@@ -115,22 +115,13 @@ function OffersScreen() {
   });
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
-    console.log(
-      "userInfo:",
-      userInfo,
-      " accepted:",
-      accepted,
-      " completed:",
-      completed,
-      " activeSortBy:",
-      activeSortBy,
-      " username:",
-      username,
-      " respondState.success:",
-      respondState.success,
-      " deleteState.success:",
-      deleteState.success
-    );
+    if (!userInfo) {
+      navigate("/login");
+    }
+    if (username != userInfo.username) {
+      navigate("/");
+    }
+    
 
     if (respondState.success) {
       toast.success(respondState.flag ? "Offer Accepted!" : "Offer Deleted!");
