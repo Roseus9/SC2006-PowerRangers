@@ -19,6 +19,7 @@ import {
   OFFER_CREATE_RESET,
   USER_LOGIN_RESET,
   USER_REGISTER_RESET,
+  REVIEW_CREATE_RESET
 } from "../constants/constants";
 import { useSearchParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
@@ -36,6 +37,7 @@ function Home() {
   const uLogin = useSelector((state) => state.userLogin);
   const uRegister = useSelector((state) => state.userRegister);
   const offerCreate = useSelector((state) => state.offerCreate);
+  const createReview = useSelector((state) => state.createReview);
 
   const [searchParams] = useSearchParams();
   let keyword = searchParams.get("keyword") || "";
@@ -76,6 +78,11 @@ function Home() {
       dispatch({ type: PRODUCT_CREATE_RESET });
     }
 
+    if (createReview.success == true){
+      toast.success('Review Submitted!');
+      dispatch({ type: REVIEW_CREATE_RESET })
+    }
+  
     if (offerCreate.success == true) {
       toast.success("Offer created!");
       dispatch({ type: OFFER_CREATE_RESET });

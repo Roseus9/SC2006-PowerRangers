@@ -6,24 +6,39 @@ import Notification from '../components/Notification'
 import Product2 from '../components/Product2'
 import Alert from 'react-bootstrap/Alert';
 
-import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap'
+import {Row, Col, Image, ListGroup, Card, Button, Badge} from 'react-bootstrap'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserProfileView } from '../actions/userLoginActions'
+import { getReviewAction } from '../actions/offerActions'
+
+import Rating from '../components/Rating'
 
 function ProfileScreen() {
     let { username } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const userDetails = useSelector(state => state.userDetails);
     const {error, loading, userObj} = userDetails;
+    const getReviews = useSelector(state => state.getReview);
+    const {review} = getReviews;
 
     // useEffect is a hook that allows us to run a function when the component loads
     useEffect(() => {
         dispatch(getUserProfileView(username))
-        // console.log("HI")
+
         // console.log(error)
         // console.log(userDetails)
-    }, [username, dispatch])
+    }, [username, userDetails.success, dispatch])
+
+    useEffect(() => {
+        if (userObj){
+            dispatch(getReviewAction(userObj.user.id, true))
+        }
+        console.log(review)
+    }, [userObj])
+
+
   return (
     <Row>
         <h2>{username}'s Profile Page</h2>
@@ -59,7 +74,6 @@ function ProfileScreen() {
 
         <Col md={9}>
             <h4>Listings 📌</h4>
-            <br></br>
             {loading ? (<Loader />) 
                 : error 
                     ? (<Notification variant="danger" message={"This User has not listed any items."} />) 
@@ -80,6 +94,71 @@ function ProfileScreen() {
                                         )}
                                     </Row>
                                 )}
+            <br></br>
+            <h4>Reviews 📝</h4>
+            {getReviews.loading ? (<Loader />)
+                : getReviews.error
+                    ? (<Notification variant="danger" message={getReviews.error} />)
+                        : review && review.buyerReviews.length === 0 && review.sellerReviews.length === 0
+                            ? (<Notification variant="danger" message="No Reviews Available" />)
+                                : (
+                                    <Row>
+                                        <Alert variant="light">
+                                            <Row >
+                                                <Col md="auto">
+                                                    <span style={{ display: "inline" }}>Average Ratings ({ review && review.raters ?  review.raters : "0"})</span>
+                                                    <Rating value ={review && review.totalrating ? parseFloat(review.totalrating) : 0}/> 
+                                                </Col>
+
+                                            </Row>
+                                        </Alert>
+                                        <ListGroup as="ol" numbered>
+                                            {review && review.buyerReviews.map((r) => (
+                                                <ListGroup.Item
+                                                    as="li"
+                                                    className="d-flex justify-content-between align-items-start"
+                                                >
+                                                    <div className="ms-2 me-auto">
+                                                        <div>
+                                                            <Alert.Link onClick={()=>{navigate(`/profile/${r.seller.username}`)}}>{r.seller.username}(seller)</Alert.Link>
+                                                            <strong> {r.product.name}</strong>
+                                                        </div> 
+                                                        {r.content}
+                                                    </div>
+                                                    <Badge bg="primary" pill>
+                                                    {r.rating} ⭐
+                                                    </Badge> 
+                                                </ListGroup.Item>
+                                                ))
+                                            }
+                                            {review && review.sellerReviews.map((r) => (
+                                                <ListGroup.Item
+                                                    as="li"
+                                                    className="d-flex justify-content-between align-items-start"
+                                                >
+                                                    <div className="ms-2 me-auto">
+                                                        <div>
+                                                            <Alert.Link onClick={()=>{navigate(`/profile/${r.buyer.username}`)}}>{r.buyer.username}(buyer)</Alert.Link>
+                                                            <strong> {r.product.name}</strong>
+                                                        </div> 
+                                                        {r.content}
+                                                    </div>
+                                                    <Badge bg="primary" pill>
+                                                    {r.rating} ⭐
+                                                    </Badge> 
+                                                </ListGroup.Item>
+                                                ))
+                                            }
+
+
+                                            </ListGroup>
+
+
+                                        
+
+                                    </Row>
+                                    )
+            }
         </Col>
     </Row>
   )

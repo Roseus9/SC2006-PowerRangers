@@ -19,16 +19,19 @@ import { BookmarkReducer } from "./reducers/bookmarkReducer";
 // importing the offer reducers
 
 import {
-  offerCreateReducer,
-  offerReceivedReducer,
-  offerSentReducer,
-  offerBoughtReducer,
-  offerSoldReducer,
   offerRespondReducer,
   offerDeleteReducer,
   getOfferReducer,
   editOfferReducer,
   offerCompleteReducer,
+  offerCreateReducer, 
+  offerReceivedReducer, 
+  offerSentReducer, 
+  offerBoughtReducer, 
+  offerSoldReducer,  
+  offerRespondReducer, 
+  getCompleteOfferReducer,
+  createReviewReducer,
 } from "./reducers/offerReducer";
 
 // const initialState = {}
@@ -59,6 +62,9 @@ const store = configureStore({
 
     userDetails: userDetailsReducer,
     bookmark: BookmarkReducer,
+    getCompleteOffer: getCompleteOfferReducer,
+    createReview: createReviewReducer,
+    getReview: getReviewReducer,
   },
   preloadedState: {
     userLogin: {

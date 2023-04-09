@@ -50,5 +50,12 @@ urlpatterns = [
     
     #edit listing
     path('editproduct', views.editProduct, name='edit-product'),
-    path('deleteproduct', views.deleteProduct, name='delete-product')
+    path('deleteproduct', views.deleteProduct, name='delete-product'),
+
+    #create review on completed offer
+    path('offer/review/create/<str:oid>/<str:id>/<str:flag>', views.makeReview, name='make-review'),
+    #get reviews for a user, flag checks if its as a buyer or as seller
+    path('offer/review/get/<str:id>/<str:flag>', views.getReview, name='get-review'),
+    #get a completed offer based on id
+    path('offer/get/complete/<str:id>', views.getComplete, name='get-complete'),
 ]

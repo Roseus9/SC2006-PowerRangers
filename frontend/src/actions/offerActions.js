@@ -17,6 +17,13 @@ import {
   OFFER_BOUGHT_REQUEST,
   OFFER_BOUGHT_SUCCESS,
   OFFER_BOUGHT_FAIL,
+  OFFER_COMPLETE_REQUEST,
+  OFFER_COMPLETE_SUCCESS,
+  OFFER_COMPLETE_FAIL,
+  OFFER_COMPLETE_GET_REQUEST,
+  OFFER_COMPLETE_GET_SUCCESS,
+  OFFER_COMPLETE_GET_FAIL,
+  OFFER_COMPLETE_GET_RESET,
   OFFER_SOLD_REQUEST,
   OFFER_SOLD_SUCCESS,
   OFFER_SOLD_FAIL,
@@ -33,14 +40,19 @@ import {
   OFFER_EDIT_REQUEST,
   OFFER_EDIT_SUCCESS,
   OFFER_EDIT_FAIL,
-  OFFER_COMPLETE_REQUEST,
-  OFFER_COMPLETE_SUCCESS,
-  OFFER_COMPLETE_FAIL,
+  REVIEW_CREATE_REQUEST,
+  REVIEW_CREATE_SUCCESS,
+  REVIEW_CREATE_FAIL,
+  REVIEW_CREATE_RESET,
+  REVIEW_GET_REQUEST,
+  REVIEW_GET_SUCCESS,
+  REVIEW_GET_FAIL,
+  REVIEW_GET_RESET,
 } from "../constants/constants";
 //---------------------------------------
 
 // ACTION CREATORS ----------------
-//  Action creator for getting a list of products
+//  Action creator for creating an offer
 //  action object contains type and payload
 
 export const createOffer = (price, product) => async (dispatch, getState) => {
@@ -298,6 +310,84 @@ export const completeOffer = (id, flag) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: OFFER_COMPLETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+
+//  Action creator for getting a specific completed offer
+export const getCompleteOfferAction = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: OFFER_COMPLETE_GET_REQUEST });
+
+    const { data } = await axios.get(`/api/offer/get/complete/${id}`);
+    console.log("COMPLETE OFFERS SUCCESSFULLY OBTAINED! returned data:", data);
+    dispatch({ type: OFFER_COMPLETE_GET_SUCCESS, payload: data});
+  } catch (error) {
+    dispatch({
+      type: OFFER_COMPLETE_GET_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//  Action creator for creating a review
+export const createReviewAction = (review, offerID, userID, flag) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: REVIEW_CREATE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "multipart/form-data",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.post(`/api/offer/review/create/${offerID}/${userID}/${flag}`, review, config);
+
+    dispatch({
+      type: REVIEW_CREATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: REVIEW_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//  Action creator for getting all reviews of a user
+export const getReviewAction = (userID, flag) => async (dispatch) => {
+  try {
+    dispatch({
+      type: REVIEW_GET_REQUEST,
+    });
+
+    const { data } = await axios.get(`/api/offer/review/get/${userID}/${flag}`);
+    console.log("SUCCESSFULLY RECEIVED REVIEWS!", data)
+    dispatch({
+      type: REVIEW_GET_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: REVIEW_GET_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

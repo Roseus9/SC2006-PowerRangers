@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Table from 'react-bootstrap/Table';
 import { Card, Button } from 'react-bootstrap'
 import { Link, useNavigate } from "react-router-dom";
@@ -8,16 +8,21 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from 'react-redux';
 import { completeOffer } from '../actions/offerActions';
+import { OFFER_COMPLETE_RESET } from '../constants/constants';
 
 function SoldOffers({offers}) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const completeState = useSelector((state) => state.offerComplete);
     const alertClicked = (slug) => {
         navigate("/profile/" + slug);
         };
 
     const productClicked = (id) => {
         navigate("/product/" + id);
+        }; 
+    const reviewClicked = (id) => {
+        navigate("/review/" + id);
         }; 
     const telegramClicked = (tele) => {
         toast.clearWaitingQueue();
@@ -53,7 +58,8 @@ function SoldOffers({offers}) {
                     No
                     </Button>
                 </div>
-            );            
+                
+            , {toastId: "toastID", limit: 1, pauseOnHover:false});            
         }
         else {
             toast.error(
@@ -72,6 +78,7 @@ function SoldOffers({offers}) {
 
     };
     const completeAction = (id, flag) => {
+        toast.dismiss();
         dispatch(completeOffer(id, flag))
     }
 
@@ -85,7 +92,6 @@ function SoldOffers({offers}) {
             Redirect to Telegram Web Chat
         </Tooltip>
         );
-
 
 
   return (
@@ -140,16 +146,20 @@ function SoldOffers({offers}) {
                 <td>${offer.price}</td>
                 <td>{new Date(offer.acceptedAt).toLocaleString()}</td>
                 <td>{new Date(offer.completedAt ? offer.completedAt : "").toLocaleString()}</td>
+
                 <td>
                     {offer.isComplete
-                        ? <Button variant='success' disabled>Sold</Button>
+                        ? <Button variant='outline-success ' disabled>Sold</Button>
                         : <Button variant='success' onClick={()=> completeClicked(offer._id, true)}>Complete</Button>
                     }
                 </td>
                 <td>
-                    {offer.isComplete
-                        ? <></>
-                        : <Button variant='danger' onClick={()=> completeClicked(offer._id, false)}>Decline</Button>
+                    {offer.isComplete ?
+                        (offer.isReviewedSeller ?
+                        <Button variant='success' disabled>Review</Button> :
+                        <Button variant='success' onClick={() => reviewClicked(offer._id)}>Review</Button>
+                        ) :
+                        <Button variant='danger' onClick={() => completeClicked(offer._id, false)}>Decline</Button>
                     }
                 </td>
 
