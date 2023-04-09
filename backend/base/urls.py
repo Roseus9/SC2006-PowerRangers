@@ -43,6 +43,8 @@ urlpatterns = [
     # profile/username
     path('profile/<str:slug>', views.UserProfileView),
 
+    # edit profile
+    path('update/profile', views.updateUserProfile, name='update-profile'),
     # Registering
     path('users/register', views.createUser, name='register-user'),  
     # logging in, using our customised MyTokenObtainPairView

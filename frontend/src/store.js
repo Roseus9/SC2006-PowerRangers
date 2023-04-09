@@ -11,6 +11,7 @@ import {
   userDetailsReducer,
   userLoginReducer,
   userRegisterReducer,
+  userUpdateReducer,
 } from "./reducers/userReducer";
 // import thunk from 'redux-thunk'
 // import { combineReducers } from 'redux'
@@ -56,7 +57,7 @@ const store = configureStore({
     offerBought: offerBoughtReducer,
     offerSold: offerSoldReducer,
     offerComplete: offerCompleteReducer,
-
+    userUpdate: userUpdateReducer,
     userDetails: userDetailsReducer,
     bookmark: BookmarkReducer,
   },

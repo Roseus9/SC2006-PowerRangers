@@ -619,3 +619,32 @@ def completeOffer(request, id, flag):
         #   delete offer
         o.delete()
         return Response({'message': 'declined successfully'})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def updateUserProfile(request):
+    user = request.user
+    print(user)
+    print(user.username)
+    profile = Profile.objects.get(user = user)
+    print(profile)
+    data = request.data
+    print(request)
+
+    print("image", request.FILES.get('image'))
+    if (request.FILES.get('image') != None): 
+        print("pass condition")
+        profile.image = request.FILES.get('image')
+    profile.telegramHandle = request.POST.get(('telegramHandle'))
+    profile.bio = request.POST.get(('bio'))
+    user.first_name = request.POST.get(('name'))
+    user.username = request.POST.get(('username'))
+    user.email = request.POST.get(('email'))
+    if (request.POST.get(('password'))) != '':
+        user.password = make_password(request.POST.get(('password')))
+    
+    profile.save()
+    user.save()
+    serializer = UserSerializerWithToken(user, many=False)
+    return Response(serializer.data)
+
