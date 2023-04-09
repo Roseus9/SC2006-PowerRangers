@@ -11,6 +11,7 @@ import {
   userDetailsReducer,
   userLoginReducer,
   userRegisterReducer,
+  userUpdateReducer,
 } from "./reducers/userReducer";
 // import thunk from 'redux-thunk'
 // import { combineReducers } from 'redux'
@@ -68,6 +69,7 @@ const store = configureStore({
     findBookmark: findBookmarkReducer,
     findUserBookmark: findUserBookmarkReducer,
     offerComplete: offerCompleteReducer,
+    userUpdate: userUpdateReducer,
     getCompleteOffer: getCompleteOfferReducer,
     createReview: createReviewReducer,
     getReview: getReviewReducer,

@@ -85,7 +85,6 @@ function EditListing() {
 
   useEffect(() => {
     if (item.done == true) {
-      console.log("effect", product);
       setTitle(product.name);
       setBlurb(product.description);
       setCondition(product.condition == true ? "new" : "old");
@@ -132,30 +131,40 @@ function EditListing() {
       toast.error("Restricted item!");
       return;
     }
-
-    if (blurb == "") {
-      toast.error("Missing description!");
-      return;
-    }
-
-    if (tags.length == 0) {
-      toast.error("Missing item tags!");
-      return;
-    }
     if (price == "") {
       toast.error("Missing price!");
       return;
     }
 
-    if (!price.match("^[0-9]+(.[0-9]{1,3})?$")) {
-      toast.error("Invalid price!");
+    if (!price.match("^[0-9]{1,4}(.[0-9]{1,2})?$")) {
+      {
+        toast.error("Invalid price!");
+        return;
+      }
+    }
+    if (price.match("^[0-9]{5,}(.[0-9]{1,2})?$")) {
+      {
+        toast.error("Accepted range: $0.00 - $9999.99!");
+        return;
+      }
+    }
+
+    if (!file) {
+      toast.error("Missing image!");
+      return;
+    }
+    if (blurb == "") {
+      toast.error("Missing description!");
+      return;
+    }
+    if (tags.length == 0) {
+      toast.error("Missing item tags!");
       return;
     }
     if (condition == "") {
       toast.error("Missing item condition!");
       return;
     }
-
     if (places.length == 0) {
       toast.error("Missing pick up locations!");
       return;

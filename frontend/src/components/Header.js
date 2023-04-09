@@ -1,25 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import { Image, Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import shop from "../resources/shop.svg";
 import SearchBar from "./SearchBar";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../actions/userLoginActions";
+import { getUserProfileView, logout } from "../actions/userLoginActions";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Header() {
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, userInfo, error } = userLogin;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [username, setUsername] = useState("");
   // to dispatch the action we created for USER_LOGOUT
   const logoutHandler = () => {
     dispatch(logout());
     navigate("/");
     console.log("logged out");
   };
-
+  useEffect(() => {
+    console.log(userInfo, "userInfo");
+    const fetch = async () => {
+      const { data } = await axios.get(`/api/userinfo/${userInfo._id}`);
+      setUsername(data.username);
+    };
+    fetch();
+  });
   return (
     <header>
       <Navbar bg="light" expand="lg" collapseOnSelect>

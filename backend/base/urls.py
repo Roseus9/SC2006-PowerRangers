@@ -42,7 +42,10 @@ urlpatterns = [
     path('users/profile/<str:id>', views.getUserProfile, name='user-profile'),
     # profile/username
     path('profile/<str:slug>', views.UserProfileView),
-
+    #get user info through id 
+    path('userinfo/<str:uid>', views.getUserInfo, name='user-info'),
+    # edit profile
+    path('update/profile/<str:uid>', views.updateUserProfile, name='update-profile'),
     # Registering
     path('users/register', views.createUser, name='register-user'),  
     # logging in, using our customised MyTokenObtainPairView

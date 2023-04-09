@@ -24,6 +24,7 @@ class Product(models.Model):
     _id = models.AutoField(primary_key=True, editable=False)
     image = models.ImageField(null=True, blank=True)
 
+
     def __str__(self):
         return self.name
     

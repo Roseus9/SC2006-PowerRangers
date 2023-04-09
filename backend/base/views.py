@@ -252,6 +252,7 @@ def UserProfileView(request, slug):
     # then find the profile model for the user
     try:
         profile = Profile.objects.get(user=user)
+        print(profile, "profile")
         serializedProfile = UserProfilesSerializer(profile, many=False).data
 
     except:
@@ -819,4 +820,59 @@ def getComplete(request, id):
     }
 
     return Response(data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def updateUserProfile(request, uid):
+    #request.user gives userID
+
+    form = request.data
+    print("form", form, uid)
+
+    tele = request.POST.get('telegramHandle')
+    bio = request.POST.get('bio')
+    name = request.POST.get('name')
+    username = request.POST.get('username')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    image = request.FILES.get('image')
+    print(image)
+    u = User.objects.get(id=uid)
+    p = Profile.objects.get(user=u)
+    p.telegram = tele
+    p.bio = bio
+    if (image):
+        p.profilepic = image
+    u.first_name = name
+    u.username = username
+    u.email = email
+    if (len(password) > 0):
+        u.password = make_password(password)
+    p.save()
+    u.save()
+    serializer = UserSerializerWithToken(u, many=False)
+    return Response(serializer.data)
+    # print("image", request.FILES.get('image'))
+    # if (request.FILES.get('image') != None): 
+    #     print("pass condition")
+    #     profile.image = request.FILES.get('image')
+    # profile.telegramHandle = request.POST.get(('telegramHandle'))
+    # profile.bio = request.POST.get(('bio'))
+    # user.first_name = request.POST.get(('name'))
+    # user.username = request.POST.get(('username'))
+    # user.email = request.POST.get(('email'))
+    # if (request.POST.get(('password'))) != '':
+    #     user.password = make_password(request.POST.get(('password')))
+    
+    # profile.save()
+    # user.save()
+    
+@api_view(['GET'])
+def getUserInfo(request, uid):
+    u = User.objects.get(id=uid)
+    serializer = UserSerializerWithToken(u, many=False)
+    return Response(serializer.data)
+    
+    
 
