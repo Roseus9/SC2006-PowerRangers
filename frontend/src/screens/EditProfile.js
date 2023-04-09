@@ -24,19 +24,20 @@ function EditProfile() {
   console.log(success)
 
   const [file, setFile] = useState();
-  const [telegramHandle, setTelegramHandle] = useState();
-  const [bio, setBio] = useState();
-  const [firstName, setFirstName] = useState();
-  const [newUsername, setnewUsername] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const [previewURL, setPreviewURL] = useState(null);
+  const [telegramHandle, setTelegramHandle] = useState(userObj?.profile?.telegram || '');
+  const [bio, setBio] = useState(userObj?.profile?.bio || '');
+  const [firstName, setFirstName] = useState(userObj?.user?.name || '');
+  const [newUsername, setnewUsername] = useState(userObj?.user?.username || '');
+  const [email, setEmail] = useState(userObj?.user?.email || '');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [previewURL, setPreviewURL] = useState(userObj?.profile?.image || null);
   
   useEffect(() => {
     dispatch(getUserProfileView(username));
   }, [username])
 
+  console.log(userObj)
   useEffect(() => {
     if (userDetails.done) {
     setTelegramHandle(userObj?.profile.telegram);
@@ -139,7 +140,7 @@ function EditProfile() {
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
             <Form.Control
-                placeholder="name"
+                placeholder="Name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
@@ -147,7 +148,7 @@ function EditProfile() {
           <Form.Group className="mb-3">
             <Form.Label>Username</Form.Label>
             <Form.Control
-                placeholder="username"
+                placeholder="Username"
                 value={newUsername}
                 onChange={(e) => setnewUsername(e.target.value)}
               />
@@ -155,7 +156,7 @@ function EditProfile() {
           <Form.Group className="mb-3">
             <Form.Label>Email</Form.Label>
             <Form.Control
-                placeholder="email"
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -165,7 +166,7 @@ function EditProfile() {
             <InputGroup>
               <InputGroup.Text>@</InputGroup.Text>
               <Form.Control
-                placeholder="telegramHandle"
+                placeholder="Telegram Handle"
                 value={telegramHandle}
                 onChange={(e) => setTelegramHandle(e.target.value)}
               />
