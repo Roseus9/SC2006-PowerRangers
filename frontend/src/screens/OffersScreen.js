@@ -27,6 +27,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   OFFER_RESPOND_RESET,
+  OFFER_COMPLETE_RESET,
   OFFER_DELETE_RESET,
   OFFER_EDIT_RESET,
 } from "../constants/constants";
@@ -59,6 +60,8 @@ function OffersScreen() {
   const respondState = useSelector((state) => state.offerRespond);
   const deleteState = useSelector((state) => state.offerDelete);
   const editOfferState = useSelector((state) => state.offerEdit);
+  const completeState = useSelector((state) => state.offerComplete);
+
   // states for filtering
   // consists of active sort by for time, and price
   // and listing status for accepted, completed, or all
@@ -112,31 +115,26 @@ function OffersScreen() {
   });
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
-    console.log(
-      "userInfo:",
-      userInfo,
-      " accepted:",
-      accepted,
-      " completed:",
-      completed,
-      " activeSortBy:",
-      activeSortBy,
-      " username:",
-      username,
-      " respondState.success:",
-      respondState.success,
-      " deleteState.success:",
-      deleteState.success
-    );
     if (!userInfo) {
       navigate("/login");
-    } else if (userInfo.username !== username) {
+    }
+    if (username != userInfo.username) {
       navigate("/");
     }
+    
 
     if (respondState.success) {
       toast.success(respondState.flag ? "Offer Accepted!" : "Offer Deleted!");
       dispatch({ type: OFFER_RESPOND_RESET });
+    }
+
+    if (completeState.success) {
+      toast.success(
+        completeState.flag
+          ? "Offer Completed, all other offers for the same product have been declined!"
+          : "Offer Deleted!"
+      );
+      dispatch({ type: OFFER_COMPLETE_RESET });
     }
 
     if (deleteState.success) {
@@ -164,29 +162,29 @@ function OffersScreen() {
     dispatch(getUserBoughtOffers(username + "-" + activeSortBy + "-" + status));
     dispatch(getUserSoldOffers(username + "-" + activeSortBy + "-" + status));
   }, [
-    userInfo,
     accepted,
     completed,
     activeSortBy,
-    username,
     respondState.success,
     deleteState.success,
+    completeState.success,
     dispatch,
   ]);
 
   return (
     <div>
       <ToastContainer
+        toastId="toastID"
         position="top-right"
-        autoClose={1500}
-        hideProgressBar={true}
+        autoClose={3500}
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
       <Tabs
         defaultActiveKey="received"
@@ -236,17 +234,17 @@ function OffersScreen() {
             </Dropdown.Menu>
           </Dropdown>
           <br></br>
-          {loadingR ? (
+          {loadingR | completeState.loading ? (
             <Loader />
           ) : errorR ? (
             <Notification variant="danger" message={errorR} />
           ) : offersR == null ? (
-            <Notification variant="danger" message="No Received Offers found" />
+            <Notification variant="danger" message="No such offers available" />
           ) : (
             <Row>
               {offersR.offers.length === 0 ? (
                 <Alert variant="danger" className="d-none d-lg-block">
-                  No Received Offers
+                  No such offers available
                 </Alert>
               ) : (
                 <MyOffers offers={offersR.offers} />
@@ -301,12 +299,12 @@ function OffersScreen() {
           ) : errorS ? (
             <Notification variant="danger" message={errorS} />
           ) : offersS == null ? (
-            <Notification variant="danger" message="No Sent Offers found" />
+            <Notification variant="danger" message="No such offers available" />
           ) : (
             <Row>
               {offersS.offers.length === 0 ? (
                 <Alert variant="danger" className="d-none d-lg-block">
-                  No Sent Offers
+                  No such offers available
                 </Alert>
               ) : (
                 <SentOffers offers={offersS.offers} />
@@ -383,24 +381,26 @@ function OffersScreen() {
               </Form.Label>
             </Form.Group>
           </Form>
+
           {loadingSO ? (
             <Loader />
           ) : errorSO ? (
             <Notification variant="danger" message={errorSO} />
           ) : offersSO == null ? (
-            <Notification variant="danger" message="No Sent Offers found" />
+            <Notification variant="danger" message="No such offers available" />
           ) : (
             <Row>
               {offersSO.offers.length === 0 ? (
                 <Alert variant="danger" className="d-none d-lg-block">
-                  No Sold Items
+                  No such offers available
                 </Alert>
               ) : (
-                <BoughtOffers offers={offersSO.offers} />
+                <SoldOffers offers={offersSO.offers} />
               )}
             </Row>
           )}
         </Tab>
+
         <Tab eventKey="bought" title="Bought Items">
           <h4>My Bought Items</h4>
           <Dropdown>
@@ -443,6 +443,7 @@ function OffersScreen() {
             </Dropdown.Menu>
           </Dropdown>
           <br></br>
+          
           <Form>
             <div key={`inline-switch`} className="mb-3">
               <Form.Check
@@ -470,23 +471,22 @@ function OffersScreen() {
               </Form.Label>
             </Form.Group>
           </Form>
-          {loadingB ? (
-            <Loader />
-          ) : errorB ? (
-            <Notification variant="danger" message={errorB} />
-          ) : offersB == null ? (
-            <Notification variant="danger" message="No Sent Offers found" />
-          ) : (
-            <Row>
-              {offersB.offers.length === 0 ? (
-                <Alert variant="danger" className="d-none d-lg-block">
-                  No Bought Items
-                </Alert>
-              ) : (
-                <BoughtOffers offers={offersB.offers} />
+          {loadingB ? (<Loader />) 
+                  : errorB
+                      ? (<Notification variant="danger" message={errorB} />) 
+                          : offersB == null
+                              ? (<Notification variant="danger" message="No such offers available" />)
+                                  : (
+                                      <Row>
+                                          {offersB.offers.length === 0 ? (
+                                            <Alert variant="danger" className="d-none d-lg-block">
+                                                No such offers available
+                                            </Alert>
+                                          ) : (
+                                            <BoughtOffers offers={offersB.offers}/>
+                                          )}
+                                      </Row>
               )}
-            </Row>
-          )}
         </Tab>
       </Tabs>
     </div>

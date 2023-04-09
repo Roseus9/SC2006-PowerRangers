@@ -55,6 +55,8 @@ class Offer(models.Model):
     isComplete = models.BooleanField(default=False, blank=False)
     completedAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True)
+    isReviewedBuyer = models.BooleanField(default=False, blank=False)
+    isReviewedSeller = models.BooleanField(default=False, blank=False)
     _id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):

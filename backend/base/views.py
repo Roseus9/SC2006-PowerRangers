@@ -8,9 +8,9 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 
-from .models import Product, User, Profile, Offer, Bookmark
+from .models import Product, Review, User, Profile, Offer, Bookmark
 # import the Serializers
-from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer, BookmarkSerializer
+from .serializer import ProductSerializer, ReviewSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer, BookmarkSerializer
 
 # JWT imports for customising tokens to return token information directly to front end
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -18,6 +18,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import datetime 
 # password hashing
 from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
 
 # customising the token to return token information directly to front end
 # serialising more information about the user
@@ -237,7 +238,6 @@ def createOffer(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getUserProfile(request, id):
-    requesteruser = request.user
     user = User.objects.get(_id=id) 
     # serialize the User object using the UserSerializer class
     # the many=False argument indicates that we are serializing a single User
@@ -463,6 +463,7 @@ def soldItems(request, slug):
     # first find the seller
     user = User.objects.get(username=slug) 
     serializedUser = UserSerializerWithToken(user, many=False).data
+
     # get his offers
     try:
         if status == "completed":
@@ -511,7 +512,9 @@ def soldItems(request, slug):
         # and get his products for these offers
     try:
         for offer in serializedOffer:
-            offer['buyer'] = UserSerializer(User.objects.get(id=offer['buyer']), many=False).data
+            buyerID = offer['buyer']
+            offer['buyer'] = UserSerializer(User.objects.get(id=buyerID), many=False).data
+            offer['profile'] = UserProfilesSerializer(Profile.objects.get(user=buyerID)).data
 
     except:
         message = {'detail': 'Cant find the buyer for the offer'}
@@ -574,7 +577,7 @@ def boughtItems(request, slug):
     # and get his products for these offers
     try:
         for offer in serializedOffer:
-            offer['product'] = ProductSerializer(Product.objects.get(_id=offer['product']), many=False).dat
+            offer['product'] = ProductSerializer(Product.objects.get(_id=offer['product']), many=False).data
 
     except:
         message = {'detail': 'Cant find the product in the offer'}
@@ -583,7 +586,10 @@ def boughtItems(request, slug):
         # and get his products for these offers
     try:
         for offer in serializedOffer:
-            offer['seller'] = UserSerializer(User.objects.get(id=offer['seller']), many=False).data
+            sellerID = offer['seller']
+            offer['seller'] = UserSerializer(User.objects.get(id=sellerID), many=False).data
+            offer['profile'] = UserProfilesSerializer(Profile.objects.get(user=sellerID)).data
+
 
     except:
         message = {'detail': 'Cant find the seller for the offer'}
@@ -643,3 +649,174 @@ def findUserBookmarks(request, uid):
         message = {'detail': 'no bookmarked listings!'}
         return Response(message)
     
+
+@api_view(['PUT'])
+def completeOffer(request, id, flag):
+    o = Offer.objects.get(_id=id)
+    #   if flag, complete the offer
+    #   also cascade delete on all other offers for the same product
+    if flag.lower() == 'true':
+        o.isComplete = True
+        o.completedAt = datetime.now()
+        o.save()
+        serializer = OfferSerializer(o, many=False)
+        # update the field in the product
+        p = o.product
+        p.isComplete = True
+        p.completedAt = datetime.now()
+        p.save()
+
+        # delete all other offers for the same product
+        Offer.objects.filter(product=o.product).exclude(_id=id).delete()
+        
+        return Response(serializer.data)
+
+    else: 
+        #   delete offer
+        o.delete()
+        return Response({'message': 'declined successfully'})
+
+@api_view(['POST'])
+def makeReview(request, oid, id, flag):
+    data = request.data
+    print(data)
+    # get buyer and seller
+    try:
+        buyer = User.objects.get(id=data.get('buyer'))
+        seller = User.objects.get(id=data.get('seller'))
+    except:
+        message = {'detail': 'Cant find the buyer or seller'}
+        print(message)
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    # get product
+    try:
+        product = Product.objects.get(_id=data.get('product'))
+    except:
+        message = {'detail': 'Cant find the product'}
+        print(message)
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    # get offer
+    try:
+        print("=======", oid)
+        offer = Offer.objects.get(_id=oid)
+        print(offer)
+        if flag.lower() == "true":
+            offer.isReviewedBuyer = True
+        else:
+            print("isreviewseller")
+            offer.isReviewedSeller = True
+        offer.save()
+    except:
+        message = {'detail': 'Cant find the offer'}
+        print(message)
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        review = Review.objects.create(
+            buyer=buyer,
+            seller=seller,
+            rating=int(data.get('rating')),
+            content=data.get('content'),
+            product=product,
+            is_from_buyer=True if flag.lower() == "true" else False,
+        )
+        serializer = ReviewSerializer(review, many=False)
+        print("CREATED REVIEW", serializer)
+        return Response(serializer.data)
+    except ValidationError as e:
+        message = {'detail': str(e)}
+        print(message)
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        message = {'detail': 'Review create failed'}
+        print(message)
+        return Response(message, status = status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def getReview(request, id, flag):
+    # if flag is true, then the user is a buyer
+    # else, the user is a seller
+    # id is the user
+    try:
+        reviewBuyer = Review.objects.filter(buyer=id, is_from_buyer=False)
+        serializedReviewBuyer = ReviewSerializer(reviewBuyer, many=True).data
+        print(serializedReviewBuyer)
+        reviewSeller = Review.objects.filter(seller=id, is_from_buyer=True)
+        serializedReviewSeller = ReviewSerializer(reviewSeller, many=True).data
+        print(serializedReviewSeller)
+    except:
+        message = {'detail': 'No such reviews exist'}
+        print(message)
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        totalrating = []
+        if len(serializedReviewBuyer) > 0:
+            for review in serializedReviewBuyer:
+                review['product'] = ProductSerializer(Product.objects.get(_id=review['product']), many=False).data
+                review['buyer'] = UserSerializerWithToken(User.objects.get(id=review['buyer']), many=False).data
+                review['seller'] = UserSerializerWithToken(User.objects.get(id=review['seller']), many=False).data
+                totalrating.append(int(review['rating']))
+        if len(serializedReviewSeller) > 0:
+            for review in serializedReviewSeller:
+                review['product'] = ProductSerializer(Product.objects.get(_id=review['product']), many=False).data
+                review['buyer'] = UserSerializerWithToken(User.objects.get(id=review['buyer']), many=False).data
+                review['seller'] = UserSerializerWithToken(User.objects.get(id=review['seller']), many=False).data
+                totalrating.append(int(review['rating']))
+        if len(totalrating) > 0:
+            average = sum(totalrating)/len(totalrating)
+
+        else:
+            average = 0
+
+
+    except:
+        message = {'detail': 'Cant find the product/buyer/seller in the review'}
+        print(message)
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+    data = {
+        'buyerReviews': serializedReviewBuyer,
+        'sellerReviews': serializedReviewSeller,
+        'totalrating': str(average),
+        'raters': str(len(totalrating)),
+    }
+    return Response(data)
+
+
+    
+
+@api_view(['GET'])
+def getComplete(request, id):
+    # first find the offer
+    try:
+        offer = Offer.objects.get(_id=id)
+        serializedOffer = OfferSerializer(offer, many=False).data
+    except:
+        message = {'detail': 'No such offer exists'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+    # the buyer and seller
+    try:
+        buyer = User.objects.get(id=serializedOffer['buyer'])
+        seller = User.objects.get(id=serializedOffer['seller'])
+        serializedOffer['buyer'] = UserSerializerWithToken(buyer, many=False).data
+        serializedOffer['seller'] = UserSerializerWithToken(seller, many=False).data
+    except:
+        message = {'detail': 'No such buyer/seller exists'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+    # and get the product for this offers
+    try:
+        serializedOffer['product'] = ProductSerializer(Product.objects.get(_id=serializedOffer['product']), many=False).data
+
+    except:
+        message = {'detail': 'Cant find the product in the offer'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    data = {
+        'offer': serializedOffer,
+    }
+
+    return Response(data)
+

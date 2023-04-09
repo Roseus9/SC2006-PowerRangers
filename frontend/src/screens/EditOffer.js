@@ -14,13 +14,15 @@ import { FormLabel } from "react-bootstrap";
 import { OFFER_CREATE_RESET } from "../constants/constants";
 import Loader from "../components/Loader";
 import { getOffer, editOffer } from "../actions/offerActions";
+
 function EditOffer() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { oid } = useParams();
   const [price, setPrice] = useState(0);
-  const userRegister = useSelector((state) => state.userLogin);
-  let { loading, userInfo } = userRegister;
+  const userDetails = useSelector((state) => state.userDetails);
+  let { userObj } = userDetails;
+  let { user } = userObj;
 
   const getOfferState = useSelector((state) => state.getOffer);
   let { success, offer } = getOfferState;
@@ -28,28 +30,31 @@ function EditOffer() {
   const editOfferState = useSelector((state) => state.offerEdit);
   // for when the cancel button is clicked
   const cancelClicked = () => {
-    navigate("/offers/" + userInfo.name);
+    navigate("/offers/" + user.name);
   };
 
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+    dispatch(getOffer(oid));
+  }, [user]);
+
+  useEffect(() => {
     //user can't acess edit offer page if the offer does not belong to them
-    if (offer) {
-      if (offer.buyer != userInfo.id) {
+    if (offer && user) {
+      console.log("offer", offer.buyer);
+      console.log("user", user.id);
+      if (user && offer.buyer != user.id) {
         navigate("/");
       }
       setPrice(offer.price);
     }
-  }, [offer]);
-  useEffect(() => {
-    //user cant access edit offer page if not logged in
-    if (!userInfo) {
-      navigate("/login");
-    }
-    dispatch(getOffer(oid));
-  }, [userInfo, navigate]);
+  }, [offer, user]);
+
   useEffect(() => {
     if (editOfferState && editOfferState.success)
-      navigate("/offers/" + userInfo.name);
+      navigate("/offers/" + user.username);
   }, [editOfferState]);
 
   const submitHandler = (e) => {

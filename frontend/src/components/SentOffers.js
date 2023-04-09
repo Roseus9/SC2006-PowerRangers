@@ -9,6 +9,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteOfferAction } from "../actions/offerActions";
 import { useDispatch } from "react-redux";
+import { OFFER_EDIT_RESET } from "../constants/constants";
+
 function SentOffers({ offers }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,7 +27,8 @@ function SentOffers({ offers }) {
   );
 
   const editOffer = (offer) => {
-    console.log("editoffer", offer);
+    console.log("editoffer", offer._id);
+    dispatch({type: OFFER_EDIT_RESET})
     navigate("/edit/offer/" + offer._id);
   };
 
@@ -52,6 +55,7 @@ function SentOffers({ offers }) {
   };
 
   const deleteOffer = (offer) => {
+    toast.dismiss();
     dispatch(deleteOfferAction(offer._id));
   };
   return (
@@ -74,7 +78,7 @@ function SentOffers({ offers }) {
             <th>#</th>
             <th>Product Name</th>
             <th></th>
-            <th>Seller Username</th>
+            <th>Seller Profile</th>
             <th>Offered Price</th>
             <th>Offered Time</th>
             <th>Actions</th>
@@ -104,20 +108,25 @@ function SentOffers({ offers }) {
                   src={offer.product.image}
                   alt={offer.product.name}
                   style={{
-                    height: "200px",
-                    width: "350px",
+                    height: "150px",
+                    width: "250px",
                     objectFit: "cover",
                   }}
                 />
               </td>
 
-              <td onClick={() => alertClicked(offer.seller.username)}>
+              <td>
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 400 }}
                   overlay={renderTooltip}
                 >
-                  <Button variant="primary">@{offer.seller.username}</Button>
+                  <Button
+                    variant="outline-dark"
+                    onClick={() => alertClicked(offer.seller.username)}
+                  >
+                    @{offer.seller.username}
+                  </Button>
                 </OverlayTrigger>
               </td>
 

@@ -25,8 +25,10 @@ urlpatterns = [
     # sold and bought items
     path("offer/bought/<str:slug>", views.boughtItems, name="received-offers"),
     path("offer/sold/<str:slug>", views.soldItems, name="sent-offers"),
-    #responding to offers
+    # responding to offers
     path("offer/<str:oid>/<str:flag>", views.respondOffer, name="respond-offer"),
+    # complete offer
+    path("offer/complete/<str:id>/<str:flag>", views.completeOffer, name="complete-offer"),
     #deleting offers
     path("offerdelete/<str:oid>",views.deleteOffer, name="delete-offer" ),
     #get offer details 
@@ -54,5 +56,12 @@ urlpatterns = [
     path('checkbookmark/<str:pid>/<str:uid>', views.checkBookmark, name='check-bookmark'),
     path('changebookmark/<str:pid>/<str:uid>/<str:flag>', views.changeBookmark, name='check-bookmark'),
     path('findbookmarks/<str:pid>', views.findBookmarks, name='find-bookmarks'),
-    path('finduserbookmarks/<str:uid>', views.findUserBookmarks, name='find-user-bookmarks')
+    path('finduserbookmarks/<str:uid>', views.findUserBookmarks, name='find-user-bookmarks'),
+
+    #create review on completed offer
+    path('offer/review/create/<str:oid>/<str:id>/<str:flag>', views.makeReview, name='make-review'),
+    #get reviews for a user, flag checks if its as a buyer or as seller
+    path('offer/review/get/<str:id>/<str:flag>', views.getReview, name='get-review'),
+    #get a completed offer based on id
+    path('offer/get/complete/<str:id>', views.getComplete, name='get-complete'),
 ]

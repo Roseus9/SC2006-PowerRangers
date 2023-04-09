@@ -18,13 +18,15 @@ export const Bookmarked = () => {
   let dispatch = useDispatch();
   let navigate = useNavigate();
 
-  const userRegister = useSelector((state) => state.userLogin);
+  const userLogin = useSelector((state) => state.userLogin);
   const userBookmarksState = useSelector((state) => state.findUserBookmark);
   let { loading, error, products, done } = userBookmarksState;
-  let { userInfo = {} } = userRegister;
+  let { userInfo } = userLogin;
+  let { _id = {} } = userInfo;
   useEffect(() => {
-    if (!userInfo) navigate("/");
-    dispatch(findUserBookmarks(userInfo.id));
+    if (!_id) navigate("/");
+    console.log(_id);
+    dispatch(findUserBookmarks(_id));
   }, []);
 
   return (
@@ -33,7 +35,7 @@ export const Bookmarked = () => {
         <Loader />
       ) : error ? (
         <Notification variant="danger" message={error} />
-      ) : products.length === 0 ? (
+      ) : products.detail ? (
         <Alert variant="danger" style={{ marginTop: "25px" }}>
           No results found.
         </Alert>

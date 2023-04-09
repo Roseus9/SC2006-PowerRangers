@@ -37,13 +37,16 @@ function CreateOffer() {
   useEffect(() => {
     setProduct(productID)
     if (success) {
-       dispatch({ type: OFFER_CREATE_RESET });
        navigate("/");
      }
     if (!userInfo) {
         navigate("/login")
     }
-  }, [userInfo, navigate, success])
+    if (error) {
+      toast.error("Failed to make Offer, Invalid Value");
+      dispatch({ type: OFFER_CREATE_RESET });
+    }
+  }, [userInfo, navigate, success, error])
 
   const submitHandler = (e) => {
     e.preventDefault();

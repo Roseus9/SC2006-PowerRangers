@@ -29,6 +29,10 @@ import {
   offerBoughtReducer,
   offerSoldReducer,
   offerRespondReducer,
+  offerCompleteReducer,
+  getCompleteOfferReducer,
+  createReviewReducer,
+  getReviewReducer,
   offerDeleteReducer,
   getOfferReducer,
   editOfferReducer,
@@ -63,6 +67,10 @@ const store = configureStore({
     changeBookmark: changeBookmarkReducer,
     findBookmark: findBookmarkReducer,
     findUserBookmark: findUserBookmarkReducer,
+    offerComplete: offerCompleteReducer,
+    getCompleteOffer: getCompleteOfferReducer,
+    createReview: createReviewReducer,
+    getReview: getReviewReducer,
   },
   preloadedState: {
     userLogin: {

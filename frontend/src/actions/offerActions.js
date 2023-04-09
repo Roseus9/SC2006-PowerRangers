@@ -17,12 +17,27 @@ import {
   OFFER_BOUGHT_REQUEST,
   OFFER_BOUGHT_SUCCESS,
   OFFER_BOUGHT_FAIL,
+  OFFER_COMPLETE_REQUEST,
+  OFFER_COMPLETE_SUCCESS,
+  OFFER_COMPLETE_FAIL,
+  OFFER_COMPLETE_GET_REQUEST,
+  OFFER_COMPLETE_GET_SUCCESS,
+  OFFER_COMPLETE_GET_FAIL,
+  OFFER_COMPLETE_GET_RESET,
   OFFER_SOLD_REQUEST,
   OFFER_SOLD_SUCCESS,
   OFFER_SOLD_FAIL,
   OFFER_RESPOND_REQUEST,
   OFFER_RESPOND_SUCCESS,
   OFFER_RESPOND_FAIL,
+  REVIEW_CREATE_REQUEST,
+  REVIEW_CREATE_SUCCESS,
+  REVIEW_CREATE_FAIL,
+  REVIEW_CREATE_RESET,
+  REVIEW_GET_REQUEST,
+  REVIEW_GET_SUCCESS,
+  REVIEW_GET_FAIL,
+  REVIEW_GET_RESET,
   OFFER_DELETE_REQUEST,
   OFFER_DELETE_SUCCESS,
   OFFER_DELETE_FAIL,
@@ -37,7 +52,7 @@ import {
 //---------------------------------------
 
 // ACTION CREATORS ----------------
-//  Action creator for getting a list of products
+//  Action creator for creating an offer
 //  action object contains type and payload
 
 export const createOffer = (price, product) => async (dispatch, getState) => {
@@ -212,7 +227,6 @@ export const deleteOfferAction = (oid) => async (dispatch, getState) => {
 export const getOffer = (oid) => async (dispatch, getState) => {
   try {
     dispatch({ type: OFFER_GET_REQUEST });
-    console.log(typeof oid);
     const {
       userLogin: { userInfo },
     } = getState();
@@ -260,6 +274,123 @@ export const editOffer = (oid, price) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: OFFER_EDIT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//  Action creator for putting in a completed offer
+// flag == true means the offer is completed
+// flag == false means the offer is to be declined
+//  action object contains type and payload
+export const completeOffer = (id, flag) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: OFFER_COMPLETE_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `/api/offer/complete/${id}/${flag}`,
+      {},
+      config
+    );
+    console.log("COMPLETE OFFERS SUCCESSFULLY UPDATED! returned data:", data);
+    dispatch({ type: OFFER_COMPLETE_SUCCESS, payload: data, flag: flag });
+  } catch (error) {
+    dispatch({
+      type: OFFER_COMPLETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//  Action creator for getting a specific completed offer
+export const getCompleteOfferAction = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: OFFER_COMPLETE_GET_REQUEST });
+
+    const { data } = await axios.get(`/api/offer/get/complete/${id}`);
+    console.log("COMPLETE OFFERS SUCCESSFULLY OBTAINED! returned data:", data);
+    dispatch({ type: OFFER_COMPLETE_GET_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: OFFER_COMPLETE_GET_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//  Action creator for creating a review
+export const createReviewAction =
+  (review, offerID, userID, flag) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: REVIEW_CREATE_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `/api/offer/review/create/${offerID}/${userID}/${flag}`,
+        review,
+        config
+      );
+
+      dispatch({
+        type: REVIEW_CREATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: REVIEW_CREATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+//  Action creator for getting all reviews of a user
+export const getReviewAction = (userID, flag) => async (dispatch) => {
+  try {
+    dispatch({
+      type: REVIEW_GET_REQUEST,
+    });
+
+    const { data } = await axios.get(`/api/offer/review/get/${userID}/${flag}`);
+    console.log("SUCCESSFULLY RECEIVED REVIEWS!", data);
+    dispatch({
+      type: REVIEW_GET_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: REVIEW_GET_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

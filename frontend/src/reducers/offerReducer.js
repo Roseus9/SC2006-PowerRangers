@@ -16,9 +16,25 @@ import {
   OFFER_BOUGHT_REQUEST,
   OFFER_BOUGHT_SUCCESS,
   OFFER_BOUGHT_FAIL,
+  OFFER_COMPLETE_REQUEST,
+  OFFER_COMPLETE_SUCCESS,
+  OFFER_COMPLETE_FAIL,
+  OFFER_COMPLETE_RESET,
   OFFER_SOLD_REQUEST,
   OFFER_SOLD_SUCCESS,
   OFFER_SOLD_FAIL,
+  OFFER_COMPLETE_GET_REQUEST,
+  OFFER_COMPLETE_GET_SUCCESS,
+  OFFER_COMPLETE_GET_FAIL,
+  OFFER_COMPLETE_GET_RESET,
+  REVIEW_CREATE_REQUEST,
+  REVIEW_CREATE_SUCCESS,
+  REVIEW_CREATE_FAIL,
+  REVIEW_CREATE_RESET,
+  REVIEW_GET_REQUEST,
+  REVIEW_GET_SUCCESS,
+  REVIEW_GET_FAIL,
+  REVIEW_GET_RESET,
   OFFER_DELETE_REQUEST,
   OFFER_DELETE_SUCCESS,
   OFFER_DELETE_FAIL,
@@ -172,6 +188,85 @@ export const editOfferReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case OFFER_EDIT_RESET:
       return { loading: false, success: false };
+    default:
+      return state;
+  }
+};
+
+export const offerCompleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_COMPLETE_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_COMPLETE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        message: action.payload,
+        flag: action.flag,
+      };
+    case OFFER_COMPLETE_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_COMPLETE_RESET:
+      return { loading: false, success: false, flag: null };
+    default:
+      return state;
+  }
+};
+
+
+
+export const getCompleteOfferReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OFFER_COMPLETE_GET_REQUEST:
+      return { loading: true, success: false };
+    case OFFER_COMPLETE_GET_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        offers: action.payload,
+      };
+    case OFFER_COMPLETE_GET_FAIL:
+      return { loading: false, error: action.payload };
+    case OFFER_COMPLETE_GET_RESET:
+      return { loading: false, success: false};
+    default:
+      return state;
+  }
+};
+
+export const createReviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case REVIEW_CREATE_REQUEST:
+      return { loading: true, success: false };
+    case REVIEW_CREATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        review: action.payload,
+      };
+    case REVIEW_CREATE_FAIL:
+      return { loading: false, error: action.payload };
+    case REVIEW_CREATE_RESET:
+      return { loading: false, success: false, error: false};
+    default:
+      return state;
+  }
+};
+
+export const getReviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case REVIEW_GET_REQUEST:
+      return { loading: true, success: false };
+    case REVIEW_GET_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        review: action.payload,
+      };
+    case REVIEW_GET_FAIL:
+      return { loading: false, error: action.payload };
+    case REVIEW_GET_RESET:
+      return { loading: false, success: false, error: false};
     default:
       return state;
   }
