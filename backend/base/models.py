@@ -23,7 +23,7 @@ class Product(models.Model):
     completedAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     _id = models.AutoField(primary_key=True, editable=False)
     image = models.ImageField(null=True, blank=True)
-    likes = models.IntegerField(default=0, null=False, blank=True, editable=False)
+
 
     def __str__(self):
         return self.name

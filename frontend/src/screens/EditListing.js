@@ -85,7 +85,6 @@ function EditListing() {
 
   useEffect(() => {
     if (item.done == true) {
-      console.log("effect", product);
       setTitle(product.name);
       setBlurb(product.description);
       setCondition(product.condition == true ? "new" : "old");
@@ -137,15 +136,13 @@ function EditListing() {
       return;
     }
 
-    if (!price.match("^[0-9]{1,4}(\.[0-9]{1,2})?$"))
-    {
+    if (!price.match("^[0-9]{1,4}(.[0-9]{1,2})?$")) {
       {
         toast.error("Invalid price!");
         return;
       }
     }
-    if(price.match("^[0-9]{5,}(\.[0-9]{1,2})?$"))
-    {
+    if (price.match("^[0-9]{5,}(.[0-9]{1,2})?$")) {
       {
         toast.error("Accepted range: $0.00 - $9999.99!");
         return;
