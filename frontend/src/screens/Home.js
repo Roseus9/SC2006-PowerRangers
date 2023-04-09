@@ -87,6 +87,8 @@ function Home() {
       toast.success("Offer created!");
       dispatch({ type: OFFER_CREATE_RESET });
     }
+
+    
   }, [
     dispatch,
     keyword,

@@ -37,7 +37,6 @@ function CreateOffer() {
   useEffect(() => {
     setProduct(productID)
     if (success) {
-       dispatch({ type: OFFER_CREATE_RESET });
        navigate("/");
      }
     if (!userInfo) {

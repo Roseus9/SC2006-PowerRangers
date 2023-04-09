@@ -17,23 +17,6 @@ import {
 import { configureStore } from "@reduxjs/toolkit";
 import { BookmarkReducer } from "./reducers/bookmarkReducer";
 // importing the offer reducers
-<<<<<<< HEAD
-
-import {
-  offerRespondReducer,
-  offerDeleteReducer,
-  getOfferReducer,
-  editOfferReducer,
-  offerCompleteReducer,
-  offerCreateReducer, 
-  offerReceivedReducer, 
-  offerSentReducer, 
-  offerBoughtReducer, 
-  offerSoldReducer,  
-  offerRespondReducer, 
-  getCompleteOfferReducer,
-  createReviewReducer,
-=======
 import { 
   offerCreateReducer,
   offerReceivedReducer,
@@ -48,7 +31,6 @@ import {
   offerDeleteReducer,
   getOfferReducer,
   editOfferReducer,
->>>>>>> feature1
 } from "./reducers/offerReducer";
 
 // const initialState = {}

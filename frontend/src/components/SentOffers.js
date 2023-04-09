@@ -52,6 +52,7 @@ function SentOffers({ offers }) {
   };
 
   const deleteOffer = (offer) => {
+    toast.dismiss();
     dispatch(deleteOfferAction(offer._id));
   };
   return (

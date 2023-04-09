@@ -7,92 +7,45 @@ import Image from "react-bootstrap/Image";
 import { ToastContainer, toast } from "react-toastify";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
+
 function BoughtOffers({offers}) {
-    const navigate = useNavigate();
-    const alertClicked = (slug) => {
-        navigate("/profile/" + slug);
-        };
-    const productClicked = (id) => {
-        navigate("/product/" + id);
-        }; 
-    const reviewClicked = (id) => {
-        navigate("/review/" + id);
-        }; 
-    const renderTooltip = (props) => (
-        <Tooltip id="button-tooltip" {...props}>
-            Click to Visit Profile
-        </Tooltip>
-        );
-    const renderTooltipTelegram = (props) => (
-        <Tooltip id="button-tooltip" {...props}>
-            Redirect to Telegram Web Chat
-        </Tooltip>
-        );
-    const telegramClicked = (tele) => {
-        toast.clearWaitingQueue();
-        toast.dark(
-            <div>
-                ⚠️ This will redirect you to an external site, "telegram.com", proceed? <br />
-                <Button className="my-3" onClick={() => {redirect(tele)}}>
-                Yes
-                </Button>
-                <Button className="my-3" variant="danger" style={{ marginLeft: "10px" }}>
-                No
-                </Button>
-            </div>
-            , {toastId: "toastID", limit: 1});
-    };
-    const redirect = (tele) => {
-        window.location.href = "https://web.telegram.org/k/#@"+tele;
-    }
-
-
-function BoughtOffers({ offers }) {
   const navigate = useNavigate();
   const alertClicked = (slug) => {
-    navigate("/profile/" + slug);
-  };
+      navigate("/profile/" + slug);
+      };
   const productClicked = (id) => {
-    navigate("/product/" + id);
-  };
+      navigate("/product/" + id);
+      }; 
+  const reviewClicked = (id) => {
+      navigate("/review/" + id);
+      }; 
   const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Click to Visit Profile
-    </Tooltip>
-  );
+      <Tooltip id="button-tooltip" {...props}>
+          Click to Visit Profile
+      </Tooltip>
+      );
   const renderTooltipTelegram = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Redirect to Telegram Web Chat
-    </Tooltip>
-  );
+      <Tooltip id="button-tooltip" {...props}>
+          Redirect to Telegram Web Chat
+      </Tooltip>
+      );
   const telegramClicked = (tele) => {
-    toast.clearWaitingQueue();
-    toast.dark(
-      <div>
-        ⚠️ This will redirect you to an external site, "telegram.com", proceed?{" "}
-        <br />
-        <Button
-          className="my-3"
-          onClick={() => {
-            redirect(tele);
-          }}
-        >
-          Yes
-        </Button>
-        <Button
-          className="my-3"
-          variant="danger"
-          style={{ marginLeft: "10px" }}
-        >
-          No
-        </Button>
-      </div>,
-      { toastId: "toastID", limit: 1 }
-    );
+      toast.clearWaitingQueue();
+      toast.dark(
+          <div>
+              ⚠️ This will redirect you to an external site, "telegram.com", proceed? <br />
+              <Button className="my-3" onClick={() => {redirect(tele)}}>
+              Yes
+              </Button>
+              <Button className="my-3" variant="danger" style={{ marginLeft: "10px" }}>
+              No
+              </Button>
+          </div>
+          , {toastId: "toastID", limit: 1});
   };
   const redirect = (tele) => {
-    window.location.href = "https://web.telegram.org/k/#@" + tele;
-  };
+      window.location.href = "https://web.telegram.org/k/#@"+tele;
+  }
   return (
     <div>
       <Table striped hover>
@@ -167,5 +120,5 @@ function BoughtOffers({ offers }) {
     </div>
   );
 }
-}
+
 export default BoughtOffers;
