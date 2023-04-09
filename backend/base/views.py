@@ -8,9 +8,9 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 
-from .models import Product, User, Profile, Offer
+from .models import Product, User, Profile, Offer, Bookmark
 # import the Serializers
-from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer
+from .serializer import ProductSerializer, UserSerializer, UserSerializerWithToken, UserProfilesSerializer, OfferSerializer, BookmarkSerializer
 
 # JWT imports for customising tokens to return token information directly to front end
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -77,6 +77,9 @@ def getRoutes(request):
             '/api/users/register',
             '/api/users/login',
             'api/users',
+            '/api/checkbookmark/<pid>/<uid>',
+            '/api/changebookmark/<pid>/<uid>/<flag>',
+            'api/findbookmarks/<pid>'
     ]
 
     return Response(routes)
@@ -593,3 +596,38 @@ def boughtItems(request, slug):
 
     return Response(data)
 
+@api_view(['GET'])
+def checkBookmark(request, pid, uid):
+    try:
+        user = User.objects.get(id=uid)
+        product = Product.objects.get(_id=pid)
+        b = Bookmark.objects.get(user=user, product=product)
+        message = {'flag': True}
+        
+    except: 
+        message = {'flag': False}
+    return Response(message)
+    
+@api_view(['POST'])
+def changeBookmark(request, pid, uid, flag):
+    user = User.objects.get(id=uid)
+    product = Product.objects.get(_id=pid)
+    if (flag == "false" or flag == "False" or flag == False):
+        b = Bookmark.objects.create(
+            user=user, 
+            product=product
+        )
+        message = {'newFlag': True}
+    else: 
+        b = Bookmark.objects.get(user=user, product=product)
+        b.delete()
+        message = {'newFlag': False}
+    return Response(message)
+
+@api_view(['GET'])
+def findBookmarks(request, pid):
+    product = Product.objects.get(_id=pid)
+    count = Bookmark.objects.filter(product=product).count()
+    message = {'count': count}
+    return Response(message)
+    

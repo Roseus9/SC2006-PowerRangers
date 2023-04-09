@@ -48,5 +48,10 @@ urlpatterns = [
     
     #edit listing
     path('editproduct', views.editProduct, name='edit-product'),
-    path('deleteproduct', views.deleteProduct, name='delete-product')
+    path('deleteproduct', views.deleteProduct, name='delete-product'),
+    
+    #check if bookmark exists 
+    path('checkbookmark/<str:pid>/<str:uid>', views.checkBookmark, name='check-bookmark'),
+    path('changebookmark/<str:pid>/<str:uid>/<str:flag>', views.changeBookmark, name='check-bookmark'),
+    path('findbookmarks/<str:pid>', views.findBookmarks, name='find-bookmarks')
 ]

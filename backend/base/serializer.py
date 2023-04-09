@@ -76,5 +76,9 @@ class UserProfilesSerializer(serializers.ModelSerializer):
         model = Profile
         fields = '__all__'
         
-
+class BookmarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'
+        
 

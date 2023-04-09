@@ -64,9 +64,8 @@ class Offer(models.Model):
 class Bookmark(models.Model):
     # (null=True) allows the database to store a NULL value for the field.
     # (blank=True) allows the field to be empty in a form or in the admin interface.
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
-    product = models.OneToOneField(Product, on_delete=models.SET_NULL, null=True)
-    isBookmarked = models.BooleanField(default=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="user")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name="product")
     bookmarkedAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
 

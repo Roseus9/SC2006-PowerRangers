@@ -15,7 +15,11 @@ import {
 // import thunk from 'redux-thunk'
 // import { combineReducers } from 'redux'
 import { configureStore } from "@reduxjs/toolkit";
-import { BookmarkReducer } from "./reducers/bookmarkReducer";
+import {
+  changeBookmarkReducer,
+  findBookmarkReducer,
+  getBookmarkReducer,
+} from "./reducers/bookmarkReducer";
 // importing the offer reducers
 import {
   offerCreateReducer,
@@ -53,9 +57,10 @@ const store = configureStore({
     offerRespond: offerRespondReducer,
     offerBought: offerBoughtReducer,
     offerSold: offerSoldReducer,
-
     userDetails: userDetailsReducer,
-    bookmark: BookmarkReducer,
+    getBookmark: getBookmarkReducer,
+    changeBookmark: changeBookmarkReducer,
+    findBookmark: findBookmarkReducer,
   },
   preloadedState: {
     userLogin: {
