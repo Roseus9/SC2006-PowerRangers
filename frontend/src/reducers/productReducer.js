@@ -35,10 +35,10 @@ const productListInitialState = {
 export const productListReducer = (state = productListInitialState, action) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
-      return { loading: true, products: [] };
+      return { loading: true, done: false, products: [] };
     case PRODUCT_LIST_SUCCESS:
       // if succesful, return a payload of data with the products to the state
-      return { loading: false, products: action.payload };
+      return { loading: false, done: true, products: action.payload };
     // if there is an error, return a new attribute error, passing in the response from the payload
     case PRODUCT_LIST_FAIL:
       return { loading: false, error: action.payload };
@@ -62,7 +62,7 @@ export const productItemReducer = (state = productInitialState, action) => {
       return { loading: true, product: {} };
     case PRODUCT_ITEM_SUCCESS:
       // if succesful, return a payload of data with the products to the state
-      return { loading: false, product: action.payload };
+      return { loading: false, done: true, product: action.payload };
     // if there is an error, return a new attribute error, passing in the response from the payload
     case PRODUCT_ITEM_FAIL:
       return { loading: false, error: action.payload };
@@ -77,6 +77,7 @@ export const productCreateReducer = (state = {}, action) => {
     case PRODUCT_CREATE_REQUEST:
       return {
         loading: true,
+        sucess: false,
       };
 
     case PRODUCT_CREATE_SUCCESS:
@@ -89,6 +90,7 @@ export const productCreateReducer = (state = {}, action) => {
       return {
         loading: false,
         error: action.payload,
+        sucess: false,
       };
     case PRODUCT_CREATE_RESET:
       return {

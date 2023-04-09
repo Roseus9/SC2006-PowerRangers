@@ -5,13 +5,13 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import producttags from "../constants/producttags";
 import locations from "../constants/locations";
-import Select from "react-select"; 
+import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import restrictedItems from "../constants/restrictedItems";
 import { createProduct } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
-import Notification from '../components/Notification';
+import Notification from "../components/Notification";
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_CREATE_RESET } from "../constants/constants";
 import Loader from "../components/Loader";
@@ -39,20 +39,17 @@ function CreateListing() {
   let { product, error, success } = productCreate;
 
   //user cant access create listing page if not logged in
-  const userRegister = useSelector(state => state.userLogin);
-  let { loading, userInfo} = userRegister;
-
+  const userRegister = useSelector((state) => state.userLogin);
+  let { loading, userInfo } = userRegister;
 
   useEffect(() => {
-
     if (success) {
-      dispatch({ type: PRODUCT_CREATE_RESET });
       navigate("/");
     }
     if (!userInfo) {
-        navigate("/login")
+      navigate("/login");
     }
-  }, [userInfo, navigate, success])
+  }, [userInfo, navigate, success]);
 
   const cancelClicked = () => {
     navigate("/");
@@ -134,7 +131,6 @@ function CreateListing() {
     //   delivery: deliveryFlag,
     //   notes: deliveryFlag == true ? deliveryNotes : null,
     //   image: file,
-
 
     dispatch(createProduct(listing));
     if (success) {
@@ -262,7 +258,7 @@ function CreateListing() {
             <Form.Group className="mb-3">
               <Form.Label>Delivery</Form.Label>
               <Form.Check
-                value={deliveryFlag} 
+                value={deliveryFlag}
                 onChange={(e) => {
                   setDeliveryFlag(e.target.checked);
                   var locationBox = document.getElementById("deliveryBox");
@@ -289,34 +285,35 @@ function CreateListing() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-
-              {productCreate.loading ? <Loader/> :
-                 <> 
-                    <Button
-                      type="submit"
-                      variant="secondary"
-                      style={{
-                        backgroundColor: "#F24E1E",
-                        marginRight: "8px",
-                        marginTop: "5px",
-                      }}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      onClick={cancelClicked}
-                      variant="outline-secondary"
-                      style={{ marginTop: "5px" }}
-                    >
-                      Cancel
-                    </Button>
-                  </>              
-                }
+              {productCreate.loading ? (
+                <Loader />
+              ) : (
+                <>
+                  <Button
+                    type="submit"
+                    variant="secondary"
+                    style={{
+                      backgroundColor: "#F24E1E",
+                      marginRight: "8px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    onClick={cancelClicked}
+                    variant="outline-secondary"
+                    style={{ marginTop: "5px" }}
+                  >
+                    Cancel
+                  </Button>
+                </>
+              )}
             </Form.Group>
           </div>
         </div>
       </Form>
-      {error && <Notification variant='danger' message={error}/>}          
+      {error && <Notification variant="danger" message={error} />}
     </div>
   );
 }

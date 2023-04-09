@@ -49,18 +49,43 @@ function CreateListing() {
   const [telegram, setTelegram] = useState("");
   const [message, setMessage] = useState("");
   const submitHandler = (e) => {
-      // this prevents the default action from occurring, 
-      // e.g. prevent "submit" button to test some validation or processing of form data first. 
-      e.preventDefault();
-      if (!telegram.match("^(?=\\w{5,32}\\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$")) {
-        toast.error("Invalid Telegram Username")
+    // this prevents the default action from occurring, 
+    // e.g. prevent "submit" button to test some validation or processing of form data first. 
+    e.preventDefault();
+    if (!name.match("^[a-zA-Z\s.'-,]{1,50}$")) {
+      toast.error("Invalid name, name can only contain letters and spaces")
+      return
+    } 
+    else if (!username.match("^[a-zA-Z0-9_-]{3,16}$")) {
+      if(username.length < 3 || username.length > 16) {
+        toast.error("Invalid Username length, Username needs to be 3-16 characters long")
         return
-      }
-      else if (password != confirmPassword){
-        toast.error("Passwords do not match")
+        } else {
+          toast.error("Invalid Username, Username can only contain letters, numbers, hyphens and underscores")
+        return
+        }
+    }
+    else if (!telegram.match("^(?=\\w{5,32}\\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$")) {
+      toast.error("Invalid Telegram Username")
+      return
+    }
+    else if (password != confirmPassword){
+      toast.error("Passwords do not match")
+      return
+    } 
+    else if (!password.match("^[a-zA-Z0-9@$!%*?&]{8,32}$")) {
+      if(password.length < 8 || password.length > 32) {
+        toast.error("Invalid Password length, Passwords needs to be 8-32 characters long")
+        return 
       } else {
-        dispatch(register(name, username, email, password, telegram));
-      }
+        toast.error("Invalid Password, Password can only contain alphanumeric characters or special characters")
+        return
+      }        
+    } 
+    else {
+      dispatch(register(name, username, email, password, telegram));
+    }
+    
   }
   return (
     <FormContainer>
