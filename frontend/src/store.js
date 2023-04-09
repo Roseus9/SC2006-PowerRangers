@@ -24,7 +24,9 @@ import {
   offerBoughtReducer, 
   offerSoldReducer,  
   offerRespondReducer, 
-  offerCompleteReducer 
+  offerCompleteReducer,
+  getCompleteOfferReducer,
+  createReviewReducer,
 } from "./reducers/offerReducer";
 
 // const initialState = {}
@@ -51,6 +53,8 @@ const store = configureStore({
     offerComplete: offerCompleteReducer,
     userDetails: userDetailsReducer,
     bookmark: BookmarkReducer,
+    getCompleteOffer: getCompleteOfferReducer,
+    createReview: createReviewReducer,
   },
   preloadedState: {
     userLogin: {

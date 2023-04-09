@@ -15,6 +15,9 @@ function BoughtOffers({offers}) {
     const productClicked = (id) => {
         navigate("/product/" + id);
         }; 
+    const reviewClicked = (id) => {
+        navigate("/review/" + id);
+        }; 
     const renderTooltip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
             Click to Visit Profile
@@ -98,14 +101,17 @@ function BoughtOffers({offers}) {
                 <td>{new Date(offer.completedAt ? offer.completedAt : "").toLocaleString()}</td>
                 <td>
                     {offer.isComplete
-                        ? <Button variant='success' disabled>Sold</Button>
+                        ? <Button variant='outline-success' disabled>Sold</Button>
                         : <Button variant='warning' disabled>Pending</Button>
                     }
                 </td>
                 <td>
-                    {offer.isComplete
-                        ? <></>
-                        : <></>
+                    {offer.isComplete ?
+                            (offer.isReviewedBuyer ?
+                            <Button variant='success' disabled>Review</Button> :
+                            <Button variant='success' onClick={() => reviewClicked(offer._id)}>Review</Button>
+                            ) :
+                        <></>
                     }
                 </td>
             </tr>

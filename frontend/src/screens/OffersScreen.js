@@ -101,25 +101,22 @@ const handleAcceptedChange = (event) => {
   }
 
 
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login")
+    }
+    else if (userInfo.username !== username) {
+      navigate("/")
+    }
+  }, [userInfo, username, navigate])
+
 
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
 
-      if (!userInfo) {
-        navigate("/login")
-      }
-      else if (userInfo.username !== username) {
-        navigate("/")
-      }
-
       if (respondState.success) {
         toast.success(respondState.flag ? "Offer Accepted!" : "Offer Deleted!");
         dispatch({ type: OFFER_RESPOND_RESET });
-      }
-
-      if (completeState.success) {
-        toast.success(completeState.flag ? "Offer Completed, all other offers for the same product have been declined!" : "Offer Deleted!");
-        dispatch({ type: OFFER_COMPLETE_RESET });
       }
 
       let status = "all"
@@ -144,7 +141,14 @@ const handleAcceptedChange = (event) => {
       dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+status))
 
       
-  }, [userInfo, accepted, completed, activeSortBy, username, respondState.success, completeState.success, dispatch])
+  }, [accepted, completed, activeSortBy, respondState.success, completeState.success, dispatch])
+
+  useEffect(() => {
+    if (completeState.success) {
+      toast.success("Offer Completed!");
+      dispatch({ type: OFFER_COMPLETE_RESET });
+    }
+  }, [completeState.success, dispatch])
 
 
   return (
@@ -281,7 +285,7 @@ const handleAcceptedChange = (event) => {
                     </Form.Label>
                   </Form.Group>
                 </Form>    
-                {loadingSO ? (<Loader />) 
+                {loadingSO | completeState.loading ? (<Loader />) 
                   : errorSO
                       ? (<Notification variant="danger" message={errorSO} />) 
                           : offersSO == null
