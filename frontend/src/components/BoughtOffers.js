@@ -129,8 +129,8 @@ function BoughtOffers({ offers }) {
                     >
                     <Button variant="outline-dark" onClick={()=> alertClicked(offer.seller.username)}>@{offer.seller.username}</Button>
                     </OverlayTrigger>
-
                 </td>
+
                 <td >
                     <OverlayTrigger
                     placement="bottom"

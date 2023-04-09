@@ -21,6 +21,7 @@ import {
   USER_REGISTER_RESET,
   REVIEW_CREATE_RESET
 } from "../constants/constants";
+
 import { useSearchParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
@@ -77,7 +78,6 @@ function Home() {
       toast.success("Listing created!");
       dispatch({ type: PRODUCT_CREATE_RESET });
     }
-
     if (createReview.success == true){
       toast.success('Review Submitted!');
       dispatch({ type: REVIEW_CREATE_RESET })

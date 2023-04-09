@@ -113,17 +113,6 @@ function OffersScreen() {
       dispatch({ type: OFFER_EDIT_RESET });
     }
   });
-
-  useEffect(() => {
-    if (!userInfo) {
-      navigate("/login")
-    }
-    else if (userInfo.username !== username) {
-      navigate("/")
-    }
-  }, [userInfo, username, navigate])
-
-
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
     console.log(
@@ -148,35 +137,44 @@ function OffersScreen() {
       dispatch({ type: OFFER_RESPOND_RESET });
     }
 
-    let status = "all"
-    if (accepted && completed) {
-      status = "all"
-    } else if (accepted) {
-      status = "accepted"
-    } else if (completed) {
-      status = "completed"
+    if (respondState.success) {
+      toast.success(respondState.flag ? "Offer Accepted!" : "Offer Deleted!");
+      dispatch({ type: OFFER_RESPOND_RESET });
     }
-    else {
-      status = "all"
-    }
-    console.log("Listing Status:", status)
-    console.log("Sort By Time/Price:", activeSortBy)
-    setListingStatus(status)
 
-    dispatch(getUserProfileView(username))
-    dispatch(getUserReceivedOffers(username+"-"+activeSortBy))
-    dispatch(getUserSentOffers(username+"-"+activeSortBy))
-    dispatch(getUserBoughtOffers(username+"-"+activeSortBy+"-"+status))
-    dispatch(getUserSoldOffers(username+"-"+activeSortBy+"-"+status))
-
-    
-}, [accepted, completed, activeSortBy, respondState.success, completeState.success, dispatch])
-
-  useEffect(() => {
     if (completeState.success) {
-      toast.success("Offer Completed!");
+      toast.success(
+        completeState.flag
+          ? "Offer Completed, all other offers for the same product have been declined!"
+          : "Offer Deleted!"
+      );
       dispatch({ type: OFFER_COMPLETE_RESET });
     }
+
+    if (deleteState.success) {
+      toast.success("Offer Deleted!");
+      dispatch({ type: OFFER_DELETE_RESET });
+    }
+
+    let status = "all";
+    if (accepted && completed) {
+      status = "all";
+    } else if (accepted) {
+      status = "accepted";
+    } else if (completed) {
+      status = "completed";
+    } else {
+      status = "all";
+    }
+    console.log("Listing Status:", status);
+    console.log("Sort By Time/Price:", activeSortBy);
+    setListingStatus(status);
+
+    dispatch(getUserProfileView(username));
+    dispatch(getUserReceivedOffers(username + "-" + activeSortBy));
+    dispatch(getUserSentOffers(username + "-" + activeSortBy));
+    dispatch(getUserBoughtOffers(username + "-" + activeSortBy + "-" + status));
+    dispatch(getUserSoldOffers(username + "-" + activeSortBy + "-" + status));
   }, [
     accepted,
     completed,
@@ -388,31 +386,34 @@ function OffersScreen() {
               />
             </div>
 
-                  <Form.Group>
-
-                    <Form.Label>
-                      Listing Status: <Badge bg="primary" >{listingStatus ? listingStatus : "None"}</Badge>
-                    </Form.Label>
-                  </Form.Group>
-                </Form>    
-                {loadingSO | completeState.loading ? (<Loader />) 
-                  : errorSO
-                      ? (<Notification variant="danger" message={errorSO} />) 
-                          : offersSO == null
-                              ? (<Notification variant="danger" message="No Sent Offers found" />)
-                                  : (
-                                      <Row>
-                                          {offersSO.offers.length === 0 ? (
-                                          <Alert variant="danger" className="d-none d-lg-block">
-                                              No Sold Items
-                                          </Alert>
-                                          ) : (
-                                            <SoldOffers offers={offersSO.offers}/>
-                                          )}
-                                      </Row>
-                )}   
-          </Tab>
-          <Tab eventKey="bought" title="Bought Items">
+            <Form.Group>
+              <Form.Label>
+                Listing Status:{" "}
+                <Badge bg="primary">
+                  {listingStatus ? listingStatus : "None"}
+                </Badge>
+              </Form.Label>
+            </Form.Group>
+          </Form>
+          {loadingSO ? (
+            <Loader />
+          ) : errorSO ? (
+            <Notification variant="danger" message={errorSO} />
+          ) : offersSO == null ? (
+            <Notification variant="danger" message="No Sent Offers found" />
+          ) : (
+            <Row>
+              {offersSO.offers.length === 0 ? (
+                <Alert variant="danger" className="d-none d-lg-block">
+                  No Sold Items
+                </Alert>
+              ) : (
+                <SoldOffers offers={offersSO.offers} />
+              )}
+            </Row>
+          )}
+        </Tab>
+        <Tab eventKey="bought" title="Bought Items">
           <h4>My Bought Items</h4>
           <Dropdown>
             <Dropdown.Toggle variant="dark">
