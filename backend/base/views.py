@@ -648,7 +648,7 @@ def makeReview(request, oid, id, flag):
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
     # get offer
     try:
-        print(oid)
+        print("=======", oid)
         offer = Offer.objects.get(_id=oid)
         print(offer)
         if flag.lower() == "true":
@@ -671,6 +671,7 @@ def makeReview(request, oid, id, flag):
             is_from_buyer=True if flag.lower() == "true" else False,
         )
         serializer = ReviewSerializer(review, many=False)
+        print("CREATED REVIEW", serializer)
         return Response(serializer.data)
     except ValidationError as e:
         message = {'detail': str(e)}
@@ -687,11 +688,10 @@ def getReview(request, id, flag):
     # else, the user is a seller
     # id is the user
     try:
-        # if flag.lower() == 'true':
-        reviewBuyer = Review.objects.filter(buyer=id, is_from_buyer=True)
+        reviewBuyer = Review.objects.filter(buyer=id, is_from_buyer=False)
         serializedReviewBuyer = ReviewSerializer(reviewBuyer, many=True).data
         print(serializedReviewBuyer)
-        reviewSeller = Review.objects.filter(seller=id, is_from_buyer=False)
+        reviewSeller = Review.objects.filter(seller=id, is_from_buyer=True)
         serializedReviewSeller = ReviewSerializer(reviewSeller, many=True).data
         print(serializedReviewSeller)
     except:
