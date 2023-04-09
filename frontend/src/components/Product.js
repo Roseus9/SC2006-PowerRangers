@@ -46,12 +46,7 @@ function Product({ product }) {
             <strong>{product.name}</strong>
           </Card.Title>
         </Link>
-        <Card.Text as="div">
-          <div className="my-3">
-            <Rating value={product.rating} />
-            {product.rating} from {product.numReviews} reviews
-          </div>
-        </Card.Text>
+
         <Card.Text
           as="h3"
           className={`my-3`}

@@ -149,10 +149,6 @@ function EditListing() {
       }
     }
 
-    if (!file) {
-      toast.error("Missing image!");
-      return;
-    }
     if (blurb == "") {
       toast.error("Missing description!");
       return;
@@ -219,7 +215,7 @@ function EditListing() {
       />
 
       <Form onSubmit={submitHandler}>
-        <h4>Create New Listing</h4>
+        <h4>Edit Listing</h4>
         <hr />
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{ width: "50%" }}>
