@@ -8,6 +8,9 @@ import {
   BOOKMARK_PRODUCT_REQUEST,
   BOOKMARK_PRODUCT_SUCCESS,
   BOOKMARK_PRODUCT_FAIL,
+  BOOKMARK_REMOVE_REQUEST,
+  BOOKMARK_REMOVE_SUCCESS,
+  BOOKMARK_REMOVE_FAIL,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -42,6 +45,34 @@ export const bookmarkProduct = (productId) => async (dispatch, getState) => {
     } catch (error) {
       dispatch({
         type: BOOKMARK_PRODUCT_FAIL,
+        payload:
+          error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+      });
+    }
+  };
+
+  export const removeBookmark = (productId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: BOOKMARK_REMOVE_REQUEST });
+  
+      const {
+        userLogin: { userInfo },
+      } = getState();
+  
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+  
+      await axios.delete(`/api/bookmark/${productId}`, config);
+  
+      dispatch({ type: BOOKMARK_REMOVE_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: BOOKMARK_REMOVE_FAIL,
         payload:
           error.response && error.response.data.detail
             ? error.response.data.detail

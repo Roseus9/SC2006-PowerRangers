@@ -1,5 +1,9 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
+
+
 
 # django rest framework
 from rest_framework import status
@@ -68,6 +72,31 @@ def getRoutes(request):
 
     return Response(routes)
     # return JsonResponse(routes, safe=False)
+
+class BookmarkView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        if pk:
+            bookmark = get_object_or_404(Bookmark, pk=pk)
+            serializer = BookmarkSerializer(bookmark)
+            return Response(serializer.data)
+        else:
+            bookmarks = Bookmark.objects.filter(user=request.user)
+            serializer = BookmarkSerializer(bookmarks, many=True)
+            return Response(serializer.data)
+
+    def post(self, request):
+        serializer = BookmarkSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        bookmark = get_object_or_404(Bookmark, pk=pk, user=request.user)
+        bookmark.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # The request.data attribute contains the data that was sent with the request. 
 # In this case, we expect the request to include the user's name, email, username, password and tel
@@ -255,22 +284,6 @@ def UserProfileView(request, slug):
 
     return Response(data)
 
-# @api_view(['POST'])
-# def addBookmark(request, pk):
-#     user = request.user
-#     product = Product.objects.get(_id=pk)
-
-#     # Check if a bookmark already exists for this user and product
-#     if Bookmark.objects.filter(user=user, product=product).exists():
-#         return Response({'message': 'Bookmark already exists'}, status=status.HTTP_400_BAD_REQUEST)
-
-#     # Create a new bookmark for the user and product
-#     bookmark = Bookmark.objects.create(user=user, product=product, isBookmarked=True)
-
-#     # Serialize the bookmark and return it in the response
-#     serializer = BookmarkSerializer(bookmark, many=False)
-#     return Response(serializer.data)
-
 @api_view(['POST'])
 def addBookmark(request, pk):
     user = request.user
@@ -287,7 +300,7 @@ def addBookmark(request, pk):
     serializer = BookmarkSerializer(bookmark, many=False)
     return Response(serializer.data)
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 def removeBookmark(request, pk):
     user = request.user
     product = Product.objects.get(_id=pk)
@@ -302,14 +315,3 @@ def removeBookmark(request, pk):
     bookmark.delete()
 
     return Response({'message': 'Bookmark removed successfully'}, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-def getBookmark(request):
-    user = request.user
-
-    # Get all bookmarks for the user
-    bookmarks = Bookmark.objects.filter(user=user)
-
-    # Serialize the bookmarks and return them in the response
-    serializer = BookmarkSerializer(bookmarks, many=True)
-    return Response(serializer.data)

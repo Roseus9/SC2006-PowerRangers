@@ -4,14 +4,15 @@ import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Notification from '../components/Notification'
 import { Link } from 'react-router-dom'
-
+import axios from "axios"
 
 import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { getProduct } from '../actions/productActions'
 import { useNavigate } from 'react-router-dom';
-import { bookmarkProduct } from '../actions/bookmarkActions';
+//import { bookmarkProduct } from '../actions/bookmarkActions';
+import { bookmarkProduct, removeBookmark } from "../actions/bookmarkActions";
 
 
 // here we deconstruct the props object, to access match
@@ -22,10 +23,48 @@ function ProductScreen() {
     const dispatch = useDispatch();
     const item = useSelector(state => state.productItem);
     const {error, loading, product} = item;
+    const [isBookmarked, setIsBookmarked] = useState(false);
+
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    
     // useEffect is a hook that allows us to run a function when the component loads
     useEffect(() => {
         dispatch(getProduct(itemId))
     }, [itemId, dispatch])
+
+    useEffect(() => {
+        // Check if the product is bookmarked by the user
+        const checkBookmarkStatus = async () => {
+          try {
+            const { data } = await axios.get(`/api/bookmark/${itemId}`, config);
+            setIsBookmarked(data.isBookmarked);
+          } catch (error) {
+            // Handle error
+          }
+        };
+    
+        checkBookmarkStatus();
+      }, [itemId, config]);
+
+    const toggleBookmark = async () => {
+        try {
+            if (isBookmarked) {
+                await dispatch(removeBookmark(itemId));
+                setIsBookmarked(false);
+            } else {
+                await dispatch(bookmarkProduct(itemId));
+                setIsBookmarked(true);
+            }
+        } catch (error) {
+        // Handle error
+        }
+    };
 
     const alertClicked = () => {
         navigate("/profile/" + product.username);
@@ -33,6 +72,8 @@ function ProductScreen() {
 
     function addToBookmarkHandler() {
         dispatch(bookmarkProduct(itemId))
+        // check state of bookmark, render page need do this too
+        // 
     }
 
     // function ProductScreen({match}) {
@@ -94,13 +135,18 @@ function ProductScreen() {
         
                             </ListGroup.Item>    */}
                         </ListGroup>
-                        <Button
+                        {/* <Button
                             onClick = {addToBookmarkHandler} 
                             className='my-3' 
                             variant='primary'
                             type='button'>
                             Bookmark
+                        </Button> */}
+
+                        <Button onClick={toggleBookmark} className="my-3" variant="primary" type="button">
+                                {isBookmarked ? 'Remove Bookmark' : 'Bookmark'}
                         </Button>
+
                         <Link to={`/offer/product/${product._id}`}>
                             <Button className='my-3' variant='danger' style={{marginLeft: "10px"}}>Make Offer</Button> 
                         </Link>

@@ -17,8 +17,9 @@ urlpatterns = [
     path("create", views.createProduct, name="create-product"),
     path("offer/product/<str:pk>", views.createOffer, name = "offer"),
     path('users', views.getUsers, name='users'),
-    path("bookmark/<str:pk>", views.addBookmark, name = "offer"),
-    
+    path("bookmark/<str:pk>", views.addBookmark, name = "bookmark"),
+    path("bookmark/<str:pk>/remove", views.removeBookmark, name="remove-bookmark"),
+
     # this allows us to access by:
     # profile/123
     path('users/profile/<str:id>', views.getUserProfile, name='user-profile'),
