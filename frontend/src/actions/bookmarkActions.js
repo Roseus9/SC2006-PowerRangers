@@ -11,6 +11,9 @@ import {
   BOOKMARK_FIND_REQUEST,
   BOOKMARK_FIND_SUCCESS,
   BOOKMARK_FIND_FAIL,
+  BOOKMARK_FIND_USER_REQUEST,
+  BOOKMARK_FIND_USER_SUCCESS,
+  BOOKMARK_FIND_USER_FAIL,
 } from "../constants/constants";
 
 export const getBookmarkAction = (pid, uid) => async (dispatch, getState) => {
@@ -89,6 +92,22 @@ export const findBookmarks = (pid) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: BOOKMARK_FIND_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const findUserBookmarks = (uid) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: BOOKMARK_FIND_USER_REQUEST });
+    const { data } = await axios.get(`/api/finduserbookmarks/${uid}`);
+    dispatch({ type: BOOKMARK_FIND_USER_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: BOOKMARK_FIND_USER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

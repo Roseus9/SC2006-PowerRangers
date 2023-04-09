@@ -53,5 +53,6 @@ urlpatterns = [
     #check if bookmark exists 
     path('checkbookmark/<str:pid>/<str:uid>', views.checkBookmark, name='check-bookmark'),
     path('changebookmark/<str:pid>/<str:uid>/<str:flag>', views.changeBookmark, name='check-bookmark'),
-    path('findbookmarks/<str:pid>', views.findBookmarks, name='find-bookmarks')
+    path('findbookmarks/<str:pid>', views.findBookmarks, name='find-bookmarks'),
+    path('finduserbookmarks/<str:uid>', views.findUserBookmarks, name='find-user-bookmarks')
 ]

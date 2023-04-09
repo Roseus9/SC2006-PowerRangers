@@ -67,6 +67,7 @@ function Product({ product }) {
             color: "#000000",
             border: "none",
           }}
+          disabled
         >
           <b>{likes}</b> ❤️
         </Button>

@@ -32,7 +32,6 @@ export const getProducts =
   async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST });
-      console.log(`/api/products?keyword=${keyword}&tags=${tags}`);
       const { data } = await axios.get(
         `/api/products?keyword=${keyword}&tags=${tags}`
       );

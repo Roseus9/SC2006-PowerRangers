@@ -13,6 +13,10 @@ import {
   BOOKMARK_FIND_SUCCESS,
   BOOKMARK_FIND_FAIL,
   BOOKMARK_FIND_RESET,
+  BOOKMARK_FIND_USER_REQUEST,
+  BOOKMARK_FIND_USER_SUCCESS,
+  BOOKMARK_FIND_USER_FAIL,
+  BOOKMARK_FIND_USER_RESET,
 } from "../constants/constants";
 
 const getBookmarkInitialState = {
@@ -35,6 +39,14 @@ const findBookmarkInitialState = {
   done: false,
   count: null,
 };
+
+const findUserBookmarkInitialState = {
+  loading: false,
+  error: [],
+  products: [],
+  done: false,
+};
+
 export const getBookmarkReducer = (state = getBookmarkInitialState, action) => {
   switch (action.type) {
     case BOOKMARK_INDIV_SEARCH_REQUEST:
@@ -85,6 +97,24 @@ export const findBookmarkReducer = (
       return { loading: false, error: action.payload };
     case BOOKMARK_FIND_RESET:
       return { loading: false, error: [], done: false, count: null };
+    default:
+      return state;
+  }
+};
+
+export const findUserBookmarkReducer = (
+  state = findUserBookmarkInitialState,
+  action
+) => {
+  switch (action.type) {
+    case BOOKMARK_FIND_USER_REQUEST:
+      return { loading: true, error: [], products: [], done: false };
+    case BOOKMARK_FIND_USER_SUCCESS:
+      return { loading: false, products: action.payload, done: true };
+    case BOOKMARK_FIND_USER_FAIL:
+      return { loading: false, error: action.payload };
+    case BOOKMARK_FIND_USER_RESET:
+      return { loading: true, error: [], products: [], done: false };
     default:
       return state;
   }

@@ -18,6 +18,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import {
   changeBookmarkReducer,
   findBookmarkReducer,
+  findUserBookmarkReducer,
   getBookmarkReducer,
 } from "./reducers/bookmarkReducer";
 // importing the offer reducers
@@ -61,6 +62,7 @@ const store = configureStore({
     getBookmark: getBookmarkReducer,
     changeBookmark: changeBookmarkReducer,
     findBookmark: findBookmarkReducer,
+    findUserBookmark: findUserBookmarkReducer,
   },
   preloadedState: {
     userLogin: {

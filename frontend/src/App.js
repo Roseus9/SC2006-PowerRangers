@@ -17,7 +17,7 @@ import CreateOffer from "./screens/CreateOffer";
 import OffersScreen from "./screens/OffersScreen";
 import EditListing from "./screens/EditListing";
 import EditOffer from "./screens/EditOffer";
-
+import { Bookmarked } from "./screens/Bookmarked";
 function App() {
   return (
     <Router>
@@ -37,6 +37,7 @@ function App() {
             <Route path="/edit/product/:productID" element={<EditListing />} />
             <Route path="/offers/:username" element={<OffersScreen />} />
             <Route path="/edit/offer/:oid" element={<EditOffer />} />
+            <Route path="/bookmarked" element={<Bookmarked />} />
           </Routes>
         </Container>
       </main>

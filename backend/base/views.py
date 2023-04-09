@@ -548,13 +548,13 @@ def boughtItems(request, slug):
                 offer = Offer.objects.filter(buyer=user, isComplete=True).order_by('-createdAt')
         elif status == "accepted":
             if orderType == "highest":
-                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('-price')
+                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('-pric')
             elif orderType == "lowest":
                 offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('price')
             elif orderType == "oldest":
-                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('createdAt')
+                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('creatdAt')
             else:   
-                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('-createdAt')
+                offer = Offer.objects.filter(buyer=user, isAccepted=True, isComplete=False).order_by('-creaedAt')
         else:
             if orderType == "highest":
                 offer = Offer.objects.filter(buyer=user, isAccepted=True).order_by('-price')
@@ -574,7 +574,7 @@ def boughtItems(request, slug):
     # and get his products for these offers
     try:
         for offer in serializedOffer:
-            offer['product'] = ProductSerializer(Product.objects.get(_id=offer['product']), many=False).data
+            offer['product'] = ProductSerializer(Product.objects.get(_id=offer['product']), many=False).dat
 
     except:
         message = {'detail': 'Cant find the product in the offer'}
@@ -630,4 +630,16 @@ def findBookmarks(request, pid):
     count = Bookmark.objects.filter(product=product).count()
     message = {'count': count}
     return Response(message)
+
+@api_view(['GET'])
+def findUserBookmarks(request, uid):
+    try:
+        u = User.objects.get(id=uid)
+        bookmarks = Bookmark.objects.filter(user=u)
+        products = [bookmark.product for bookmark in bookmarks]
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    except: 
+        message = {'detail': 'no bookmarked listings!'}
+        return Response(message)
     
