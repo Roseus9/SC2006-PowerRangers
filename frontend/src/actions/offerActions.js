@@ -33,6 +33,9 @@ import {
   OFFER_EDIT_REQUEST,
   OFFER_EDIT_SUCCESS,
   OFFER_EDIT_FAIL,
+  OFFER_COMPLETE_REQUEST,
+  OFFER_COMPLETE_SUCCESS,
+  OFFER_COMPLETE_FAIL,
 } from "../constants/constants";
 //---------------------------------------
 
