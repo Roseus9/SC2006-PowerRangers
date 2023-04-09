@@ -25,6 +25,7 @@ export const getBookmark = (pid, uid) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.post(`/api/checkbookmark/${pid}/${uid}`);
+
     if (Object.keys(data).length == 0)
       dispatch({
         type: BOOKMARK_INDIV_SEARCH_FAIL,
