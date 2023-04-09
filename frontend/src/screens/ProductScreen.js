@@ -206,9 +206,13 @@ function ProductScreen() {
                 <div className="d-flex align-items-center">
                   <h3>{product.name}</h3>
                   <Badge
-                    bg="danger"
+                    bg="secondary"
                     className="ms-2"
-                    style={{ fontSize: "13px" }}
+                    style={{
+                      fontSize: "13px",
+                      backgroundColor: "#d3d3d3",
+                      color: "#000000",
+                    }}
                   >
                     {likes} ❤️
                   </Badge>

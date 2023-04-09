@@ -22,7 +22,7 @@ import {
 } from "../constants/constants";
 import { useSearchParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
-
+import { useRef } from "react";
 function Home() {
   // initial state of products is set to an empty array
   // const [products, setProducts] = useState([])
@@ -43,7 +43,7 @@ function Home() {
 
   const [activeSortBy, setActiveSortBy] = useState("Most Recent");
   const [sortedProducts, setSortedProducts] = useState([]);
-
+  const all = useRef(null);
   useEffect(() => {
     if (productCreate && productCreate.success) {
       console.log("yay");
@@ -108,6 +108,7 @@ function Home() {
         sorted = [...products].sort((a, b) => a.price - b.price);
       }
       setSortedProducts(sorted);
+      all.current.scrollIntoView({ behaviour: "smooth" });
     }
   }, [products, activeSortBy]);
 
@@ -131,7 +132,9 @@ function Home() {
         theme="dark"
       />
       {!keyword && !tags && <MainCarousel />}
-      <h1 style={{ marginTop: "20px" }}>All Listings</h1>
+      <h1 style={{ marginTop: "20px" }} ref={all}>
+        All Listings
+      </h1>
       <div>
         <Dropdown>
           <Dropdown.Toggle variant="primary">
