@@ -27,6 +27,7 @@ import {
   offerCompleteReducer,
   getCompleteOfferReducer,
   createReviewReducer,
+  getReviewReducer,
 } from "./reducers/offerReducer";
 
 // const initialState = {}
@@ -55,6 +56,7 @@ const store = configureStore({
     bookmark: BookmarkReducer,
     getCompleteOffer: getCompleteOfferReducer,
     createReview: createReviewReducer,
+    getReview: getReviewReducer,
   },
   preloadedState: {
     userLogin: {

@@ -652,35 +652,54 @@ def makeReview(request, oid, id, flag):
         return Response(message, status = status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
-def getReview(request, oid, id, flag):
+def getReview(request, id, flag):
     # if flag is true, then the user is a buyer
     # else, the user is a seller
     # id is the user
     try:
-        if flag.lower() == 'true':
-            review = Review.objects.filter(buyer=id, is_from_buyer=True)
-            serializedReview = ReviewSerializer(review, many=True).data
-        else:
-            review = Review.objects.filter(seller=id, is_from_buyer=False)
-            serializedReview = ReviewSerializer(review, many=True).data
+        # if flag.lower() == 'true':
+        reviewBuyer = Review.objects.filter(buyer=id, is_from_buyer=True)
+        serializedReviewBuyer = ReviewSerializer(reviewBuyer, many=True).data
+        print(serializedReviewBuyer)
+        reviewSeller = Review.objects.filter(seller=id, is_from_buyer=False)
+        serializedReviewSeller = ReviewSerializer(reviewSeller, many=True).data
+        print(serializedReviewSeller)
     except:
-        message = {'detail': 'No such review exists'}
+        message = {'detail': 'No such reviews exist'}
+        print(message)
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
     
     try:
-        if len(serializedReview) > 0:
-            for review in serializedReview:
+        totalrating = []
+        if len(serializedReviewBuyer) > 0:
+            for review in serializedReviewBuyer:
                 review['product'] = ProductSerializer(Product.objects.get(_id=review['product']), many=False).data
                 review['buyer'] = UserSerializerWithToken(User.objects.get(id=review['buyer']), many=False).data
                 review['seller'] = UserSerializerWithToken(User.objects.get(id=review['seller']), many=False).data
+                totalrating.append(int(review['rating']))
+        if len(serializedReviewSeller) > 0:
+            for review in serializedReviewSeller:
+                review['product'] = ProductSerializer(Product.objects.get(_id=review['product']), many=False).data
+                review['buyer'] = UserSerializerWithToken(User.objects.get(id=review['buyer']), many=False).data
+                review['seller'] = UserSerializerWithToken(User.objects.get(id=review['seller']), many=False).data
+                totalrating.append(int(review['rating']))
+        if len(totalrating) > 0:
+            average = sum(totalrating)/len(totalrating)
+
+        else:
+            average = 0
+
 
     except:
         message = {'detail': 'Cant find the product/buyer/seller in the review'}
         print(message)
-        return Response({'reviews': serializedReview})
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
     
     data = {
-        'reviews': serializedReview,
+        'buyerReviews': serializedReviewBuyer,
+        'sellerReviews': serializedReviewSeller,
+        'totalrating': str(average),
+        'raters': str(len(totalrating)),
     }
     return Response(data)
 

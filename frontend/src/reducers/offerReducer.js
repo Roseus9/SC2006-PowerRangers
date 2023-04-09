@@ -31,6 +31,10 @@ import {
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_FAIL,
   REVIEW_CREATE_RESET,
+  REVIEW_GET_REQUEST,
+  REVIEW_GET_SUCCESS,
+  REVIEW_GET_FAIL,
+  REVIEW_GET_RESET,
 
 } from "../constants/constants";
 
@@ -182,6 +186,25 @@ export const createReviewReducer = (state = {}, action) => {
     case REVIEW_CREATE_FAIL:
       return { loading: false, error: action.payload };
     case REVIEW_CREATE_RESET:
+      return { loading: false, success: false, error: false};
+    default:
+      return state;
+  }
+};
+
+export const getReviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case REVIEW_GET_REQUEST:
+      return { loading: true, success: false };
+    case REVIEW_GET_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        review: action.payload,
+      };
+    case REVIEW_GET_FAIL:
+      return { loading: false, error: action.payload };
+    case REVIEW_GET_RESET:
       return { loading: false, success: false, error: false};
     default:
       return state;

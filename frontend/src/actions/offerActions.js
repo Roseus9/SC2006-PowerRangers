@@ -40,6 +40,11 @@ import {
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_FAIL,
   REVIEW_CREATE_RESET,
+  
+  REVIEW_GET_REQUEST,
+  REVIEW_GET_SUCCESS,
+  REVIEW_GET_FAIL,
+  REVIEW_GET_RESET,
 } from "../constants/constants";
 //---------------------------------------
 
@@ -239,7 +244,7 @@ export const getCompleteOfferAction = (id) => async (dispatch) => {
   }
 };
 
-
+//  Action creator for creating a review
 export const createReviewAction = (review, offerID, userID, flag) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -265,6 +270,30 @@ export const createReviewAction = (review, offerID, userID, flag) => async (disp
   } catch (error) {
     dispatch({
       type: REVIEW_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//  Action creator for getting all reviews of a user
+export const getReviewAction = (userID, flag) => async (dispatch) => {
+  try {
+    dispatch({
+      type: REVIEW_GET_REQUEST,
+    });
+
+    const { data } = await axios.get(`/api/offer/review/get/${userID}/${flag}`);
+    console.log("SUCCESSFULLY RECEIVED REVIEWS!", data)
+    dispatch({
+      type: REVIEW_GET_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: REVIEW_GET_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -107,3 +107,9 @@ export const REVIEW_CREATE_REQUEST = "REVIEW_CREATE_REQUEST";
 export const REVIEW_CREATE_SUCCESS = "REVIEW_CREATE_SUCCESS";
 export const REVIEW_CREATE_FAIL = "REVIEW_CREATE_FAIL";
 export const REVIEW_CREATE_RESET = "REVIEW_CREATE_RESET";
+
+//  constants for API call for getting all reviews for a user
+export const REVIEW_GET_REQUEST = "REVIEW_GET_REQUEST";
+export const REVIEW_GET_SUCCESS = "REVIEW_GET_SUCCESS";
+export const REVIEW_GET_FAIL = "REVIEW_GET_FAIL";
+export const REVIEW_GET_RESET = "REVIEW_GET_RESET";
