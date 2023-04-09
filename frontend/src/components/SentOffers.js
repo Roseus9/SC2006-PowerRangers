@@ -9,6 +9,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteOfferAction } from "../actions/offerActions";
 import { useDispatch } from "react-redux";
+import { OFFER_EDIT_RESET } from "../constants/constants";
+
 function SentOffers({ offers }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,7 +27,8 @@ function SentOffers({ offers }) {
   );
 
   const editOffer = (offer) => {
-    console.log("editoffer", offer);
+    console.log("editoffer", offer._id);
+    dispatch({type: OFFER_EDIT_RESET})
     navigate("/edit/offer/" + offer._id);
   };
 

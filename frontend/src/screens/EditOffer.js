@@ -32,21 +32,28 @@ function EditOffer() {
   };
 
   useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
     //user can't acess edit offer page if the offer does not belong to them
-    if (offer) {
-      if (offer.buyer != userInfo.id) {
+    if (offer && userInfo) {
+      console.log("offer", offer.buyer)
+      console.log("user", userInfo.id)
+      if (userInfo && (offer.buyer != userInfo.id)) {
         navigate("/");
       }
       setPrice(offer.price);
     }
-  }, [offer]);
+  }, [offer, userInfo]);
+
   useEffect(() => {
     //user cant access edit offer page if not logged in
-    if (!userInfo) {
-      navigate("/login");
-    }
-    dispatch(getOffer(oid));
+    
   }, [userInfo, navigate]);
+
   useEffect(() => {
     if (editOfferState && editOfferState.success)
       navigate("/offers/" + userInfo.name);
