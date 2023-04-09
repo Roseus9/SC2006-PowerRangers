@@ -52,7 +52,11 @@ function CreateListing() {
     // this prevents the default action from occurring, 
     // e.g. prevent "submit" button to test some validation or processing of form data first. 
     e.preventDefault();
-    if (!username.match("^[a-zA-Z0-9_-]{3,16}$")) {
+    if (!name.match("^[a-zA-Z\s.'-,]{1,50}$")) {
+      toast.error("Invalid name, name can only contain letters and spaces")
+      return
+    } 
+    else if (!username.match("^[a-zA-Z0-9_-]{3,16}$")) {
       if(username.length < 3 || username.length > 16) {
         toast.error("Invalid Username length, Username needs to be 3-16 characters long")
         return
@@ -67,6 +71,7 @@ function CreateListing() {
     }
     else if (password != confirmPassword){
       toast.error("Passwords do not match")
+      return
     } 
     else if (!password.match("^[a-zA-Z0-9@$!%*?&]{8,32}$")) {
       if(password.length < 8 || password.length > 32) {
