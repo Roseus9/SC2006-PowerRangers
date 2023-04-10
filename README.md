@@ -75,8 +75,9 @@ Using Locust with the following parameters:
 | Users         | 1000                   |
 | Hatch Rate    | 10 requests per second |
 | Wait          | 1 to 5                 |
-| **Final RPS** | **154.2 (0% Failures)** |
-- This was tested on our get userInfo route, which retrieves user details if they are logged in.
+
+
+- This was tested on our get userInfo route, which retrieves user details if they are logged in:
 ```
 from locust import HttpUser, between, task
 
@@ -88,5 +89,8 @@ class MyUser(HttpUser):
         user_id = 1 # or any other valid user id
         self.client.get(f'/api/userinfo/{user_id}')
 ```
+
+- Results:
+| **Final RPS** | **154.2 (0% Failures)** |
 > ![image](https://user-images.githubusercontent.com/64686163/230887659-94bf6319-fa2c-4657-9c48-5c5851e292d7.png)
 
