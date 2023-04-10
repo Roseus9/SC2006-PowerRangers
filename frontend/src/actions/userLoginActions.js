@@ -180,9 +180,11 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    const uid = userInfo.id;
+    const uid = userInfo._id;
     const { data } = await axios.post(
-      `/api/update/profile/${uid}`, user,config
+      `/api/update/profile/${uid}`,
+      user,
+      config
     );
     dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
