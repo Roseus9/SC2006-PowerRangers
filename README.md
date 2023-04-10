@@ -70,11 +70,13 @@ Cyclomatic Complexity Value = Number of Decision Points + 1 = 3 + 1 = 4
 
 #### Load Testing
 Using Locust with the following parameters:
-| Users         | 1000                   |
+| Param         | Value                  |
 |---------------|------------------------|
+| Users         | 1000                   |
 | Hatch Rate    | 10 requests per second |
 | Wait          | 1 to 5                 |
-| **Final RPS** | **154.2, 0% Failures** |
+| **Final RPS** | **154.2 (0% Failures)** |
+- This was tested on our get userInfo route, which retrieves user details if they are logged in.
 ```
 from locust import HttpUser, between, task
 
