@@ -43,17 +43,13 @@ In Windows CMD, ensure you are in the backend folder of your repository
 4. Enter `number of users` and `hatch rate` (e.g. 100, 10)
 5. Start load testing by clicking `Start swarming`
 
-### System Architecture (Simple Overview)
+## System Architecture (Simple Overview)
 Utilises Django Rest Framework for the Backend, and React, Redux (state managment) for Frontend.
 - As requests pour in, they are routed by django through specific API routes. Data is queried from the database and represented using the Django model entities, before being repackaged by serializers into a readable format such as JSON for processing. The view acts as an interface between the front and backend.
 
 - In React, these screens/components are able to call CRUD operations by calling various actions that then interact with our API using axios. Depending on the results, different actions are dispatched, resulting in different global states. These states are kept in the store, which can be accessed by future screens and components. We often use an action creator of {type: RESET} to clear state after an execution of specific actions, to ensure "loading" and "success" are returned to False.
 
 > ![Initial use-case model-sys arch Slides drawio (1)](https://user-images.githubusercontent.com/64686163/230790692-9ad2954e-116d-4d96-97aa-6ddfa2962521.png)
-
-
-
-
 
 ### Design Patterns:
 #### Singleton Pattern
