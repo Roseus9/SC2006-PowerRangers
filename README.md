@@ -56,7 +56,7 @@ def editProduct(request):
 > ![image](https://user-images.githubusercontent.com/64686163/230882010-5ae9c59c-22ed-440d-ae06-b179e53d4bb4.png)
 
 #### Equivalence Class Testing (Create User)
-Set one column as invalid, and all columns as valid
+Set one column as invalid, and all columns as valid for each test case
 - Here the Listing Title is "Naproxen" which is a restricted item, preventing item creation
 > ![image](https://user-images.githubusercontent.com/64686163/230886771-fd5e41f1-ab8c-4797-b385-2e7bfde7713d.png)
 
@@ -67,4 +67,24 @@ Cyclomatic Complexity Value = Number of Decision Points + 1 = 3 + 1 = 4
 - The following is the make offer process:
 > ![image](https://user-images.githubusercontent.com/64686163/230882301-27112973-5c41-43e4-98b8-5de9b4cc0f92.png)
 > ![image](https://user-images.githubusercontent.com/64686163/230882339-e8b3ca4d-330b-4caa-9960-fd9f7dde69c4.png)
+
+#### Load Testing
+Using Locust with the following parameters:
+| Users         | 1000                   |
+|---------------|------------------------|
+| Hatch Rate    | 10 requests per second |
+| Wait          | 1 to 5                 |
+| **Final RPS** | **154.2, 0% Failures** |
+```
+from locust import HttpUser, between, task
+
+class MyUser(HttpUser):
+    wait_time = between(1, 5)
+
+    @task
+    def get_user_info(self):
+        user_id = 1 # or any other valid user id
+        self.client.get(f'/api/userinfo/{user_id}')
+```
+> ![image](https://user-images.githubusercontent.com/64686163/230887659-94bf6319-fa2c-4657-9c48-5c5851e292d7.png)
 
