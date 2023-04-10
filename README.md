@@ -50,7 +50,7 @@ def editProduct(request):
 |------------------------|-------------|---------|----------------|
 | Upper Boundary         | 9999.98     | 9999.99 | **_10000.00_** |
 
-- Price range valid equivalence class ($0.00 <= x <= $9999.99)
+- Price range valid equivalence class: **($0.00 <= x <= $9999.99)**
 - Valid boundary values: {0.00, 9999.99}
 - Invalid boundary values: {-0.01, 10000.00}
 > ![image](https://user-images.githubusercontent.com/64686163/230882010-5ae9c59c-22ed-440d-ae06-b179e53d4bb4.png)
