@@ -56,12 +56,13 @@ Invalid boundary values: {-0.01, 10000.00}
 #### Equivalence Class Testing (Create User)
 Set one column as invalid, and all columns as valid
 - Here the Listing Title is "Naproxen" which is a restricted item, preventing item creation
-> ![image](https://user-images.githubusercontent.com/64686163/230882153-4b76f37e-4684-4d02-9404-6de2c5ab357f.png)
+> ![image](https://user-images.githubusercontent.com/64686163/230886771-fd5e41f1-ab8c-4797-b385-2e7bfde7713d.png)
 
 ### White Box Testing
 ####  Basis Path Testing
 Cyclomatic Complexity Value = Number of Decision Points + 1 = 3 + 1 = 4
-Generate 4 Test Cases to ensure coverage of the process. The following is the make offer process:
+- Generate 4 Test Cases to ensure coverage of the process.
+- The following is the make offer process:
 > ![image](https://user-images.githubusercontent.com/64686163/230882301-27112973-5c41-43e4-98b8-5de9b4cc0f92.png)
 > ![image](https://user-images.githubusercontent.com/64686163/230882339-e8b3ca4d-330b-4caa-9960-fd9f7dde69c4.png)
 
