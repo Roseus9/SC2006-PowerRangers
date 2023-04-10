@@ -70,6 +70,7 @@ Cyclomatic Complexity Value = Number of Decision Points + 1 = 3 + 1 = 4
 
 #### Load Testing
 Using Locust with the following parameters:
+
 | Param         | Value                  |
 |---------------|------------------------|
 | Users         | 1000                   |
@@ -91,6 +92,10 @@ class MyUser(HttpUser):
 ```
 
 - Results:
+
+| Param         | Value                  |
+|---------------|------------------------|
 | **Final RPS** | **154.2 (0% Failures)** |
+
 > ![image](https://user-images.githubusercontent.com/64686163/230887659-94bf6319-fa2c-4657-9c48-5c5851e292d7.png)
 
