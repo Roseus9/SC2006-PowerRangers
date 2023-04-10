@@ -54,11 +54,13 @@ Utilises Django Rest Framework for the Backend, and React, Redux (state managmen
 ### Design Patterns:
 #### Singleton Pattern
 Used in our Redux State Tree. [Download Redux Dev Tools, F12](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
-Restricts the instantiation of a class to a singular instance and also provides easy access to that instance (UseSelector).
+- Restricts the instantiation of a class to a singular instance and also provides easy access to that instance (UseSelector).
 > ![image](https://user-images.githubusercontent.com/64686163/230888895-2b698a84-1cd5-4d01-b160-166b347e1a77.png)
 
 #### Provider Pattern
-With the Provider Pattern, we can make data available to multiple components. Rather than passing that data down each layer through props (prop drilling), we can wrap all components in a Provider. This ensures Loose Coupling, where state data is independent of the components.
+With the Provider Pattern, we can make data available to multiple components.
+- Rather than passing that data down each layer through props (prop drilling), we can wrap all components in a Provider.
+- This ensures Loose Coupling, where state data is independent of the components.
 > ![image](https://user-images.githubusercontent.com/64686163/230885355-6a7ce5e4-c1cf-4056-974f-a47b22d3c03b.png)
 
 #### Decorator Pattern
