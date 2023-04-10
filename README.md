@@ -11,6 +11,22 @@ Utilises Django Rest Framework for the Backend, and React, Redux (state managmen
 
 > ![Initial use-case model-sys arch Slides drawio (1)](https://user-images.githubusercontent.com/64686163/230790692-9ad2954e-116d-4d96-97aa-6ddfa2962521.png)
 
+### Setting up repository
+
+1. Go to a folder where you want the repository to be in
+2. Clone the repository
+`git clone https://github.com/adriangohjw/cz2006-software-engineering.git`
+
+### Setup virtual environment in project
+
+In Windows CMD, ensure you are in the folder of your repository
+
+1. Run `python –m venv myenv`
+2. Run `myenv\Scripts\activate` 
+3. Run `pip install -r requirements.txt`
+
+
+
 ### Design Patterns:
 #### Singleton Pattern
 Used in our Redux State Tree.
