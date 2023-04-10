@@ -53,7 +53,7 @@ Utilises Django Rest Framework for the Backend, and React, Redux (state managmen
 
 ### Design Patterns:
 #### Singleton Pattern
-Used in our Redux State Tree.
+Used in our Redux State Tree. [Download Redux Dev Tools, F12](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
 Restricts the instantiation of a class to a singular instance and also provides easy access to that instance (UseSelector).
 > ![image](https://user-images.githubusercontent.com/64686163/230888895-2b698a84-1cd5-4d01-b160-166b347e1a77.png)
 
