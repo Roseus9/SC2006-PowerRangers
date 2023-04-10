@@ -46,9 +46,9 @@ def editProduct(request):
 
 ### Black Box Testing:
 #### Boundary Value Testing (Price)
-| Lower Boundary         | **-0.01** | 0.00    | 1.00         |
-|------------------------|-----------|---------|--------------|
-| Upper Boundary         | 9999.98   | 9999.99 | **10000.00** |
+| Lower Boundary         | **_-0.01_** | 0.00    | 1.00           |
+|------------------------|-------------|---------|----------------|
+| Upper Boundary         | 9999.98     | 9999.99 | **_10000.00_** |
 
 - Price range valid equivalence class ($0.00 <= x <= $9999.99)
 - Valid boundary values: {0.00, 9999.99}
