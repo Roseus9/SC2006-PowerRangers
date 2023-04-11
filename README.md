@@ -1,6 +1,16 @@
 # SC2006-NTU-Marketplace
 ## NTU Marketplace App
-One stop platform for convenient and efficient way for individuals to trade goods, promoting sustainability by extending the lifespan of goods
+One stop platform for convenient and efficient purchasing and selling of pre-loved hall items, promoting sustainability by extending the lifespan of goods and decluttering homes.
+
+- Login Details for Accounts
+
+```
+User: chicken
+Password: 12345678
+
+User: alibaba
+Password: 12345678
+```
 
 ### Setting up repository
 
