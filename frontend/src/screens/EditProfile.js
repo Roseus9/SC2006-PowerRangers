@@ -70,21 +70,48 @@ function EditProfile() {
     profile.append("password", password);
     console.log("profile", profile);
 
-    if (!firstName) {
-      toast.error("Name cannot be blank!");
-    } else if (!newUsername) {
-      toast.error("Username cannot be blank!");
+    if (!firstName.match("^[a-zA-Zs.'-,]{1,50}$")) {
+      toast.error("Invalid name, name can only contain letters and spaces");
+      return;
+    } else if (!username.match("^[a-zA-Z0-9_-]{3,16}$")) {
+      if (username.length < 3 || username.length > 16) {
+        toast.error(
+          "Invalid Username length, Username needs to be 3-16 characters long"
+        );
+        return;
+      } else {
+        toast.error(
+          "Invalid Username, Username can only contain letters, numbers, hyphens and underscores"
+        );
+        return;
+      } 
     } else if (!email) {
       toast.error("Email cannot be blank!");
+      return;
     } else if (
       telegramHandle &&
       !telegramHandle.match("^(?=\\w{5,32}\\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$")
     ) {
-      toast.error("Invalid Telegram Username");
+      toast.error("Invalid Telegram Username. Username can only contain alphanumeric letters or underscore symbol. Minimum length of 5 is required.");
+      return;
     } else if (password && !confirmPassword) {
       toast.error("Please fill in confirm password");
+      return;
     } else if (password && password != confirmPassword) {
       toast.error("Passwords do not match");
+      return;
+    } else if (password && !password.match("^[a-zA-Z0-9@$!%*?&]{8,32}$")) {
+      if (password.length < 8 || password.length > 32) {
+        toast.error(
+          "Invalid Password length, Passwords needs to be 8-32 characters long"
+        );
+        return;
+      } else {
+        toast.error(
+          "Invalid Password, Password can only contain alphanumeric characters or special characters"
+        );
+        return;
+      } 
     } else {
       dispatch(updateUserProfile(profile));
       if (success) {
@@ -144,6 +171,7 @@ function EditProfile() {
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
               <Form.Control
+                required
                 placeholder="Name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -152,6 +180,7 @@ function EditProfile() {
             <Form.Group className="mb-3">
               <Form.Label>Username</Form.Label>
               <Form.Control
+                required
                 placeholder="Username"
                 value={newUsername}
                 onChange={(e) => setnewUsername(e.target.value)}
@@ -160,6 +189,8 @@ function EditProfile() {
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
+                required
+                type="Email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -170,6 +201,7 @@ function EditProfile() {
               <InputGroup>
                 <InputGroup.Text>@</InputGroup.Text>
                 <Form.Control
+                  required
                   placeholder="Telegram Handle"
                   value={telegramHandle}
                   onChange={(e) => setTelegramHandle(e.target.value)}
