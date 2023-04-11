@@ -65,9 +65,6 @@ function Header() {
                   <LinkContainer to={`offers/${userInfo.username}`}>
                     <NavDropdown.Item>Offers</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/settings">
-                    <NavDropdown.Item>Settings</NavDropdown.Item>
-                  </LinkContainer>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
