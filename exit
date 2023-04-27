@@ -1,0 +1,265 @@
+[33mcommit e4682a6498f0e3f2ce9fc73280938d4b73bb4937[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Mon Apr 10 08:18:09 2023 +0800
+
+    <feat> added testing
+
+[33mcommit bac6ac1bfc777c3879be1279298695aab0e2e81c[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 23:22:25 2023 +0800
+
+    <bug> fixed edit offer
+
+[33mcommit a8dda3a7f11bea140f82f09d66c50dbefc6dd1b5[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 23:07:17 2023 +0800
+
+    <feat> protect offer routes, <refactor> remove settings
+
+[33mcommit 1052c772c8e6949b405f6e685d0964b0b2dd7879[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 22:48:58 2023 +0800
+
+    <bug> fixed reviews display on profiles
+
+[33mcommit 1abf6d4557c37cdcf0565e38fa33e5e11e6abd71[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 22:31:11 2023 +0800
+
+    <bug> fixed toasts bugs and offers
+
+[33mcommit 7bb203607de75ac4e72619195de8860d56b690a7[m
+Merge: e432e96 3d9c719
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 21:30:59 2023 +0800
+
+    divergent branches
+
+[33mcommit e432e960567475aea3edae1a9d122456b8f03d4b[m
+Merge: 2fbcd54 b595d42
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 21:26:59 2023 +0800
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit 3d9c71902137e2289a622ef15935d25b35d3eb30[m[33m ([m[1;31morigin/feature1[m[33m, [m[1;32mfeature1[m[33m)[m
+Merge: ea1a3f9 b595d42
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 21:23:04 2023 +0800
+
+    <feat> added reviews
+
+[33mcommit 2fbcd5435801310a811ea71161c9a39ba85b3bbf[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 21:11:50 2023 +0800
+
+    <feat> merge
+
+[33mcommit cc78539ebb146e18b28db7350618718f7125ea68[m
+Merge: f68c080 ea1a3f9
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 21:07:25 2023 +0800
+
+    <feat> added reviews
+
+[33mcommit b595d4287eaf91da3277ca8d9522c916f825ee24[m
+Merge: f68c080 345638f
+Author: Roseus9 <33109124+Roseus9@users.noreply.github.com>
+Date:   Sun Apr 9 20:49:22 2023 +0800
+
+    Merge pull request #4 from Roseus9/registerNew
+    
+    <refactor> Update name validation
+
+[33mcommit 345638f838261bbef293efcc07775eb436d09ea6[m[33m ([m[1;31morigin/registerNew[m[33m)[m
+Author: rt <1601500j@student.tp.edu.sg>
+Date:   Sun Apr 9 20:44:32 2023 +0800
+
+    <refactor> Update name validation
+
+[33mcommit f68c08017c199e111e9a6435d2a25556554ae86e[m
+Merge: 50e733f 4acdae6
+Author: Roseus9 <33109124+Roseus9@users.noreply.github.com>
+Date:   Sun Apr 9 19:56:36 2023 +0800
+
+    Merge pull request #3 from Roseus9/registerNew
+    
+    <refactor> Update Registration input validation
+
+[33mcommit 4acdae6f0e54271bcf7a879f17c97ebb35503935[m
+Author: rt <1601500j@student.tp.edu.sg>
+Date:   Sun Apr 9 19:54:41 2023 +0800
+
+    <refactor> Update Registration input validation
+
+[33mcommit ea1a3f9cae5e2d528bdcdccff7fabd03737c5e28[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 18:55:35 2023 +0800
+
+    <feat> added reviews on profile
+
+[33mcommit 50e733f007f0c096a2d0a3bcf138fe49f583ff65[m
+Author: onghaixiang <onghaixiang@live.com.sg>
+Date:   Sun Apr 9 16:21:23 2023 +0800
+
+    <bug> constants
+
+[33mcommit adeb99203975da2d2ece1908d584992d0c9c8dd2[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sun Apr 9 16:17:23 2023 +0800
+
+    <feat> added create review and disabled button once complete
+
+[33mcommit c4f341d81cf69bfb4f427f099408e1fcb3c2393d[m[33m ([m[1;31morigin/yanchi2[m[33m)[m
+Merge: 00c085a c5e9f1b
+Author: onghaixiang <onghaixiang@live.com.sg>
+Date:   Sun Apr 9 04:18:06 2023 +0800
+
+    Merge branch 'haixiang'
+
+[33mcommit c5e9f1befb381930aee961982cc0a870ce0ca926[m
+Author: onghaixiang <onghaixiang@live.com.sg>
+Date:   Sun Apr 9 03:54:14 2023 +0800
+
+    <feat> home toasts
+
+[33mcommit 3a505f718eba8a00b2209e46dcb9a90ed629dcfd[m
+Author: onghaixiang <onghaixiang@live.com.sg>
+Date:   Sun Apr 9 01:27:55 2023 +0800
+
+    <feat> edit offer
+
+[33mcommit 00c085af7ebd2d1c349bcc6f40961a3b5773de79[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 23:39:06 2023 +0800
+
+    <feat> finished complete listings
+
+[33mcommit ec40aa74d6e5c5ee88c5589859eb21c09d00fecd[m
+Author: onghaixiang <onghaixiang@live.com.sg>
+Date:   Sat Apr 8 22:08:46 2023 +0800
+
+    <bug> myoffers shape
+
+[33mcommit 976aab65efdea504f014de31ab8ea6e67775c1f4[m
+Author: onghaixiang <onghaixiang@live.com.sg>
+Date:   Sat Apr 8 22:07:21 2023 +0800
+
+    <feat> offer delete
+
+[33mcommit 018883e279e19128c70237b4aefcca1173d70bfc[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 19:37:09 2023 +0800
+
+    <bug>
+
+[33mcommit 90989a00d799395edbe400d98d1b9aff61296bf8[m
+Merge: 35a6304 04cde5a
+Author: onghaixiang <onghaixiang@live.com.sg>
+Date:   Sat Apr 8 19:34:23 2023 +0800
+
+    Merge branch 'main' of https://github.com/Roseus9/SC2006-PowerRangers into haixiang
+
+[33mcommit 35a630423b9ebf58b0dd8f730cb45961dd94077e[m
+Merge: a657fa2 b523cd7
+Author: onghaixiang <onghaixiang@live.com.sg>
+Date:   Sat Apr 8 19:21:48 2023 +0800
+
+    Merge branch 'main' into haixiang
+
+[33mcommit 04cde5a34f3ae843af7875b3044ef2558ac89bcc[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 19:14:54 2023 +0800
+
+    <feat> changed the toasts to dark
+
+[33mcommit 42ed14026005ddf8de51ea0dffc0a0491fa79ff0[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 16:35:18 2023 +0800
+
+    <bug> readded back store.js
+
+[33mcommit 5aed13365f83a0086ba64306d6351556ff503563[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 16:06:05 2023 +0800
+
+    <refactor> merged with haixiang branch
+
+[33mcommit a555e3172c92f1a7b5712d4865978c43594b01c2[m
+Merge: b938719 a657fa2
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 15:57:55 2023 +0800
+
+    <feat> added accept offers
+
+[33mcommit b938719dd311a627260cf889f1ed4db18edc1310[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 15:12:57 2023 +0800
+
+    <bug> fixed error message displaying when moving from failed login => registration
+
+[33mcommit 49ddc54e3b80979843d39bcd4e62c922c8370059[m
+Merge: 6a0bea1 42675ed
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 15:02:34 2023 +0800
+
+    <bug> delivery notes
+
+[33mcommit 6a0bea1b24e10e6ac30d7da353cbf3d9b0b9e584[m
+Merge: 55fd03a d24b176
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 14:54:02 2023 +0800
+
+    Merge branch 'feature1'
+
+[33mcommit 55fd03afdb9ed6fcfc26469946762c9968465202[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 14:53:59 2023 +0800
+
+    <git> let db override
+
+[33mcommit d24b1769c566aa9dfadc4a09c16b64b2a30bb4cf[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 14:52:42 2023 +0800
+
+    <feat> added toasts for logout, register <bug> fixed isCreator in ProductScreen
+
+[33mcommit 42675eddd9d6082d1b2f2485e266cab53d2e78a5[m[33m ([m[1;31morigin/yanchi[m[33m)[m
+Author: yanchi <yanchi97@gmail.com>
+Date:   Sat Apr 8 04:18:32 2023 +0800
+
+    <ignore>
+
+[33mcommit 11f955225763c25dc56b61ce0ec5837481f97b02[m
+Author: yanchi <yanchi97@gmail.com>
+Date:   Sat Apr 8 04:06:19 2023 +0800
+
+    ignore
+
+[33mcommit 18863ee69c2ff8b7b8c38a5a35d4368ada6df501[m
+Merge: dc11665 22269a9
+Author: yanchi <yanchi97@gmail.com>
+Date:   Sat Apr 8 03:46:18 2023 +0800
+
+    <feat> sorting in main page
+
+[33mcommit 22269a94f6c207083b78c5d5dc2aa39a284ab4b5[m
+Author: yanchi <yanchi97@gmail.com>
+Date:   Sat Apr 8 03:41:26 2023 +0800
+
+    <feat> order by in main page
+
+[33mcommit dc11665f0ee4f91630149a72b69f47d53d50a734[m
+Merge: d1da023 1e4e411
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 02:43:28 2023 +0800
+
+    <feat> added sorting for offers, also fixed reset for create listing & create offers
+
+[33mcommit 1e4e4118cfb8a2052b1ba61450fca1fc86c45d46[m
+Author: LAPTOP-J191SCGH\nat <nati.saver@gmail.com>
+Date:   Sat Apr 8 02:27:32 2023 +0800
+
+    <feat> added filtering for offers page
+
+[33mcommit d1da023cb2f5607cf23d772

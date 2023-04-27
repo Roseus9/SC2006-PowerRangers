@@ -47,7 +47,7 @@ function ProductScreen() {
   const { error, loading, product } = item;
   const Pdelete = useSelector((state) => state.productDelete);
   const userRegister = useSelector((state) => state.userLogin);
-  let { userInfo = {} } = userRegister;
+  let { userInfo } = userRegister;
   const getBookmarkState = useSelector((state) => state.getBookmark);
   const [bookmarkText, setBookmarkText] = useState("Bookmark");
   const changeBookmarkState = useSelector((state) => state.changeBookmark);
@@ -66,10 +66,10 @@ function ProductScreen() {
   }, [itemId, navigate]);
 
   useEffect(() => {
-    if (item.done && userInfo != {}) {
+    if (item.done && userInfo) {
       dispatch(findBookmarks(itemId));
       dispatch({ type: BOOKMARK_FIND_RESET });
-      dispatch(getBookmarkAction(item.product._id, userInfo._id));
+      dispatch(getBookmarkAction(itemId, userInfo._id));
       dispatch({ type: BOOKMARK_CHANGE_RESET });
     }
   }, [item, changeBookmarkState.done]);

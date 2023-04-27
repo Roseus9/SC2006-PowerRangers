@@ -46,6 +46,11 @@ function ProfileScreen() {
   }
   const getReviews = useSelector((state) => state.getReview);
   const { review } = getReviews;
+  
+  let isCreator = false;
+  if (userInfo && userObj) {
+    isCreator = userInfo && userInfo._id == userObj.user.id;
+  }
 
   // useEffect is a hook that allows us to run a function when the component loads
   useEffect(() => {
@@ -59,8 +64,13 @@ function ProfileScreen() {
     if (userObj) {
       dispatch(getReviewAction(userObj.user.id, true));
     }
-    console.log(review);
-  }, [userObj]);
+    console.log("userObj", userObj)
+    console.log("userInfo", userInfo)
+    console.log("isCreator", isCreator)
+    console.log("review", review);
+  }, [userObj, userInfo]);
+
+
 
   return (
     <div>
@@ -118,7 +128,7 @@ function ProfileScreen() {
                   Bio: {userObj ? userObj.profile.bio : "-"}
                 </ListGroup.Item>
               </ListGroup>
-              {username == userInfo.username && (
+              {isCreator && (
                 <Link to={`/update/profile/${username}`}>
                   <Button className="my-3" variant="primary">
                     Edit Profile ✏️
